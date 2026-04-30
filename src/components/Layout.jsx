@@ -5,10 +5,13 @@ import TabBar from './TabBar';
 import Header from './Header';
 
 const pageTransition = (reduced) => ({
-    initial: reduced ? false : { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: reduced ? false : { opacity: 0 },
-    transition: { duration: reduced ? 0 : 0.2 }
+    initial: reduced ? false : { opacity: 0, x: 20 },
+    animate: { opacity: 1, x: 0 },
+    exit: reduced ? false : { opacity: 0, x: -20 },
+    transition: { 
+        duration: reduced ? 0 : 0.35, 
+        ease: [0.25, 1, 0.5, 1] // Custom cubic-bezier for a "fluid" feel
+    }
 });
 
 const Layout = () => {
