@@ -1,6 +1,8 @@
 import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import ListPage from './pages/ListPage';
 import ChatPage from './pages/ChatPage';
 import FeedPage from './pages/FeedPage';
@@ -30,9 +32,11 @@ function App() {
         return () => window.removeEventListener('storage', checkAuth);
     }, []);
 
+    const location = useLocation();
+
     return (
-        <HashRouter>
-            <Routes>
+        <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
 
@@ -46,8 +50,14 @@ function App() {
                     <Route path="users" element={<UsersPage />} />
                 </Route>
             </Routes>
-        </HashRouter>
+        </AnimatePresence>
     );
 }
 
-export default App;
+const AppWrapper = () => (
+    <HashRouter>
+        <App />
+    </HashRouter>
+);
+
+export default AppWrapper;
