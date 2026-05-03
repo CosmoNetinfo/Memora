@@ -20,7 +20,7 @@ const ProfilePage = () => {
     const [stats, setStats] = useState({ followers: 0, following: 0 });
     const fileInputRef = useRef(null);
 
-    const isPatient = user.role === 'patient';
+    const isPatient = user?.role === 'patient';
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -424,7 +424,7 @@ const ProfilePage = () => {
                         aria-label={isOwnProfile ? "Cambia foto profilo" : "Foto profilo"}
                     >
                         <div style={styles.avatar}>
-                            {user.photo && typeof user.photo === 'string' && user.photo.startsWith('http') ? <img src={user.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Profile" /> : user.name?.[0]}
+                            {user?.photo && typeof user.photo === 'string' && user.photo.startsWith('http') ? <img src={user.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Profile" /> : user?.name?.[0]}
                         </div>
                         {isOwnProfile && (
                             <span style={styles.avatarOverlay}>
@@ -535,7 +535,7 @@ const ProfilePage = () => {
                 <div style={styles.infoRow}>
                     <AppIcon name="map-marker" size={20} color="primary" />
                     <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span>{user.location || 'Posizione non impostata'}</span>
+                        <span>{user?.location || 'Posizione non impostata'}</span>
                         {isOwnProfile && (
                             <button 
                                 onClick={handleUpdateLocation} 
