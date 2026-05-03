@@ -180,9 +180,10 @@ const SignupPage = () => {
                 </div>
             </div>
 
-            <div style={{ marginTop: '20px', fontSize: '11px', color: '#999', lineHeight: '1.4' }}>
-                Creato da <strong>Daniele Spalletti</strong> e <strong>Michele Mosca</strong><br />
-                di <a href="https://www.cosmonet.info" target="_blank" style={{color: '#999'}}>cosmonet.info</a>
+            <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '11px', color: '#999', lineHeight: '1.4' }}>
+                Memora x Airalzh © 2026<br />
+                <strong>Daniele Spalletti</strong> (sviluppatore) e <strong>Michele Mosca</strong> (web designer)<br />
+                per <a href="https://www.cosmonet.info" target="_blank" style={{color: '#999', textDecoration: 'underline'}}>cosmonet.info</a>
             </div>
         </div>
     );
