@@ -104,8 +104,10 @@ const ListPage = () => {
                     query = query.eq('role', 'patient').limit(1);
                 }
 
-                const { data, error } = await query.single();
-                if (!error && data) {
+                const { data, error } = await query.maybeSingle();
+                if (error) {
+                    console.error("Errore fetch umore:", error);
+                } else if (data) {
                     setCurrentMood(data.current_mood);
                 }
             } catch (e) {
