@@ -53,6 +53,7 @@ function App() {
                     console.error("❌ Errore segnale presenza:", error);
                 } else {
                     console.log("🟢 Segnale attività inviato per:", userId);
+                    localStorage.setItem('last_active_signal', Date.now().toString());
                 }
             };
 
