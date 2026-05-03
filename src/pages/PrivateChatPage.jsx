@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import AppIcon from '../components/AppIcon';
 
-const VoicePlayer = ({ url, isMe }) => {
+const VoicePlayer = ({ url, isMe, userPhoto, userName }) => {
     const [isPlaying, setIsPlaying] = React.useState(false);
     const [progress, setProgress] = React.useState(0);
     const [duration, setDuration] = React.useState(0);
@@ -35,57 +35,97 @@ const VoicePlayer = ({ url, isMe }) => {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
+    // Genera barrette waveform simulate
+    const bars = [15, 25, 20, 35, 15, 40, 25, 30, 20, 35, 25, 15, 25, 40, 20, 30, 15, 25, 20];
+
     return (
         <div style={{ 
             display: 'flex', 
             alignItems: 'center', 
-            gap: '12px', 
-            minWidth: '200px',
-            padding: '4px 2px'
+            gap: '10px', 
+            minWidth: '240px',
+            padding: '4px 0'
         }}>
+            {/* Play Button */}
             <button 
                 onClick={togglePlay}
                 style={{
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '50%',
-                    backgroundColor: isMe ? 'rgba(255,255,255,0.2)' : 'rgba(var(--color-primary-rgb), 0.1)',
+                    background: 'none',
                     border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    cursor: 'pointer',
                     flexShrink: 0
                 }}
             >
-                <AppIcon name={isPlaying ? "pause" : "play"} size={16} color={isMe ? "white" : "primary"} />
+                <AppIcon name={isPlaying ? "pause" : "play"} size={28} color={isMe ? "white" : "primary"} />
             </button>
-            
-            <div style={{ flex: 1, position: 'relative' }}>
-                <div style={{ 
-                    height: '4px', 
-                    width: '100%', 
-                    backgroundColor: isMe ? 'rgba(255,255,255,0.3)' : '#E5E7EB',
-                    borderRadius: '2px',
-                    overflow: 'hidden'
-                }}>
-                    <div style={{ 
-                        height: '100%', 
-                        width: `${progress}%`, 
-                        backgroundColor: isMe ? 'white' : 'var(--color-primary)',
-                        transition: 'width 0.1s linear'
-                    }} />
-                </div>
+
+            {/* Waveform Area */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2px' }}>
                 <div style={{ 
                     display: 'flex', 
-                    justifyContent: 'space-between', 
-                    marginTop: '4px',
-                    fontSize: '10px',
-                    opacity: 0.8,
-                    fontWeight: '600'
+                    alignItems: 'center', 
+                    gap: '2px', 
+                    height: '24px',
+                    position: 'relative'
                 }}>
-                    <span>{formatTime(audioRef.current?.currentTime)}</span>
-                    <span>{formatTime(duration)}</span>
+                    {bars.map((height, i) => {
+                        const barProgress = (i / bars.length) * 100;
+                        const isActive = progress > barProgress;
+                        return (
+                            <div key={i} style={{
+                                width: '3px',
+                                height: `${height}%`,
+                                backgroundColor: isActive 
+                                    ? (isMe ? 'white' : 'var(--color-primary)') 
+                                    : (isMe ? 'rgba(255,255,255,0.4)' : '#D1D5DB'),
+                                borderRadius: '2px',
+                                transition: 'background-color 0.2s'
+                            }} />
+                        );
+                    })}
+                </div>
+                <div style={{ fontSize: '10px', opacity: 0.8, fontWeight: '600' }}>
+                    {formatTime(isPlaying ? audioRef.current?.currentTime : duration)}
+                </div>
+            </div>
+
+            {/* User Avatar with Mic Overlay */}
+            <div style={{ position: 'relative', flexShrink: 0 }}>
+                <div style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    backgroundColor: isMe ? 'rgba(255,255,255,0.2)' : '#E5E7EB',
+                    border: isMe ? '2px solid rgba(255,255,255,0.5)' : '2px solid var(--color-primary-light)'
+                }}>
+                    {userPhoto ? (
+                        <img src={userPhoto} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="U" />
+                    ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>
+                            {userName?.[0]}
+                        </div>
+                    )}
+                </div>
+                <div style={{
+                    position: 'absolute',
+                    bottom: '-2px',
+                    right: '-2px',
+                    backgroundColor: 'white',
+                    borderRadius: '50%',
+                    width: '18px',
+                    height: '18px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    border: '1px solid #eee'
+                }}>
+                    <AppIcon name="microphone" size={10} color="primary" />
                 </div>
             </div>
             
@@ -457,7 +497,12 @@ const PrivateChatPage = () => {
                     return (
                         <div key={msg.id} style={styles.bubble(msg.sender)}>
                             {isAudio ? (
-                                <VoicePlayer url={msg.text} isMe={msg.sender === 'me'} />
+                                <VoicePlayer 
+                                    url={msg.text} 
+                                    isMe={msg.sender === 'me'} 
+                                    userPhoto={msg.sender === 'me' ? user.photo : receiverProfile?.photo_url}
+                                    userName={msg.sender === 'me' ? user.name : receiverProfile?.name}
+                                />
                             ) : (
                                 <p style={styles.messageText}>{msg.text}</p>
                             )}
