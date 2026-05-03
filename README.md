@@ -1,41 +1,39 @@
 # Memora 🧠
 
-Un'applicazione mobile premium progettata per supportare i pazienti affetti da Alzheimer e i loro caregiver, offrendo strumenti intuitivi per la gestione quotidiana, la memoria e la socialità.
+Un'applicazione mobile premium progettata per supportare i pazienti affetti da Alzheimer, i loro caregiver e il personale medico, offrendo strumenti intelligenti per la gestione quotidiana, la memoria e la socialità in tempo reale.
+
+## 🚀 Novità & Funzionalità Avanzate
+
+### 🎙️ Messaggi Vocali Intelligenti
+Abbiamo integrato un sistema di messaggistica vocale per abbattere le barriere della tastiera.
+- **Registrazione One-Tap**: Registra e invia messaggi audio istantaneamente.
+- **Player Integrato**: Ascolta i messaggi direttamente nella chat con un'interfaccia pulita.
+- **Cloud Storage**: Audio salvati in modo sicuro su Supabase Storage.
+
+### 📅 Cloud Agenda (Sincronizzazione Real-time)
+L'agenda non è più solo locale, ma vive nel cloud.
+- **Sincronizzazione Multi-dispositivo**: Un caregiver può aggiungere un impegno dal suo telefono e il paziente lo vedrà apparire istantaneamente sul proprio.
+- **Aggiornamenti Live**: Spunta le attività concluse e aggiorna tutti i dispositivi collegati in tempo reale.
+
+### 👨‍⚕️ Dashboard Medica Professionale
+Un centro di controllo per i dottori per monitorare i pazienti a distanza.
+- **Monitoraggio Umore**: Grafici interattivi basati sullo storico degli stati d'animo registrati dal paziente.
+- **Verifica Attività**: I medici possono controllare se il paziente sta seguendo l'agenda quotidiana (medicine, attività fisica, ecc.).
+- **Note Cliniche Cloud**: Sistema di note professionali condivise tra lo staff medico.
+
+### 🟢 Community & Presenza
+- **Indicatori di Stato**: Visualizza in tempo reale chi è online (punto verde) o offline (punto rosso).
+- **Chat Privata Evoluta**: Messaggistica istantanea con conferma di lettura e supporto multimediale.
 
 ## 🎨 Design & Branding
-L'applicazione segue l'identità visiva ufficiale di **Airalzh Onlus** ed è stata rinominata **Memora** per riflettere la sua missione.
+L'applicazione segue l'identità visiva ufficiale di **Airalzh Onlus**.
 - **Palette Colori**: Viola Vibrante (`#9C69A7`), Prugna Scuro (`#4A304F`) e Lilla Chiarissimo (`#F7F3FA`).
-- **Icona**: Logo moderno con cervello stilizzato in palette ufficiale.
-- **Interfaccia**: Design mobile-first stile iOS, ottimizzato per l'accessibilità e la facilità d'uso.
+- **Accessibilità**: Design mobile-first stile iOS, ottimizzato per ipovedenti con testi grandi e icone chiare.
 
-## 🚀 Funzionalità Principali
-
-### ✅ Gestione Attività (Todolist)
-Una lista quotidiana chiara per gestire medicine, idratazione e appuntamenti. Include funzioni di:
-- Inserimento rapido di nuovi task.
-- Spunta di completamento con feedback visivo.
-- Cancellazione rapida.
-
-### 📸 MemoraBook (Social Feed)
-Uno spazio sicuro per condividere momenti e pensieri con la comunità.
-- **Post Interattivi**: Condivisione di messaggi di testo e immagini.
-- **Caricamento Foto**: Supporto per l'upload di immagini con ridimensionamento automatico intelligente per prestazioni ottimali.
-- **Gestione Contenuti**: Possibilità di modificare ed eliminare i propri post.
-- **Lightbox**: Visualizzazione delle immagini a tutto schermo per una migliore visibilità.
-
-### 🆘 Sicurezza & Emergenza (SOS)
-- **Contatti SOS**: Numero di emergenza configurabile per chiamate rapide.
-- **Supporto Tecnico**: Collegamento diretto al servizio "Pronto Alzheimer".
-
-### ⚙️ Personalizzazione & PWA
-- **Caratteri Grandi**: Modalità accessibilità per una lettura facilitata.
-- **Installabile**: Configurazione PWA completa per aggiungere l'app alla Home dello smartphone con icona dedicata.
-
-## 🛠️ Tecnologie Utilizzate
-- **Frontend**: React + Vite
-- **Icone**: Lucide-React
-- **Database & Real-time**: Supabase (Database + Auth + Storage per immagini)
-- **PWA**: Web App Manifest & Apple Touch Support
+## 🛠️ Stack Tecnologico
+- **Frontend**: React + Vite + Framer Motion (per animazioni fluide).
+- **Database & Backend**: Supabase (PostgreSQL + Real-time + Auth + Storage).
+- **PWA**: Configurazione completa per installazione su Android e iOS come App nativa.
 
 ## 📦 Installazione Locale
 
@@ -54,7 +52,7 @@ npm run dev
 ```
 
 ### 🗄️ Configurazione Database
-Per configurare correttamente Supabase (Database, Auth e Storage per le foto profilo), segui la **[Guida Supabase](GUIDA_SUPABASE.md)**.
+Per configurare correttamente Supabase (Tabelle, RLS e Storage), consulta la **[Guida Supabase](GUIDA_SUPABASE.md)** e i file SQL nella cartella `sql_updates`.
 
 ---
 
