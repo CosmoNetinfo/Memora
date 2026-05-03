@@ -14,6 +14,7 @@ const ProfilePage = () => {
     const [user, setUser] = useState(isOwnProfile ? loggedInUser : null);
     const [currentMood, setCurrentMood] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [activities, setActivities] = useState([]);
     const [uploadingPhoto, setUploadingPhoto] = useState(false);
     const [updatingLocation, setUpdatingLocation] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
@@ -78,6 +79,7 @@ const ProfilePage = () => {
                 }
 
                 fetchFollowStats(profileId);
+                fetchActivities(profileId);
                 if (!isOwnProfile && loggedInUser?.id) {
                     checkFollowStatus(loggedInUser.id, profileId);
                 }
@@ -104,7 +106,20 @@ const ProfilePage = () => {
                 .subscribe();
             return () => { supabase.removeChannel(channel); };
         }
-    }, [id]); 
+    }, [id]);
+
+    const fetchActivities = async (profileId) => {
+        const { data, error } = await supabase
+            .from('activity_log')
+            .select('*')
+            .eq('user_id', profileId)
+            .order('created_at', { ascending: false })
+            .limit(10);
+        
+        if (!error && data) {
+            setActivities(data);
+        }
+    };
 
     const fetchFollowStats = async (profileId) => {
         const { count: followers } = await supabase.from('follows').select('*', { count: 'exact', head: true }).eq('followed_id', profileId);
@@ -654,6 +669,48 @@ const ProfilePage = () => {
                     <span>Iscritto a Gennaio 2026</span>
                 </div>
             </div>
+            
+            {/* Attività Recenti Card */}
+            <div style={styles.infoCard}>
+                <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '16px', color: 'var(--color-primary-dark)' }}>Attività Recenti</h3>
+                {activities.length === 0 ? (
+                    <div style={{ color: '#9CA3AF', fontSize: '13px', textAlign: 'center', padding: '20px' }}>Nessuna attività registrata di recente.</div>
+                ) : (
+                    activities.map((act, idx) => (
+                        <div key={act.id} style={{ ...styles.infoRow, borderBottom: idx === activities.length - 1 ? 'none' : '1px solid #F3F4F6' }}>
+                            <div style={{ 
+                                width: '32px', 
+                                height: '32px', 
+                                borderRadius: '50%', 
+                                backgroundColor: act.action === 'task_completed' ? '#ECFDF5' : '#F5F3FF', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center',
+                                flexShrink: 0
+                            }}>
+                                <AppIcon 
+                                    name={act.action === 'task_completed' ? 'badge-check' : act.action === 'mood_updated' ? 'grin' : 'add'} 
+                                    size={16} 
+                                    color={act.action === 'task_completed' ? 'success' : 'primary'} 
+                                />
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0, marginLeft: '10px' }}>
+                                <div style={{ fontSize: '14px', fontWeight: '600', color: '#1F2937' }}>
+                                    {act.action === 'task_completed' ? 'Task completato' : 
+                                     act.action === 'mood_updated' ? 'Umore aggiornato' : 
+                                     act.action === 'task_added' ? 'Nuovo task' : 'Attività'}
+                                </div>
+                                <div style={{ fontSize: '13px', color: '#6B7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                    {act.details}
+                                </div>
+                            </div>
+                            <div style={{ fontSize: '11px', color: '#9CA3AF' }}>
+                                {new Date(act.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
 
             {/* Quick Actions Card */}
             <div style={styles.actionCard}>
@@ -661,7 +718,7 @@ const ProfilePage = () => {
                     <AppIcon name="settings" size={18} color="primaryDark" />
                     <span>Impostazioni App</span>
                 </button>
-                <Link to="/report-umore" style={{ ...styles.actionBtn, textDecoration: 'none', borderTop: '1px solid var(--color-border)' }}>
+                <Link to={`/report-umore/${user.id}`} style={{ ...styles.actionBtn, textDecoration: 'none', borderTop: '1px solid var(--color-border)' }}>
                     <AppIcon name="calendar-lines" size={18} color="primaryDark" />
                     <span>Report umore</span>
                 </Link>

@@ -1,9 +1,10 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import AppIcon from '../components/AppIcon';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
 import { getMoodHistory, getMoodColor } from '../utils/moodHistory';
+import { supabase } from '../supabaseClient';
 
 const MOOD_LABELS = { happy: 'Felice', neutral: 'Neutro', sad: 'Triste' };
 
@@ -27,14 +28,50 @@ function prevalentMood(counts) {
 }
 
 export default function ReportUmorePage() {
+  const { userId } = useParams();
   const [tab, setTab] = useState('giornaliero');
-  const [history, setHistory] = useState(() => getMoodHistory());
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const loggedInUser = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
 
   useEffect(() => {
-    const onMoodSaved = () => setHistory(getMoodHistory());
-    window.addEventListener('patientMoodSaved', onMoodSaved);
-    return () => window.removeEventListener('patientMoodSaved', onMoodSaved);
-  }, []);
+    const fetchHistory = async () => {
+        setLoading(true);
+        const targetId = userId || loggedInUser.id;
+        if (!targetId) {
+            setHistory(getMoodHistory());
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const { data, error } = await supabase
+                .from('mood_history')
+                .select('*')
+                .eq('user_id', targetId)
+                .order('created_at', { ascending: false });
+            
+            if (!error && data) {
+                setHistory(data.map(item => ({
+                    mood: item.mood,
+                    timestamp: new Date(item.created_at).getTime()
+                })));
+            } else {
+                setHistory(getMoodHistory());
+            }
+        } catch (e) {
+            console.error("Error fetching mood history", e);
+            setHistory(getMoodHistory());
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchHistory();
+    
+    window.addEventListener('patientMoodSaved', fetchHistory);
+    return () => window.removeEventListener('patientMoodSaved', fetchHistory);
+  }, [userId, loggedInUser.id]);
 
   const lastEntry = history[0] || null;
   const lastDate = lastEntry ? new Date(lastEntry.timestamp) : null;

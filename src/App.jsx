@@ -164,6 +164,7 @@ function App() {
                     <Route path="cerca-persone" element={<FindPeoplePage />} />
                     <Route path="impostazioni" element={<SettingsPage />} />
                     <Route path="report-umore" element={<ReportUmorePage />} />
+                    <Route path="report-umore/:userId" element={<ReportUmorePage />} />
                     <Route path="users" element={<UsersPage />} />
                 </Route>
 
