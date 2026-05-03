@@ -23,48 +23,44 @@ function App() {
     React.useEffect(() => {
         if (isAuthenticated) {
             const updateActivity = async () => {
-                const user = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
-                if (user.id) {
+                const { data: { session } } = await supabase.auth.getSession();
+                const userId = session?.user?.id;
+                
+                if (userId) {
                     const { error } = await supabase.from('profiles').update({ 
                         last_active: new Date().toISOString() 
-                    }).eq('id', user.id);
+                    }).eq('id', userId);
                     
-                    if (error) {
-                        console.error("Errore aggiornamento attività:", error);
-                    } else {
-                        console.log("Segnale di attività inviato al database! 🟢");
-                    }
+                    if (error) console.error("Errore attività:", error);
+                    else console.log("Segnale di attività per:", userId);
                 }
             };
             updateActivity();
-            const interval = setInterval(updateActivity, 30000); // Ogni 30 secondi invece di 60
+            const interval = setInterval(updateActivity, 30000);
             return () => clearInterval(interval);
         }
     }, [isAuthenticated]);
+
     const [loading, setLoading] = React.useState(true);
     const location = useLocation();
 
     // Sincronizzazione profilo e controllo BAN
     React.useEffect(() => {
         const syncProfile = async () => {
-            const savedUser = localStorage.getItem('alzheimer_user');
-            if (!savedUser) {
-                setLoading(false);
-                return;
-            }
-
             try {
-                const localUser = JSON.parse(savedUser);
-                if (!localUser.id) {
+                const { data: { session } } = await supabase.auth.getSession();
+                const userId = session?.user?.id;
+
+                if (!userId) {
                     setLoading(false);
                     return;
                 }
 
-                // Recupera dati freschi da Supabase
+                // Recupera dati freschi usando l'ID ufficiale della sessione
                 const { data: profile, error } = await supabase
                     .from('profiles')
                     .select('*')
-                    .eq('id', localUser.id)
+                    .eq('id', userId)
                     .single();
 
                 if (error || !profile) {

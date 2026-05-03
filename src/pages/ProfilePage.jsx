@@ -464,6 +464,29 @@ const ProfilePage = () => {
                 >
                     Torna alla Home
                 </button>
+
+                <div style={{ marginTop: '50px', paddingTop: '20px', borderTop: '1px solid #eee' }}>
+                    <p style={{ color: '#666', fontSize: '13px', marginBottom: '15px' }}>Problemi persistenti?</p>
+                    <button 
+                        onClick={async () => {
+                            localStorage.clear();
+                            await supabase.auth.signOut();
+                            window.location.href = '/#/login';
+                            window.location.reload();
+                        }} 
+                        style={{ 
+                            backgroundColor: '#FEE2E2', 
+                            color: '#B91C1C', 
+                            border: 'none', 
+                            padding: '10px 20px', 
+                            borderRadius: '12px', 
+                            fontWeight: 'bold', 
+                            cursor: 'pointer' 
+                        }}
+                    >
+                        🔄 Forza Riconnessione
+                    </button>
+                </div>
             </div>
         </div>
     );
