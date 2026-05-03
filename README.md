@@ -1,39 +1,42 @@
-# Memora 🧠
+# Memora 🧠✨
 
-Un'applicazione mobile premium progettata per supportare i pazienti affetti da Alzheimer, i loro caregiver e il personale medico, offrendo strumenti intelligenti per la gestione quotidiana, la memoria e la socialità in tempo reale.
+Un'applicazione mobile **Premium** progettata per supportare i pazienti affetti da Alzheimer, i loro caregiver e il personale medico. Memora offre strumenti intelligenti per la gestione quotidiana, la memoria e la socialità, unendo un'estetica raffinata a una tecnologia all'avanguardia.
 
-## 🚀 Novità & Funzionalità Avanzate
+## 🚀 Innovazioni & Funzionalità Killer
 
-### 🎙️ Messaggi Vocali Intelligenti
-Abbiamo integrato un sistema di messaggistica vocale per abbattere le barriere della tastiera.
-- **Registrazione One-Tap**: Registra e invia messaggi audio istantaneamente.
-- **Player Integrato**: Ascolta i messaggi direttamente nella chat con un'interfaccia pulita.
-- **Cloud Storage**: Audio salvati in modo sicuro su Supabase Storage.
+### 🎙️ Messaggi Vocali "Premium Voice"
+Abbiamo reinventato la comunicazione vocale per renderla umana e accessibile.
+- **Interfaccia WhatsApp Style**: Player audio personalizzato con **waveform dinamica** e foto profilo integrata nel fumetto.
+- **Micro-interazioni**: Pulsanti Play/Pause fluidi e feedback visivo del progresso.
+- **Cloud Delivery**: Audio gestiti via Supabase Storage per una velocità di riproduzione immediata.
 
-### 📅 Cloud Agenda (Sincronizzazione Real-time)
-L'agenda non è più solo locale, ma vive nel cloud.
-- **Sincronizzazione Multi-dispositivo**: Un caregiver può aggiungere un impegno dal suo telefono e il paziente lo vedrà apparire istantaneamente sul proprio.
-- **Aggiornamenti Live**: Spunta le attività concluse e aggiorna tutti i dispositivi collegati in tempo reale.
+### 📈 Report Benessere & Mood Tracker 2.0
+Il monitoraggio non è mai stato così chiaro.
+- **Grafici Dinamici**: Visualizzazione storica dell'umore con dati scaricati in tempo reale dal database.
+- **Accesso Caregiver/Medico**: Possibilità di visualizzare i report di utenti specifici direttamente dal profilo del paziente.
+- **Analisi Prevalente**: Algoritmi che calcolano lo stato d'animo dominante per periodo.
 
-### 👨‍⚕️ Dashboard Medica & Registro Attività
-Un centro di controllo per i dottori per monitorare i pazienti a distanza.
-- **Registro Attività (Log)**: Cronologia dettagliata di ogni azione (es: "Farmaco preso alle 10:30").
-- **Monitoraggio Umore**: Grafici interattivi basati sullo storico degli stati d'animo registrati dal paziente.
-- **Note Cliniche Cloud**: Sistema di note professionali condivise tra lo staff medico.
+### 📔 Diario Attività & Monitoraggio Remoto
+- **Activity Log**: Un registro cronologico di ogni task completato, visualizzabile direttamente sul profilo dell'utente.
+- **Real-time Status**: Sistema di heartbeat per segnalare lo stato "Online" e l'ultimo accesso in tempo reale.
 
-### 🟢 Community & Presenza
-- **Indicatori di Stato**: Visualizza in tempo reale chi è online (punto verde) o offline (punto rosso).
-- **Chat Privata Evoluta**: Messaggistica istantanea con conferma di lettura e supporto multimediale.
+### 🪲 Scarafaggio Diagnostico (Debug Console)
+Un sistema di telemetria avanzato integrato nell'app.
+- **Global Error Catching**: Cattura automatica di errori JavaScript e fallimenti di rete.
+- **Report Rapido**: Tasto dedicato per inviare i log tecnici via email all'amministratore (`admindany@gmail.com`).
+
+### ✉️ Notifiche Istantanee
+- **Badge Reattivo**: Un pallino rosso dinamico sulla bustina dei messaggi avvisa istantaneamente dell'arrivo di nuovi contenuti non letti.
 
 ## 🎨 Design & Branding
-L'applicazione segue l'identità visiva ufficiale di **Airalzh Onlus**.
-- **Palette Colori**: Viola Vibrante (`#9C69A7`), Prugna Scuro (`#4A304F`) e Lilla Chiarissimo (`#F7F3FA`).
-- **Accessibilità**: Design mobile-first stile iOS, ottimizzato per ipovedenti con testi grandi e icone chiare.
+L'applicazione segue l'identità visiva ufficiale di **Airalzh Onlus** con un tocco moderno.
+- **Palette**: Viola Vibrante (`#9C69A7`), Prugna Scuro (`#4A304F`) e Lilla Chiarissimo (`#F7F3FA`).
+- **User Experience**: Design "Safe & Calm", icone grandi e chiare (AppIcon Custom System) e navigazione a prova di errore.
 
 ## 🛠️ Stack Tecnologico
-- **Frontend**: React + Vite + Framer Motion.
-- **Database & Backend**: Supabase (PostgreSQL + Real-time + Auth + Storage).
-- **PWA**: Configurazione completa per installazione su Android e iOS come App nativa.
+- **Frontend**: React + Vite + Framer Motion (per animazioni fluide).
+- **Backend**: Supabase (PostgreSQL + Real-time + Auth + Storage).
+- **Mobile Foundation**: Architettura ottimizzata per Capacitor per deployment nativo iOS/Android.
 
 ## 📦 Installazione Locale
 
