@@ -210,6 +210,7 @@ const PrivateChatPage = () => {
             alignItems: 'center',
             gap: '12px',
             zIndex: 10,
+            cursor: 'pointer',
         },
         avatar: {
             width: '36px',
@@ -255,11 +256,14 @@ const PrivateChatPage = () => {
         },
         inputArea: {
             padding: '12px 16px',
+            paddingBottom: 'calc(12px + env(safe-area-inset-bottom))',
             backgroundColor: 'white',
             borderTop: '1px solid var(--color-border)',
             display: 'flex',
             alignItems: 'center',
             gap: '10px',
+            position: 'sticky',
+            bottom: 0,
         },
         input: {
             flex: 1,
@@ -287,8 +291,8 @@ const PrivateChatPage = () => {
 
     return (
         <div style={styles.container}>
-            <div style={styles.header}>
-                <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+            <div style={styles.header} onClick={() => navigate(`/profilo/${receiverId}`)}>
+                <button onClick={(e) => { e.stopPropagation(); navigate(-1); }} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
                     <AppIcon name="arrow-left" size={24} color="primary" />
                 </button>
                 <div style={styles.avatar}>
