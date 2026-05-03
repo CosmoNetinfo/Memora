@@ -88,6 +88,9 @@ const Header = ({ title }) => {
                 </div>
             </Link>
             <h1 style={styles.title}>{title}</h1>
+            <Link to="/messaggi" style={{ ...styles.settingsBtn, right: '56px' }} className="app-header-messages">
+                <AppIcon name="envelope" size={24} />
+            </Link>
             <Link to="/impostazioni" className="app-header-settings" style={styles.settingsBtn}>
                 <AppIcon name="settings" size={24} />
             </Link>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Shield, ShieldAlert, User, Trash2, Ban, CheckCircle } from 'lucide-react';
 import AppIcon from '../components/AppIcon';
 import { supabase } from '../supabaseClient';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const UsersPage = () => {
     const navigate = useNavigate();
@@ -98,13 +98,13 @@ const UsersPage = () => {
                     <div style={styles.avatar}>
                         {u.photo_url ? <img src={u.photo_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Avatar" /> : <User size={24} color="#999" />}
                     </div>
-                    <div style={styles.userInfo}>
+                    <Link to={`/profilo/${u.id}`} style={{...styles.userInfo, textDecoration: 'none', color: 'inherit'}}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <span style={styles.userName}>{u.name} {u.surname}</span>
                             <span style={styles.badge(u.role)}>{u.role}</span>
                         </div>
                         <div style={styles.userRole}>{u.email}</div>
-                    </div>
+                    </Link>
                     <div style={styles.actions}>
                         {u.role !== 'admin' && (
                             <>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Heart, Share2, X, Edit2, Check, Maximize2, User } from 'lucide-react';
 import AppIcon from '../components/AppIcon';
 import { supabase } from '../supabaseClient';
+import { Link } from 'react-router-dom';
 
 const FeedPage = () => {
     const [posts, setPosts] = useState([]);
@@ -378,7 +379,7 @@ const FeedPage = () => {
                 return (
                 <div key={post.id} style={styles.card}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                        <div style={{ display: 'flex', gap: '10px', minWidth: 0, flex: 1 }}>
+                        <Link to={`/profilo/${post.author_id}`} style={{ display: 'flex', gap: '10px', minWidth: 0, flex: 1, textDecoration: 'none', color: 'inherit' }}>
                             <div style={styles.avatar(authorMood)}>
                                 {post.author_photo && typeof post.author_photo === 'string' && post.author_photo.startsWith('http') ? <img src={post.author_photo} style={styles.avatarImg} alt="Autore" /> : (post.author?.[0] || 'U')}
                             </div>
@@ -390,7 +391,7 @@ const FeedPage = () => {
                                 </div>
                                 <div style={{ fontSize: '11px', color: '#999' }}>{new Date(post.created_at).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
                             </div>
-                        </div>
+                        </Link>
                         {(post.author_id === user.id || user.role === 'admin' || user.role === 'moderator') && (
                             <button style={{ background: 'none', border: 'none' }} onClick={() => deletePost(post.id)} aria-label="Elimina">
                                 <AppIcon name="trash" size={18} color="error" />

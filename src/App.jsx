@@ -12,6 +12,8 @@ import SettingsPage from './pages/SettingsPage';
 import ProfilePage from './pages/ProfilePage';
 import ReportUmorePage from './pages/ReportUmorePage';
 import UsersPage from './pages/UsersPage';
+import MessagesListPage from './pages/MessagesListPage';
+import PrivateChatPage from './pages/PrivateChatPage';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = React.useState(!!localStorage.getItem('alzheimer_user'));
@@ -104,6 +106,9 @@ function App() {
                     <Route path="chat" element={<ChatPage />} />
                     <Route path="feed" element={<FeedPage />} />
                     <Route path="profilo" element={<ProfilePage />} />
+                    <Route path="profilo/:id" element={<ProfilePage />} />
+                    <Route path="messaggi" element={<MessagesListPage />} />
+                    <Route path="chat-privata/:receiverId" element={<PrivateChatPage />} />
                     <Route path="impostazioni" element={<SettingsPage />} />
                     <Route path="report-umore" element={<ReportUmorePage />} />
                     <Route path="users" element={<UsersPage />} />

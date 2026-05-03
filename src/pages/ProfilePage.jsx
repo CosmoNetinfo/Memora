@@ -2,13 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { LogOut } from 'lucide-react';
 import AppIcon from '../components/AppIcon';
 import { supabase } from '../supabaseClient';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { getMoodColor, addMoodEntry } from '../utils/moodHistory';
 import { getCurrentPosition, getAddressFromCoords } from '../utils/locationService';
 
 const ProfilePage = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('alzheimer_user') || '{}'));
+    const loggedInUser = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
+    const [user, setUser] = useState(loggedInUser);
+    const isOwnProfile = !id || id === loggedInUser.id || id === (loggedInUser.name + (loggedInUser.surname || ''));
     const [currentMood, setCurrentMood] = useState(null);
     const [loading, setLoading] = useState(true);
     const [uploadingPhoto, setUploadingPhoto] = useState(false);
@@ -19,33 +22,24 @@ const ProfilePage = () => {
 
     useEffect(() => {
         const fetchUserData = async () => {
+            setLoading(true);
             try {
-                let emailFromAuth = user.email || null;
-                if (!emailFromAuth) {
-                    const { data: authData } = await supabase.auth.getUser();
-                    emailFromAuth = authData?.user?.email ?? null;
-                    if (emailFromAuth) {
-                        const updated = { ...user, email: emailFromAuth };
-                        setUser(updated);
-                        localStorage.setItem('alzheimer_user', JSON.stringify(updated));
-                    }
-                }
-
-                const profileId = user.id || (user.name + (user.surname || ''));
+                const profileId = id || loggedInUser.id || (loggedInUser.name + (loggedInUser.surname || ''));
                 const { data, error } = await supabase
                     .from('profiles')
-                    .select('current_mood, role, bio, location, email, photo_url')
+                    .select('id, name, surname, current_mood, role, bio, location, email, photo_url')
                     .eq('id', profileId)
                     .single();
 
                 if (!error && data) {
                     setCurrentMood(data.current_mood);
-                    setUser(prev => ({
-                        ...prev,
+                    setUser({
                         ...data,
-                        email: data.email ?? prev.email ?? emailFromAuth,
-                        photo: data.photo_url ?? prev.photo
-                    }));
+                        photo: data.photo_url
+                    });
+                } else if (isOwnProfile) {
+                    // Fallback se il profilo proprio non viene trovato (es. primo login senza trigger)
+                    setUser(loggedInUser);
                 }
             } catch (e) {
                 console.error("Error fetching user data", e);
@@ -54,7 +48,7 @@ const ProfilePage = () => {
             }
         };
         fetchUserData();
-    }, [user.id, user.name, user.surname]);
+    }, [id, loggedInUser.id]);
 
     const handleLogout = () => {
         if (window.confirm("Sei sicuro di voler uscire?")) {
@@ -363,15 +357,23 @@ const ProfilePage = () => {
             {/* Minimal Header Card */}
             <div style={styles.headerCard}>
                 <div style={styles.avatarContainer}>
-                    <input type="file" ref={fileInputRef} accept="image/*" onChange={handlePhotoChange} hidden />
-                    <button type="button" style={styles.avatarWrap} onClick={() => fileInputRef.current?.click()} disabled={uploadingPhoto} aria-label="Cambia foto profilo">
+                    {isOwnProfile && <input type="file" ref={fileInputRef} accept="image/*" onChange={handlePhotoChange} hidden />}
+                    <button 
+                        type="button" 
+                        style={{...styles.avatarWrap, cursor: isOwnProfile ? 'pointer' : 'default'}} 
+                        onClick={() => isOwnProfile && fileInputRef.current?.click()} 
+                        disabled={uploadingPhoto || !isOwnProfile} 
+                        aria-label={isOwnProfile ? "Cambia foto profilo" : "Foto profilo"}
+                    >
                         <div style={styles.avatar}>
                             {user.photo && typeof user.photo === 'string' && user.photo.startsWith('http') ? <img src={user.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Profile" /> : user.name?.[0]}
                         </div>
-                        <span style={styles.avatarOverlay}>
-                            <AppIcon name="camera" size={24} color="white" />
-                            {uploadingPhoto ? '...' : 'Cambia'}
-                        </span>
+                        {isOwnProfile && (
+                            <span style={styles.avatarOverlay}>
+                                <AppIcon name="camera" size={24} color="white" />
+                                {uploadingPhoto ? '...' : 'Cambia'}
+                            </span>
+                        )}
                     </button>
                 </div>
                 <h1 style={styles.name}>
@@ -409,6 +411,29 @@ const ProfilePage = () => {
                 )}
 
                 {user.bio && <p style={{ color: '#6B7280', fontSize: '14px', margin: '12px 0 0 0' }}>{user.bio}</p>}
+
+                {!isOwnProfile && (
+                    <button 
+                        onClick={() => navigate(`/chat-privata/${user.id}`)}
+                        style={{
+                            marginTop: '20px',
+                            backgroundColor: 'var(--color-primary)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '25px',
+                            padding: '12px 24px',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 12px rgba(136, 0, 68, 0.2)'
+                        }}
+                    >
+                        <AppIcon name="paper-plane" size={18} color="white" />
+                        Invia Messaggio
+                    </button>
+                )}
             </div>
 
             {/* Account Details Card */}
@@ -425,22 +450,24 @@ const ProfilePage = () => {
                     <AppIcon name="map-marker" size={20} color="primary" />
                     <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span>{user.location || 'Posizione non impostata'}</span>
-                        <button 
-                            onClick={handleUpdateLocation} 
-                            disabled={updatingLocation}
-                            style={{ 
-                                background: 'var(--color-accent)', 
-                                border: 'none', 
-                                borderRadius: '8px', 
-                                padding: '4px 8px', 
-                                fontSize: '11px', 
-                                fontWeight: 'bold', 
-                                cursor: 'pointer',
-                                color: 'var(--color-primary)'
-                            }}
-                        >
-                            {updatingLocation ? '...' : 'Aggiorna'}
-                        </button>
+                        {isOwnProfile && (
+                            <button 
+                                onClick={handleUpdateLocation} 
+                                disabled={updatingLocation}
+                                style={{ 
+                                    background: 'var(--color-accent)', 
+                                    border: 'none', 
+                                    borderRadius: '8px', 
+                                    padding: '4px 8px', 
+                                    fontSize: '11px', 
+                                    fontWeight: 'bold', 
+                                    cursor: 'pointer',
+                                    color: 'var(--color-primary)'
+                                }}
+                            >
+                                {updatingLocation ? '...' : 'Aggiorna'}
+                            </button>
+                        )}
                     </div>
                 </div>
                 <div style={{ ...styles.infoRow, borderBottom: 'none' }}>
@@ -467,11 +494,13 @@ const ProfilePage = () => {
                 )}
             </div>
 
-            {/* Logout Button */}
-            <button style={styles.logoutBtn} onClick={handleLogout}>
-                <LogOut size={20} />
-                <span>Disconnetti</span>
-            </button>
+            {/* Logout Button - Solo sul proprio profilo */}
+            {isOwnProfile && (
+                <button style={styles.logoutBtn} onClick={handleLogout}>
+                    <LogOut size={20} />
+                    <span>Disconnetti</span>
+                </button>
+            )}
 
             <div style={{ textAlign: 'center', marginTop: '30px', color: '#9CA3AF', fontSize: '12px' }}>
                 Memora v1.0
