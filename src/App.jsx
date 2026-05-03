@@ -25,9 +25,15 @@ function App() {
             const updateActivity = async () => {
                 const user = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
                 if (user.id) {
-                    await supabase.from('profiles').update({ 
+                    const { error } = await supabase.from('profiles').update({ 
                         last_active: new Date().toISOString() 
                     }).eq('id', user.id);
+                    
+                    if (error) {
+                        console.error("Errore aggiornamento attività:", error);
+                    } else {
+                        console.log("Segnale di attività inviato al database! 🟢");
+                    }
                 }
             };
             updateActivity();
