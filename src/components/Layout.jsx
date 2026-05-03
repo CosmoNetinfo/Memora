@@ -36,9 +36,12 @@ const Layout = () => {
         }
     };
 
-    const isFullPage = ['/chat', '/feed', '/profilo'].includes(location.pathname);
-    const isChatPage = location.pathname === '/chat';
-    const isProfilePage = location.pathname === '/profilo';
+    const isFullPage = location.pathname.startsWith('/chat/') || 
+                       location.pathname.startsWith('/profilo/') || 
+                       ['/chat', '/feed', '/profilo'].includes(location.pathname);
+    const isChatPage = location.pathname.startsWith('/chat');
+    const isProfilePage = location.pathname.startsWith('/profilo');
+    const hideTabBar = location.pathname.startsWith('/chat/');
 
     return (
         <div className={`app-container${isFullPage ? ' full-page' : ''}`}>
@@ -54,7 +57,7 @@ const Layout = () => {
                     </motion.div>
                 </AnimatePresence>
             </main>
-            <TabBar />
+            {!hideTabBar && <TabBar />}
         </div>
     );
 };

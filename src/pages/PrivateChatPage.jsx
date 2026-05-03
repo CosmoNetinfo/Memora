@@ -264,6 +264,7 @@ const PrivateChatPage = () => {
             gap: '10px',
             position: 'sticky',
             bottom: 0,
+            zIndex: 100,
         },
         input: {
             flex: 1,
