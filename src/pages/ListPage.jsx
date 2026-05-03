@@ -32,24 +32,13 @@ const ListPage = () => {
     const isHealthcare = user.role === 'healthcare';
     const reduceMotion = useReducedMotion();
     
-    const [tasks, setTasks] = useState(() => {
-        const saved = localStorage.getItem('alzheimer_tasks');
-        if (!saved) return initialTasks;
-        try {
-            const parsed = JSON.parse(saved);
-            if (!Array.isArray(parsed) || parsed.length === 0) return initialTasks;
-            // Se sono le vecchie 4 attività predefinite, passa alle 5 nuove
-            const isOldDefaults = parsed.length === 4 && parsed.some(t => t.text === 'Prendere farmaci mattino');
-            return isOldDefaults ? initialTasks : parsed;
-        } catch {
-            return initialTasks;
-        }
-    });
+    const [tasks, setTasks] = useState([]);
+    const [loadingTasks, setLoadingTasks] = useState(true);
     const [newTaskText, setNewTaskText] = useState("");
     const [newTaskTime, setNewTaskTime] = useState("");
     const [showManage, setShowManage] = useState(false);
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-    const [currentMood, setCurrentMood] = useState(() => getLatestMood()); // sync con moodHistory (localStorage)
+    const [currentMood, setCurrentMood] = useState(null);
     const [loadingMood, setLoadingMood] = useState(true);
     const [moodToast, setMoodToast] = useState(null);
 
@@ -60,10 +49,43 @@ const ListPage = () => {
         return wellnessQuotes[index];
     }, []);
 
-    // Salva ogni volta che i task cambiano
+    // Fetch Tasks from Supabase
     useEffect(() => {
-        localStorage.setItem('alzheimer_tasks', JSON.stringify(tasks));
-    }, [tasks]);
+        if (!user.id) return;
+        fetchTasks();
+
+        const channel = supabase
+            .channel('realtime-tasks')
+            .on('postgres_changes', { 
+                event: '*', 
+                schema: 'public', 
+                table: 'tasks',
+                filter: `user_id=eq.${user.id}`
+            }, () => fetchTasks())
+            .subscribe();
+
+        return () => { supabase.removeChannel(channel); };
+    }, [user.id]);
+
+    const fetchTasks = async () => {
+        const { data, error } = await supabase
+            .from('tasks')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
+        
+        if (!error && data) {
+            // Se non ci sono task, inizializza con quelli predefiniti la prima volta
+            if (data.length === 0) {
+                const defaults = initialTasks.map(t => ({ ...t, user_id: user.id, id: undefined }));
+                const { data: inserted } = await supabase.from('tasks').insert(defaults).select();
+                if (inserted) setTasks(inserted);
+            } else {
+                setTasks(data);
+            }
+        }
+        setLoadingTasks(false);
+    };
 
     // Fetch Mood from Supabase
     useEffect(() => {
@@ -141,29 +163,39 @@ const ListPage = () => {
         check();
     }, []);
 
-    const toggleTask = (id) => {
-        setTasks(tasks.map(task =>
-            task.id === id ? { ...task, completed: !task.completed } : task
-        ));
+    const toggleTask = async (id) => {
+        const task = tasks.find(t => t.id === id);
+        if (!task) return;
+        
+        const newStatus = !task.completed;
+        setTasks(tasks.map(t => t.id === id ? { ...t, completed: newStatus } : t));
+        
+        await supabase.from('tasks').update({ completed: newStatus }).eq('id', id);
     };
 
-    const addTask = () => {
+    const addTask = async () => {
         if (!newTaskText.trim()) return;
-        const newTask = {
-            id: Date.now(),
+        const time = newTaskTime || new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+        
+        const { data, error } = await supabase.from('tasks').insert([{
+            user_id: user.id,
             text: newTaskText,
-            time: newTaskTime || new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+            time: time,
             completed: false
-        };
-        setTasks([newTask, ...tasks]);
-        setNewTaskText("");
-        setNewTaskTime("");
-        setShowManage(false);
+        }]).select();
+
+        if (!error && data) {
+            setTasks([data[0], ...tasks]);
+            setNewTaskText("");
+            setNewTaskTime("");
+            setShowManage(false);
+        }
     };
 
-    const deleteTask = (id) => {
+    const deleteTask = async (id) => {
         if (window.confirm("Vuoi cancellare questa attività?")) {
             setTasks(tasks.filter(t => t.id !== id));
+            await supabase.from('tasks').delete().eq('id', id);
         }
     };
 
