@@ -36,7 +36,8 @@ const SignupPage = () => {
                         name: formData.name,
                         surname: formData.surname,
                         role: formData.role
-                    }
+                    },
+                    emailRedirectTo: window.location.origin
                 }
             });
 
