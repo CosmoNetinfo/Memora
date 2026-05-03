@@ -42,7 +42,7 @@ const MessagesListPage = () => {
                     const otherUser = msg.sender_id === currentUserId ? msg.receiver : msg.sender;
                     if (!otherUser) return;
                     if (!convMap[otherUser.id]) {
-                        const isAudio = msg.content && typeof msg.content === 'string' && msg.content.includes('.webm');
+                        const isAudio = msg.content && typeof msg.content === 'string' && (msg.content.includes('.webm') || msg.content.includes('.mp4') || msg.content.includes('.m4a') || msg.content.includes('.wav'));
                         convMap[otherUser.id] = {
                             user: otherUser,
                             lastMessage: isAudio ? '🎤 Messaggio vocale' : msg.content,

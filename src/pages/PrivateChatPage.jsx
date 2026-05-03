@@ -203,10 +203,26 @@ const PrivateChatPage = () => {
         setTimeout(scrollToBottom, 50);
     };
 
+    const getSupportedMimeType = () => {
+        const types = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/wav'];
+        for (const type of types) {
+            if (MediaRecorder.isTypeSupported(type)) return type;
+        }
+        return 'audio/webm'; // fallback
+    };
+
+    const getExtension = (mimeType) => {
+        if (mimeType.includes('mp4')) return 'mp4';
+        if (mimeType.includes('ogg')) return 'ogg';
+        if (mimeType.includes('wav')) return 'wav';
+        return 'webm';
+    };
+
     const startRecording = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const recorder = new MediaRecorder(stream);
+            const mimeType = getSupportedMimeType();
+            const recorder = new MediaRecorder(stream, { mimeType });
             const chunks = [];
 
             recorder.ondataavailable = (e) => {
@@ -214,8 +230,10 @@ const PrivateChatPage = () => {
             };
 
             recorder.onstop = async () => {
-                const audioBlob = new Blob(chunks, { type: 'audio/webm' });
-                await sendAudioMessage(audioBlob);
+                const actualMimeType = recorder.mimeType || mimeType;
+                const extension = getExtension(actualMimeType);
+                const audioBlob = new Blob(chunks, { type: actualMimeType });
+                await sendAudioMessage(audioBlob, extension);
                 stream.getTracks().forEach(track => track.stop());
             };
 
@@ -241,9 +259,9 @@ const PrivateChatPage = () => {
         }
     };
 
-    const sendAudioMessage = async (blob) => {
+    const sendAudioMessage = async (blob, extension) => {
         const tempId = Date.now();
-        const fileName = `${currentUserId}/${tempId}.webm`;
+        const fileName = `${currentUserId}/${tempId}.${extension}`;
         
         // Aggiunta ottimistica (placeholder)
         setMessages(prev => [...prev, {
@@ -493,7 +511,7 @@ const PrivateChatPage = () => {
             <div style={styles.messageList}>
                 {messages.length === 0 && <div style={{ textAlign: 'center', color: '#9CA3AF', marginTop: '20px' }}>Inizia la conversazione con un messaggio!</div>}
                 {messages.map(msg => {
-                    const isAudio = msg.type === 'audio' || (typeof msg.text === 'string' && msg.text.includes('.webm'));
+                    const isAudio = msg.type === 'audio' || (typeof msg.text === 'string' && (msg.text.includes('.webm') || msg.text.includes('.mp4') || msg.text.includes('.m4a') || msg.text.includes('.wav')));
                     return (
                         <div key={msg.id} style={styles.bubble(msg.sender)}>
                             {isAudio ? (
