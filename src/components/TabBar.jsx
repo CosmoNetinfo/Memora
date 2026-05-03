@@ -63,18 +63,19 @@ const TabBar = () => {
                 to="/chat"
                 className={({ isActive }) => `${styles.tab} ${isActive ? styles.active : ''}`}
             >
-                <div style={{ position: 'relative' }}>
-                    <AppIcon name="comments" size={24} />
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <AppIcon name="envelope" size={26} />
                     {hasUnread && (
                         <div style={{
                             position: 'absolute',
-                            top: '-2px',
-                            right: '-2px',
-                            width: '10px',
-                            height: '10px',
+                            top: '-3px',
+                            right: '-3px',
+                            width: '12px',
+                            height: '12px',
                             backgroundColor: '#EF4444',
                             borderRadius: '50%',
-                            border: '2px solid white'
+                            border: '2px solid white',
+                            boxShadow: '0 0 4px rgba(239, 68, 68, 0.4)'
                         }} />
                     )}
                 </div>
