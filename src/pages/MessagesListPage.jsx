@@ -42,9 +42,10 @@ const MessagesListPage = () => {
                     const otherUser = msg.sender_id === currentUserId ? msg.receiver : msg.sender;
                     if (!otherUser) return;
                     if (!convMap[otherUser.id]) {
+                        const isAudio = msg.content && typeof msg.content === 'string' && msg.content.includes('.webm');
                         convMap[otherUser.id] = {
                             user: otherUser,
-                            lastMessage: msg.content,
+                            lastMessage: isAudio ? '🎤 Messaggio vocale' : msg.content,
                             time: new Date(msg.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
                             date: new Date(msg.created_at),
                             unread: !msg.is_read && msg.receiver_id === currentUserId
