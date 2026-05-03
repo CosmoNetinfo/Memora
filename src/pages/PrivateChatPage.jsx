@@ -19,6 +19,7 @@ const PrivateChatPage = () => {
         if (!receiverId || !currentUserId) return;
         fetchReceiverProfile();
         fetchMessages();
+        markMessagesAsRead();
 
         const channel = supabase
             .channel(`private-chat-${[currentUserId, receiverId].sort().join('-')}`)
@@ -56,6 +57,19 @@ const PrivateChatPage = () => {
             }];
         });
         setTimeout(scrollToBottom, 50);
+    };
+
+    const markMessagesAsRead = async () => {
+        try {
+            await supabase
+                .from('private_messages')
+                .update({ is_read: true })
+                .eq('sender_id', receiverId)
+                .eq('receiver_id', currentUserId)
+                .eq('is_read', false);
+        } catch (e) {
+            console.error("Error marking messages as read", e);
+        }
     };
 
     const fetchReceiverProfile = async () => {
