@@ -522,12 +522,15 @@ const ProfilePage = () => {
                         width: '10px', 
                         height: '10px', 
                         borderRadius: '50%', 
-                        backgroundColor: (user.last_active && (new Date() - new Date(user.last_active)) < 600000) ? '#10B981' : '#EF4444', 
+                        backgroundColor: (user.last_active && Math.abs(new Date() - new Date(user.last_active)) < 600000) ? '#10B981' : '#EF4444', 
                         marginLeft: '8px',
-                        boxShadow: `0 0 5px ${(user.last_active && (new Date() - new Date(user.last_active)) < 600000) ? 'rgba(16, 185, 129, 0.5)' : 'rgba(239, 68, 68, 0.5)'}`
-                    }} />
+                        boxShadow: `0 0 5px ${(user.last_active && Math.abs(new Date() - new Date(user.last_active)) < 600000) ? 'rgba(16, 185, 129, 0.5)' : 'rgba(239, 68, 68, 0.5)'}`
+                    }} title={user.last_active ? `Ultimo segnale: ${new Date(user.last_active).toLocaleString()}` : 'Mai connesso'} />
                     {currentMood && <span style={styles.moodEmoji}>{getMoodEmoji(currentMood)}</span>}
                 </h1>
+                <div style={{ color: '#999', fontSize: '10px', marginTop: '-10px', marginBottom: '10px' }}>
+                    ID: {user.id?.substring(0,8)}... | Last: {user.last_active ? new Date(user.last_active).toLocaleTimeString() : 'null'}
+                </div>
                 <div style={{
                     ...styles.roleBadge,
                     ...(user.role === 'admin' ? {
