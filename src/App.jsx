@@ -64,15 +64,18 @@ function App() {
                     .single();
 
                 if (error || !profile) {
-                    console.log("Profilo non trovato nel DB, provo a crearlo...");
+                    console.log("Profilo non trovato nel DB, provo a crearlo con ID sessione:", userId);
+                    const { data: { user } } = await supabase.auth.getUser();
+                    
                     const newProfile = {
-                        id: localUser.id,
-                        name: localUser.name || 'Utente',
-                        surname: localUser.surname || '',
-                        role: localUser.role || 'caregiver',
-                        email: localUser.email || localUser.id,
-                        photo_url: localUser.photo || null
+                        id: userId,
+                        name: user?.user_metadata?.name || 'Utente',
+                        surname: user?.user_metadata?.surname || '',
+                        role: user?.user_metadata?.role || 'caregiver',
+                        email: user?.email || userId,
+                        photo_url: user?.user_metadata?.photo_url || null
                     };
+
                     const { data: created, error: createError } = await supabase
                         .from('profiles')
                         .upsert([newProfile])
@@ -80,9 +83,9 @@ function App() {
                         .single();
                     
                     if (createError) {
-                        console.error("Errore creazione profilo forzata:", createError);
+                        console.error("Errore creazione forzata profilo:", createError);
                     } else {
-                        console.log("Profilo creato con successo!");
+                        console.log("Profilo creato/aggiornato con successo via Session!");
                     }
                     setLoading(false);
                     return;
