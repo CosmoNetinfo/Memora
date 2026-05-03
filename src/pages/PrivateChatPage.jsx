@@ -11,25 +11,49 @@ const VoicePlayer = ({ url, isMe, userPhoto, userName }) => {
 
     const togglePlay = (e) => {
         e.stopPropagation();
+        if (!audioRef.current) return;
+
         if (isPlaying) {
             audioRef.current.pause();
+            setIsPlaying(false);
         } else {
-            audioRef.current.play();
+            // Su iOS la durata potrebbe essere Infinity inizialmente
+            const playPromise = audioRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    setIsPlaying(true);
+                }).catch(error => {
+                    console.error("Errore riproduzione:", error);
+                    setIsPlaying(false);
+                });
+            }
         }
-        setIsPlaying(!isPlaying);
     };
 
     const handleTimeUpdate = () => {
+        if (!audioRef.current) return;
         const current = audioRef.current.currentTime;
         const total = audioRef.current.duration;
-        if (total) {
+        
+        if (total && total !== Infinity) {
             setProgress((current / total) * 100);
+            setDuration(total);
+        } else if (current > 0) {
+            // Se sta riproducendo ma non conosciamo il totale, mostriamo comunque avanzamento
+            setProgress(0); // O una gestione alternativa
+        }
+    };
+
+    const handleLoadedMetadata = () => {
+        if (!audioRef.current) return;
+        const total = audioRef.current.duration;
+        if (total && total !== Infinity) {
             setDuration(total);
         }
     };
 
     const formatTime = (time) => {
-        if (!time) return "0:00";
+        if (!time || time === Infinity) return "0:00";
         const mins = Math.floor(time / 60);
         const secs = Math.floor(time % 60);
         return `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -80,8 +104,8 @@ const VoicePlayer = ({ url, isMe, userPhoto, userName }) => {
                                 width: '3px',
                                 height: `${height}%`,
                                 backgroundColor: isActive 
-                                    ? (isMe ? 'white' : 'var(--color-primary)') 
-                                    : (isMe ? 'rgba(255,255,255,0.4)' : '#D1D5DB'),
+                                     ? (isMe ? 'white' : 'var(--color-primary)') 
+                                     : (isMe ? 'rgba(255,255,255,0.4)' : '#D1D5DB'),
                                 borderRadius: '2px',
                                 transition: 'background-color 0.2s'
                             }} />
@@ -134,7 +158,8 @@ const VoicePlayer = ({ url, isMe, userPhoto, userName }) => {
                 src={url} 
                 onTimeUpdate={handleTimeUpdate}
                 onEnded={() => setIsPlaying(false)}
-                onLoadedMetadata={handleTimeUpdate}
+                onLoadedMetadata={handleLoadedMetadata}
+                preload="auto"
                 hidden 
             />
         </div>
