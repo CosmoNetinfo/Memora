@@ -15,10 +15,10 @@ L'agenda non è più solo locale, ma vive nel cloud.
 - **Sincronizzazione Multi-dispositivo**: Un caregiver può aggiungere un impegno dal suo telefono e il paziente lo vedrà apparire istantaneamente sul proprio.
 - **Aggiornamenti Live**: Spunta le attività concluse e aggiorna tutti i dispositivi collegati in tempo reale.
 
-### 👨‍⚕️ Dashboard Medica Professionale
+### 👨‍⚕️ Dashboard Medica & Registro Attività
 Un centro di controllo per i dottori per monitorare i pazienti a distanza.
+- **Registro Attività (Log)**: Cronologia dettagliata di ogni azione (es: "Farmaco preso alle 10:30").
 - **Monitoraggio Umore**: Grafici interattivi basati sullo storico degli stati d'animo registrati dal paziente.
-- **Verifica Attività**: I medici possono controllare se il paziente sta seguendo l'agenda quotidiana (medicine, attività fisica, ecc.).
 - **Note Cliniche Cloud**: Sistema di note professionali condivise tra lo staff medico.
 
 ### 🟢 Community & Presenza
@@ -31,7 +31,7 @@ L'applicazione segue l'identità visiva ufficiale di **Airalzh Onlus**.
 - **Accessibilità**: Design mobile-first stile iOS, ottimizzato per ipovedenti con testi grandi e icone chiare.
 
 ## 🛠️ Stack Tecnologico
-- **Frontend**: React + Vite + Framer Motion (per animazioni fluide).
+- **Frontend**: React + Vite + Framer Motion.
 - **Database & Backend**: Supabase (PostgreSQL + Real-time + Auth + Storage).
 - **PWA**: Configurazione completa per installazione su Android e iOS come App nativa.
 
@@ -51,9 +51,6 @@ npm install
 npm run dev
 ```
 
-### 🗄️ Configurazione Database
-Per configurare correttamente Supabase (Tabelle, RLS e Storage), consulta la **[Guida Supabase](GUIDA_SUPABASE.md)** e i file SQL nella cartella `sql_updates`.
-
 ---
 
 ## 👥 Per i Collaboratori
@@ -61,7 +58,7 @@ Se stai lavorando a questo progetto, è **fondamentale** seguire queste regole:
 1. Leggi sempre il file **[PROGETTO_RECAP.md](PROGETTO_RECAP.md)** per conoscere lo stato attuale dei lavori.
 2. Ogni volta che fai un push, aggiorna la sezione **Changelog** in fondo a `PROGETTO_RECAP.md`.
 
-*Sviluppato con dedizione da **Daniele Spalletti** ([cosmonet.info](https://www.cosmonet.info)) per migliorare la qualità della vita quotidiana attraverso la tecnologia.*
+*Sviluppato con dedizione da **Daniele Spalletti** (sviluppatore) e **Michele Mosca** (web designer) per **cosmonet.info**.*
 ---
 
 ## 📄 License & Credits
@@ -71,11 +68,3 @@ Se stai lavorando a questo progetto, è **fondamentale** seguire queste regole:
 © 2026 Cosmonet (https://www.cosmonet.info) — All rights reserved.
 
 This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
-
-- ✅ You can use and share this project with proper attribution to Cosmonet.
-- ❌ Commercial use is **not permitted** without explicit written permission.
-
-For commercial licensing or collaboration inquiries:
-👉 [https://www.cosmonet.info](https://www.cosmonet.info)
-
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
