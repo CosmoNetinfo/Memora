@@ -3,6 +3,104 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import AppIcon from '../components/AppIcon';
 
+const VoicePlayer = ({ url, isMe }) => {
+    const [isPlaying, setIsPlaying] = React.useState(false);
+    const [progress, setProgress] = React.useState(0);
+    const [duration, setDuration] = React.useState(0);
+    const audioRef = React.useRef(null);
+
+    const togglePlay = (e) => {
+        e.stopPropagation();
+        if (isPlaying) {
+            audioRef.current.pause();
+        } else {
+            audioRef.current.play();
+        }
+        setIsPlaying(!isPlaying);
+    };
+
+    const handleTimeUpdate = () => {
+        const current = audioRef.current.currentTime;
+        const total = audioRef.current.duration;
+        if (total) {
+            setProgress((current / total) * 100);
+            setDuration(total);
+        }
+    };
+
+    const formatTime = (time) => {
+        if (!time) return "0:00";
+        const mins = Math.floor(time / 60);
+        const secs = Math.floor(time % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    };
+
+    return (
+        <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '12px', 
+            minWidth: '200px',
+            padding: '4px 2px'
+        }}>
+            <button 
+                onClick={togglePlay}
+                style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    backgroundColor: isMe ? 'rgba(255,255,255,0.2)' : 'rgba(var(--color-primary-rgb), 0.1)',
+                    border: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    flexShrink: 0
+                }}
+            >
+                <AppIcon name={isPlaying ? "pause" : "play"} size={16} color={isMe ? "white" : "primary"} />
+            </button>
+            
+            <div style={{ flex: 1, position: 'relative' }}>
+                <div style={{ 
+                    height: '4px', 
+                    width: '100%', 
+                    backgroundColor: isMe ? 'rgba(255,255,255,0.3)' : '#E5E7EB',
+                    borderRadius: '2px',
+                    overflow: 'hidden'
+                }}>
+                    <div style={{ 
+                        height: '100%', 
+                        width: `${progress}%`, 
+                        backgroundColor: isMe ? 'white' : 'var(--color-primary)',
+                        transition: 'width 0.1s linear'
+                    }} />
+                </div>
+                <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    marginTop: '4px',
+                    fontSize: '10px',
+                    opacity: 0.8,
+                    fontWeight: '600'
+                }}>
+                    <span>{formatTime(audioRef.current?.currentTime)}</span>
+                    <span>{formatTime(duration)}</span>
+                </div>
+            </div>
+            
+            <audio 
+                ref={audioRef} 
+                src={url} 
+                onTimeUpdate={handleTimeUpdate}
+                onEnded={() => setIsPlaying(false)}
+                onLoadedMetadata={handleTimeUpdate}
+                hidden 
+            />
+        </div>
+    );
+};
+
 const PrivateChatPage = () => {
     const { receiverId } = useParams();
     const navigate = useNavigate();
@@ -359,12 +457,7 @@ const PrivateChatPage = () => {
                     return (
                         <div key={msg.id} style={styles.bubble(msg.sender)}>
                             {isAudio ? (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: '160px' }}>
-                                    <AppIcon name="microphone" size={20} color={msg.sender === 'me' ? "#fff" : "primary"} />
-                                    <audio controls style={{ height: '30px', width: '100%' }}>
-                                        <source src={msg.text} type="audio/webm" />
-                                    </audio>
-                                </div>
+                                <VoicePlayer url={msg.text} isMe={msg.sender === 'me'} />
                             ) : (
                                 <p style={styles.messageText}>{msg.text}</p>
                             )}
