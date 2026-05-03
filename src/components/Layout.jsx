@@ -26,15 +26,15 @@ const Layout = () => {
     }, []);
 
     const currentPath = window.location.hash.replace('#', '');
-    const isFullPage = currentPath.includes('/chat/') || 
-                       currentPath.includes('/profilo/') || 
-                       ['/chat', '/feed', '/profilo'].includes(currentPath);
-    const isChatPage = currentPath.startsWith('/chat');
-    const isProfilePage = currentPath.startsWith('/profilo');
-    const hideTabBar = currentPath.includes('/chat/') && currentPath !== '/chat';
+    const isFullPage = currentPath.includes('chat') || 
+                       currentPath.includes('profilo') || 
+                       ['/', '/chat', '/feed', '/profilo'].includes(currentPath);
+    const isChatPage = currentPath.includes('chat');
+    const isProfilePage = currentPath.includes('profilo');
+    const hideTabBar = currentPath.includes('chat-privata');
     
     const getTitle = (path) => {
-        if (path.startsWith('/chat/')) return 'Chat';
+        if (path.includes('chat-privata')) return 'Chat';
         if (path.startsWith('/profilo/')) return 'Profilo';
         if (path.startsWith('/feed')) return 'Memoriae';
         if (path.startsWith('/utenti')) return 'Ricerca';
@@ -47,13 +47,8 @@ const Layout = () => {
 
     return (
         <div className={`app-container${isFullPage ? ' full-page' : ''}`}>
-            {/* Banner di DEBUG temporaneo - Rimuoveremo appena risolto */}
-            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, backgroundColor: 'red', color: 'white', fontSize: '10px', zIndex: 9999, textAlign: 'center', padding: '2px' }}>
-                Path: {currentPath} | Hide: {hideTabBar ? 'SI' : 'NO'} | Page: {getTitle(currentPath)}
-            </div>
-            
             <Header title={getTitle(currentPath)} />
-            <main className={`main-content${isFullPage ? ' full-page' : ''}${isChatPage ? ' full-page-fill' : ''}${isProfilePage ? ' page-profilo' : ''}`} style={{ paddingTop: 'calc(var(--header-height) + 15px)' }}>
+            <main className={`main-content${isFullPage ? ' full-page' : ''}${isChatPage ? ' full-page-fill' : ''}${isProfilePage ? ' page-profilo' : ''}`} style={{ paddingTop: 'var(--header-height)' }}>
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={location.pathname}
