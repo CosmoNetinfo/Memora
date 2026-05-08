@@ -15,7 +15,22 @@ const DebugConsole = () => {
         const handleKeyDown = (e) => {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'd') {
                 e.preventDefault();
-                setIsVisible(prev => !prev);
+                
+                // Security Check: Only allow 'super_admin' to open the console
+                const userRaw = localStorage.getItem('alzheimer_user');
+                if (userRaw) {
+                    try {
+                        const user = JSON.parse(userRaw);
+                        if (user.role === 'super_admin') {
+                            setIsVisible(prev => !prev);
+                            return;
+                        } else {
+                            console.warn("Debug Console: Accesso negato. Permessi insufficienti.");
+                        }
+                    } catch (err) {
+                        // ignore parse errors
+                    }
+                }
             }
         };
 
