@@ -129,6 +129,7 @@ function App() {
                 };
 
                 localStorage.setItem('alzheimer_user', JSON.stringify(updatedUser));
+                window.dispatchEvent(new Event('user_updated'));
                 console.log("Profilo sincronizzato con successo! ✅");
             } catch (e) {
                 console.error("Errore critico durante il sync:", e);

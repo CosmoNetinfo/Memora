@@ -270,6 +270,7 @@ const ProfilePage = () => {
             case 'patient': return 'Paziente'; 
             case 'caregiver': return 'Caregiver'; 
             case 'healthcare': return 'Medico'; 
+            case 'super_admin': return 'Super Admin';
             case 'admin': return 'Amministratore';
             case 'moderator': return 'Moderatore';
             default: return 'Utente'; 
@@ -548,17 +549,17 @@ const ProfilePage = () => {
                 </div>
                 <div style={{
                     ...styles.roleBadge,
-                    ...(user.role === 'admin' ? {
-                        background: 'linear-gradient(45deg, #FFD700, #FFA500)',
-                        color: '#000',
+                    ...((user.role === 'admin' || user.role === 'super_admin') ? {
+                        background: user.role === 'super_admin' ? 'linear-gradient(45deg, #FF4B2B, #FF416C)' : 'linear-gradient(45deg, #FFD700, #FFA500)',
+                        color: user.role === 'super_admin' ? '#FFF' : '#000',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
-                        boxShadow: '0 2px 10px rgba(255, 215, 0, 0.4)',
-                        border: '1px solid #DAA520'
+                        boxShadow: user.role === 'super_admin' ? '0 2px 10px rgba(255, 65, 108, 0.4)' : '0 2px 10px rgba(255, 215, 0, 0.4)',
+                        border: user.role === 'super_admin' ? '1px solid #FF416C' : '1px solid #DAA520'
                     } : {})
                 }}>
-                    {user.role === 'admin' && <AppIcon name="crown" size={16} color="black" />}
+                    {(user.role === 'admin' || user.role === 'super_admin') && <AppIcon name="crown" size={16} color={user.role === 'super_admin' ? 'white' : 'black'} />}
                     {getRoleLabel(user.role)}
                 </div>
 
@@ -730,7 +731,7 @@ const ProfilePage = () => {
                     <AppIcon name="calendar-lines" size={20} color="primaryDark" />
                     <span style={{ fontSize: '15px' }}>Report umore</span>
                 </Link>
-                {user.role === 'admin' && (
+                {(user.role === 'admin' || user.role === 'super_admin') && (
                     <button 
                         style={{ ...styles.actionBtn, borderRadius: 0, padding: '16px', borderTop: '1px solid #F3F4F6' }} 
                         onClick={() => navigate('/users')}

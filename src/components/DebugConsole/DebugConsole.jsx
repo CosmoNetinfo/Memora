@@ -26,9 +26,13 @@ const DebugConsole = () => {
         };
         checkRole();
         
-        // Ascoltiamo anche eventi custom nel caso in cui App.jsx modifichi lo storage
+        // Ascoltiamo eventi custom per aggiornamenti istantanei in-app
         window.addEventListener('storage', checkRole);
-        return () => window.removeEventListener('storage', checkRole);
+        window.addEventListener('user_updated', checkRole);
+        return () => {
+            window.removeEventListener('storage', checkRole);
+            window.removeEventListener('user_updated', checkRole);
+        };
     }, []);
 
     // Secret combo listener (Ctrl + Shift + D) come alternativa Desktop
@@ -36,13 +40,20 @@ const DebugConsole = () => {
         const handleKeyDown = (e) => {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'd') {
                 e.preventDefault();
-                setIsVisible(prev => {
-                    if (!prev && !isSuperAdmin) {
-                        console.warn("Debug Console: Accesso negato.");
-                        return false;
-                    }
-                    return !prev;
-                });
+                
+                // Leggiamo sempre localStorage in tempo reale per evitare stale state
+                let currentIsAdmin = false;
+                try {
+                    const user = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
+                    currentIsAdmin = user.role === 'super_admin';
+                } catch(err){}
+
+                if (!currentIsAdmin) {
+                    console.warn("Debug Console: Accesso negato.");
+                    return;
+                }
+                
+                setIsVisible(prev => !prev);
             }
         };
 
