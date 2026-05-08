@@ -572,17 +572,22 @@ const ProfilePage = () => {
                 </div>
                 <div style={{
                     ...styles.roleBadge,
-                    ...((user.role === 'admin' || user.role === 'super_admin') ? {
-                        background: user.role === 'super_admin' ? 'linear-gradient(45deg, #FF4B2B, #FF416C)' : 'linear-gradient(45deg, #FFD700, #FFA500)',
-                        color: user.role === 'super_admin' ? '#FFF' : '#000',
+                    ...((user.role === 'admin' || user.role === 'super_admin' || user.role === 'moderator') ? {
+                        background: user.role === 'super_admin' ? 'linear-gradient(45deg, #FF4B2B, #FF416C)' : 
+                                    (user.role === 'admin' ? 'linear-gradient(45deg, #FFD700, #FFA500)' : '#E0F2FE'),
+                        color: user.role === 'super_admin' ? '#FFF' : 
+                               (user.role === 'admin' ? '#000' : '#0369A1'),
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
-                        boxShadow: user.role === 'super_admin' ? '0 2px 10px rgba(255, 65, 108, 0.4)' : '0 2px 10px rgba(255, 215, 0, 0.4)',
-                        border: user.role === 'super_admin' ? '1px solid #FF416C' : '1px solid #DAA520'
+                        boxShadow: user.role === 'super_admin' ? '0 2px 10px rgba(255, 65, 108, 0.4)' : 
+                                   (user.role === 'admin' ? '0 2px 10px rgba(255, 215, 0, 0.4)' : 'none'),
+                        border: user.role === 'super_admin' ? '1px solid #FF416C' : 
+                                (user.role === 'admin' ? '1px solid #DAA520' : '1px solid #BAE6FD')
                     } : {})
                 }}>
                     {(user.role === 'admin' || user.role === 'super_admin') && <AppIcon name="crown" size={16} color={user.role === 'super_admin' ? 'white' : 'black'} />}
+                    {user.role === 'moderator' && <AppIcon name="shield-check" size={16} color="#0369A1" />}
                     {getRoleLabel(user.role)}
                 </div>
 
