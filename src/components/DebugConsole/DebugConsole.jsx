@@ -61,6 +61,41 @@ const DebugConsole = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isSuperAdmin]);
 
+    const filteredLogs = logs.filter(log => {
+        if (filter === 'all') return true;
+        return log.level === filter;
+    });
+
+    const getLevelColor = (level) => {
+        switch(level) {
+            case 'error': return '#ef4444'; // red
+            case 'warn': return '#f59e0b'; // amber
+            case 'success': return '#10b981'; // green
+            case 'info':
+            default: return '#3b82f6'; // blue
+        }
+    };
+
+    const handleSendReport = () => {
+        const text = getLogsAsText();
+        if (!text) {
+            alert('Nessun log da esportare.');
+            return;
+        }
+        const encodedText = encodeURIComponent(`Bug Report da CareLink App:\n\n${text}`);
+        const action = prompt('Digita "email" per inviare via Mail, "wa" per WhatsApp, o "copia" per copiare negli appunti.', 'copia');
+        
+        if (action === 'email') {
+            window.location.href = `mailto:?subject=Bug Report App&body=${encodedText}`;
+        } else if (action === 'wa') {
+            window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+        } else if (action === 'copia') {
+            navigator.clipboard.writeText(`Bug Report da CareLink App:\n\n${text}`)
+                .then(() => alert('Log copiati negli appunti!'))
+                .catch(() => alert('Errore durante la copia.'));
+        }
+    };
+
     // Se l'utente non è super admin, non mostriamo assolutamente nulla
     if (!isSuperAdmin) return null;
 
