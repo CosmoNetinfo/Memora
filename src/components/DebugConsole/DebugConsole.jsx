@@ -3,6 +3,7 @@ import useDebugStore from '../../store/debugStore';
 
 const DebugConsole = () => {
     const [isVisible, setIsVisible] = useState(false);
+    const [isSuperAdmin, setIsSuperAdmin] = useState(false);
     const logs = useDebugStore((state) => state.logs);
     const clearLogs = useDebugStore((state) => state.clearLogs);
     const getLogsAsText = useDebugStore((state) => state.getLogsAsText);
@@ -10,76 +11,85 @@ const DebugConsole = () => {
     const [filter, setFilter] = useState('all'); // all, info, warn, error
     const [expandedLogId, setExpandedLogId] = useState(null);
 
-    // Secret combo listener (Ctrl + Shift + D)
+    // Check role on mount and storage change
+    useEffect(() => {
+        const checkRole = () => {
+            const userRaw = localStorage.getItem('alzheimer_user');
+            if (userRaw) {
+                try {
+                    const user = JSON.parse(userRaw);
+                    setIsSuperAdmin(user.role === 'super_admin');
+                } catch (err) {}
+            } else {
+                setIsSuperAdmin(false);
+            }
+        };
+        checkRole();
+        
+        // Ascoltiamo anche eventi custom nel caso in cui App.jsx modifichi lo storage
+        window.addEventListener('storage', checkRole);
+        return () => window.removeEventListener('storage', checkRole);
+    }, []);
+
+    // Secret combo listener (Ctrl + Shift + D) come alternativa Desktop
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'd') {
                 e.preventDefault();
-                
-                // Security Check: Only allow 'super_admin' to open the console
-                const userRaw = localStorage.getItem('alzheimer_user');
-                if (userRaw) {
-                    try {
-                        const user = JSON.parse(userRaw);
-                        if (user.role === 'super_admin') {
-                            setIsVisible(prev => !prev);
-                            return;
-                        } else {
-                            console.warn("Debug Console: Accesso negato. Permessi insufficienti.");
-                        }
-                    } catch (err) {
-                        // ignore parse errors
+                setIsVisible(prev => {
+                    if (!prev && !isSuperAdmin) {
+                        console.warn("Debug Console: Accesso negato.");
+                        return false;
                     }
-                }
+                    return !prev;
+                });
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, []);
+    }, [isSuperAdmin]);
 
-    if (!isVisible) return null;
-
-    const filteredLogs = logs.filter(log => {
-        if (filter === 'all') return true;
-        return log.level === filter;
-    });
-
-    const getLevelColor = (level) => {
-        switch(level) {
-            case 'error': return '#ef4444'; // red
-            case 'warn': return '#f59e0b'; // amber
-            case 'success': return '#10b981'; // green
-            case 'info':
-            default: return '#3b82f6'; // blue
-        }
-    };
-
-    const handleSendReport = () => {
-        const text = getLogsAsText();
-        if (!text) {
-            alert('Nessun log da esportare.');
-            return;
-        }
-        const encodedText = encodeURIComponent(`Bug Report da CareLink App:\n\n${text}`);
-        const action = prompt('Digita "email" per inviare via Mail, "wa" per WhatsApp, o "copia" per copiare negli appunti.', 'copia');
-        
-        if (action === 'email') {
-            window.location.href = `mailto:?subject=Bug Report App&body=${encodedText}`;
-        } else if (action === 'wa') {
-            window.open(`https://wa.me/?text=${encodedText}`, '_blank');
-        } else if (action === 'copia') {
-            navigator.clipboard.writeText(`Bug Report da CareLink App:\n\n${text}`)
-                .then(() => alert('Log copiati negli appunti!'))
-                .catch(() => alert('Errore durante la copia.'));
-        }
-    };
+    // Se l'utente non è super admin, non mostriamo assolutamente nulla
+    if (!isSuperAdmin) return null;
 
     return (
-        <div style={{
-            position: 'fixed',
-            bottom: '20px',
-            right: '20px',
+        <>
+            {/* Pulsante flottante invisibile/semi-trasparente per Mobile & Desktop */}
+            {!isVisible && (
+                <button
+                    onClick={() => setIsVisible(true)}
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        left: '20px',
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        color: 'white',
+                        border: 'none',
+                        zIndex: 99998,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '20px',
+                        backdropFilter: 'blur(4px)',
+                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                    }}
+                    title="Apri Debug Console"
+                >
+                    🪲
+                </button>
+            )}
+
+            {/* Debug Console UI */}
+            {isVisible && (
+                <div style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
             width: '90%',
             maxWidth: '500px',
             height: '60vh',
@@ -166,6 +176,8 @@ const DebugConsole = () => {
                 )}
             </div>
         </div>
+            )}
+        </>
     );
 };
 
