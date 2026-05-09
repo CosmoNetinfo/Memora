@@ -17,6 +17,8 @@ const FeedPage = () => {
     const [newCommentText, setNewCommentText] = useState('');
     const [userMoods, setUserMoods] = useState({}); // { author_id: mood }
     const fileInputRef = useRef(null);
+    const postTextareaRef = useRef(null);
+    const commentInputRefs = useRef({});
 
     const [likedPosts, setLikedPosts] = useState(() => {
         const saved = localStorage.getItem('alzheimer_liked_posts');
@@ -213,6 +215,12 @@ const FeedPage = () => {
                     [postId]: [...(prev[postId] || []), inserted[0]]
                 }));
                 setPosts(prev => prev.map(p => p.id === postId ? { ...p, comment_count: (p.comment_count || 0) + 1 } : p));
+                
+                // Reset height of the comment textarea
+                const textarea = commentInputRefs.current[postId];
+                if (textarea) {
+                    textarea.style.height = 'inherit';
+                }
             }
         }
     };
@@ -273,6 +281,9 @@ const FeedPage = () => {
         
         setNewPostText(''); 
         setSelectedImage(null);
+        if (postTextareaRef.current) {
+            postTextareaRef.current.style.height = 'inherit';
+        }
         
         try { 
             const { error } = await supabase.from('posts').insert([newPostObj]); 
@@ -355,7 +366,25 @@ const FeedPage = () => {
                         <div style={styles.avatar(userMoods[user.id || (user.name + (user.surname || ''))]?.mood)}>
                             {user.photo && typeof user.photo === 'string' && user.photo.startsWith('http') ? <img src={user.photo} style={styles.avatarImg} alt="Profilo" /> : user.name[0]}
                         </div>
-                        <input style={styles.input} placeholder={`A che pensi, ${user.name}?`} value={newPostText} onChange={(e) => setNewPostText(e.target.value)} />
+                        <textarea 
+                            ref={postTextareaRef}
+                            style={{
+                                ...styles.input, 
+                                resize: 'none', 
+                                overflow: 'hidden', 
+                                minHeight: '42px', 
+                                borderRadius: '15px',
+                                fontFamily: 'inherit',
+                                lineHeight: '1.4'
+                            }} 
+                            placeholder={`A che pensi, ${user.name}?`} 
+                            value={newPostText} 
+                            onChange={(e) => {
+                                setNewPostText(e.target.value);
+                                e.target.style.height = 'inherit';
+                                e.target.style.height = `${e.target.scrollHeight}px`;
+                            }} 
+                        />
                     </div>
                     {selectedImage && (
                         <div style={{ position: 'relative', marginBottom: '12px', maxWidth: '100%' }}>
@@ -453,12 +482,30 @@ const FeedPage = () => {
                                 <div style={styles.avatarSmall()}>
                                     {user.photo && typeof user.photo === 'string' && user.photo.startsWith('http') ? <img src={user.photo} style={styles.avatarImg} alt="Me" /> : user.name[0]}
                                 </div>
-                                <input 
-                                    style={styles.input} 
+                                <textarea 
+                                    ref={el => commentInputRefs.current[post.id] = el}
+                                    style={{
+                                        ...styles.input, 
+                                        resize: 'none', 
+                                        overflow: 'hidden', 
+                                        minHeight: '38px', 
+                                        borderRadius: '15px',
+                                        fontFamily: 'inherit',
+                                        lineHeight: '1.4'
+                                    }} 
                                     placeholder="Scrivi un commento..." 
                                     value={newCommentText}
-                                    onChange={(e) => setNewCommentText(e.target.value)}
-                                    onKeyPress={(e) => e.key === 'Enter' && addComment(post.id)}
+                                    onChange={(e) => {
+                                        setNewCommentText(e.target.value);
+                                        e.target.style.height = 'inherit';
+                                        e.target.style.height = `${e.target.scrollHeight}px`;
+                                    }}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            e.preventDefault();
+                                            addComment(post.id);
+                                        }
+                                    }}
                                 />
                                 <button style={{ border: 'none', background: 'none', color: 'var(--color-primary)' }} onClick={() => addComment(post.id)} aria-label="Invia"><AppIcon name="paper-plane" size={20} color="primary"/></button>
                             </div>

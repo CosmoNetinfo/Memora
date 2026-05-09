@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import TabBar from './TabBar';
 import Header from './Header';
-import DebugConsole from './DebugConsole';
 
 const pageTransition = (reduced) => ({
     initial: reduced ? false : { opacity: 0, x: 20 },
@@ -61,7 +60,6 @@ const Layout = () => {
                 </AnimatePresence>
             </main>
             {!hideTabBar && <TabBar />}
-            <DebugConsole />
         </div>
     );
 };
