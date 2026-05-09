@@ -46,6 +46,18 @@ const FeedPage = () => {
         }
     };
 
+    const renderTextWithLinks = (text) => {
+        if (!text) return null;
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const parts = text.split(urlRegex);
+        return parts.map((part, i) => {
+            if (part.match(urlRegex)) {
+                return <a key={i} href={part} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>{part}</a>;
+            }
+            return part;
+        });
+    };
+
     useEffect(() => {
         localStorage.setItem('alzheimer_liked_posts', JSON.stringify(likedPosts));
     }, [likedPosts]);
@@ -296,6 +308,24 @@ const FeedPage = () => {
         }
     };
 
+    const updatePost = async (postId) => {
+        if (!editingText.trim()) return;
+        try {
+            const { error } = await supabase
+                .from('posts')
+                .update({ text: editingText.trim() })
+                .eq('id', postId);
+            
+            if (error) throw error;
+            setEditingPostId(null);
+            setEditingText('');
+            // UI si aggiorna via realtime o fetch
+        } catch (e) {
+            console.error("Errore aggiornamento post:", e);
+            alert("Errore nell'aggiornamento.");
+        }
+    };
+
     const deletePost = async (postId) => {
         if (!window.confirm("Eliminare il post?")) return;
         try { await supabase.from('posts').delete().eq('id', postId); } catch (e) {}
@@ -421,14 +451,61 @@ const FeedPage = () => {
                                 <div style={{ fontSize: '11px', color: '#999' }}>{new Date(post.created_at).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
                             </div>
                         </Link>
-                        {(post.author_id === user.id || user.role === 'admin' || user.role === 'moderator') && (
-                            <button style={{ background: 'none', border: 'none' }} onClick={() => deletePost(post.id)} aria-label="Elimina">
-                                <AppIcon name="trash" size={18} color="error" />
-                            </button>
-                        )}
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            {(post.author_id === user.id || user.role === 'admin' || user.role === 'moderator' || user.role === 'super_admin') && (
+                                <>
+                                    {editingPostId === post.id ? (
+                                        <div style={{ display: 'flex', gap: '8px' }}>
+                                            <button onClick={() => setEditingPostId(null)} style={{ background: 'none', border: 'none', color: '#999', fontSize: '12px', fontWeight: 'bold' }}>Annulla</button>
+                                            <button onClick={() => updatePost(post.id)} style={{ background: 'var(--color-primary)', border: 'none', color: 'white', padding: '4px 12px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' }}>Salva</button>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <button style={{ background: 'none', border: 'none', padding: '4px' }} onClick={() => { setEditingPostId(post.id); setEditingText(post.text); }} aria-label="Modifica">
+                                                <AppIcon name="pencil" size={18} color="primary" />
+                                            </button>
+                                            <button style={{ background: 'none', border: 'none', padding: '4px' }} onClick={() => deletePost(post.id)} aria-label="Elimina">
+                                                <AppIcon name="trash" size={18} color="error" />
+                                            </button>
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </div>
 
-                    <div style={{ fontSize: '16px', color: '#333', marginBottom: '8px', textAlign: 'left', wordBreak: 'break-word', overflowWrap: 'break-word' }}>{post.text}</div>
+                    {editingPostId === post.id ? (
+                        <textarea 
+                            autoFocus
+                            style={{
+                                ...styles.input, 
+                                width: '100%',
+                                resize: 'none', 
+                                overflow: 'hidden', 
+                                minHeight: '60px', 
+                                borderRadius: '12px',
+                                fontFamily: 'inherit',
+                                lineHeight: '1.4',
+                                marginBottom: '12px',
+                                backgroundColor: '#fff',
+                                border: '1px solid var(--color-primary-light)'
+                            }} 
+                            value={editingText} 
+                            onChange={(e) => {
+                                setEditingText(e.target.value);
+                                e.target.style.height = 'inherit';
+                                e.target.style.height = `${e.target.scrollHeight}px`;
+                            }}
+                            onFocus={(e) => {
+                                e.target.style.height = 'inherit';
+                                e.target.style.height = `${e.target.scrollHeight}px`;
+                            }}
+                        />
+                    ) : (
+                        <div style={{ fontSize: '16px', color: '#333', marginBottom: '8px', textAlign: 'left', wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+                            {renderTextWithLinks(post.text)}
+                        </div>
+                    )}
                     {post.image && (
                         <div style={styles.postImageWrap} onClick={() => setEnlargedImage(post.image)}>
                             <img src={post.image} style={styles.postImage} alt="Post" />
@@ -473,7 +550,7 @@ const FeedPage = () => {
                                                 </button>
                                             )}
                                         </div>
-                                        <div style={styles.commentText}>{comm.text}</div>
+                                        <div style={styles.commentText}>{renderTextWithLinks(comm.text)}</div>
                                     </div>
                                 </div>
                             ))}
