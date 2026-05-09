@@ -42,7 +42,7 @@ const ProfilePage = () => {
 
                 let { data, error } = await supabase
                     .from('profiles')
-                    .select('id, name, surname, current_mood, role, bio, location, email, photo_url, last_active')
+                    .select('id, name, surname, current_mood, role, bio, location, email, photo_url, last_active, created_at')
                     .eq('id', profileId)
                     .single();
 
@@ -51,7 +51,7 @@ const ProfilePage = () => {
                     // Prova a cercare in modo più permissivo
                     const { data: retryData, error: retryError } = await supabase
                         .from('profiles')
-                        .select('id, name, surname, current_mood, role, bio, location, email, photo_url, last_active')
+                        .select('id, name, surname, current_mood, role, bio, location, email, photo_url, last_active, created_at')
                         .eq('id', profileId)
                         .maybeSingle();
                     
