@@ -891,8 +891,24 @@ const ProfilePage = () => {
                 ) : (
                     activities.slice(0, 5).map(act => (
                         <div key={act.id} style={styles.activityItem}>
+                            <div style={{ 
+                                width: '32px', 
+                                height: '32px', 
+                                borderRadius: '8px', 
+                                backgroundColor: 'var(--color-bg-primary)', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center',
+                                fontSize: '16px'
+                            }}>
+                                {act.action === 'task_completed' ? '✅' : 
+                                 act.action === 'mood_updated' ? '🎭' : 
+                                 act.action === 'task_added' ? '➕' : '🕒'}
+                            </div>
                             <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: '14px', color: '#374151' }}>{act.activity_type}</div>
+                                <div style={{ fontSize: '14px', color: '#374151', fontWeight: '500' }}>
+                                    {act.details || act.activity_type || (act.action === 'task_completed' ? 'Task completato' : 'Attività registrata')}
+                                </div>
                                 <div style={{ fontSize: '11px', color: '#9CA3AF' }}>
                                     {new Date(act.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
                                 </div>
