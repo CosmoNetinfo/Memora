@@ -335,6 +335,7 @@ const ProfilePage = () => {
     };
 
     const styles = {
+        container: {
             padding: 'var(--content-padding-y) var(--content-padding-x) 100px',
             backgroundColor: 'var(--color-bg-primary)',
             minHeight: '100%',
