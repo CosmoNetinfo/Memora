@@ -136,9 +136,10 @@ const AnalyticsPage = () => {
         chartContainer: {
             width: '100%',
             height: '250px',
-            position: 'relative',
+            position: 'relative', // Essenziale per ResponsiveContainer
             minHeight: '250px',
-            display: 'block'
+            display: 'block',
+            overflow: 'hidden'
         },
         patientSelector: {
             display: 'flex',
@@ -253,9 +254,9 @@ const AnalyticsPage = () => {
                     <AppIcon name="grin" size={18} color="primary" /> Andamento Umore
                 </div>
                 <div style={styles.chartContainer}>
-                    {isReady && (
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
-                            <AreaChart data={moodData}>
+                    {isReady && moodData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={moodData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                             <defs>
                                 <linearGradient id="colorMood" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
@@ -269,6 +270,10 @@ const AnalyticsPage = () => {
                             <Area type="monotone" dataKey="val" stroke="var(--color-primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorMood)" />
                         </AreaChart>
                     </ResponsiveContainer>
+                    ) : (
+                        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '12px' }}>
+                            {loading ? 'Caricamento...' : 'Nessun dato umore disponibile'}
+                        </div>
                     )}
                 </div>
             </div>
@@ -278,9 +283,9 @@ const AnalyticsPage = () => {
                     <AppIcon name="badge-check" size={18} color="primary" /> Attività Completate
                 </div>
                 <div style={styles.chartContainer}>
-                    {isReady && (
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
-                            <BarChart data={taskData}>
+                    {isReady && taskData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={taskData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
                             <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />
                             <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />
@@ -289,6 +294,10 @@ const AnalyticsPage = () => {
                             <Bar dataKey="total" fill="#E5E7EB" radius={[4, 4, 0, 0]} barSize={20} />
                         </BarChart>
                     </ResponsiveContainer>
+                    ) : (
+                        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '12px' }}>
+                            {loading ? 'Caricamento...' : 'Nessun dato attività disponibile'}
+                        </div>
                     )}
                 </div>
             </div>

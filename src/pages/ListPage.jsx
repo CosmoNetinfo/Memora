@@ -164,6 +164,11 @@ const ListPage = () => {
 
     const addTask = async () => {
         if (!newTaskText.trim()) return;
+        if (!user || !user.id) {
+            alert("Errore: Utente non autenticato correttamente. Riprova il login.");
+            return;
+        }
+        
         const time = newTaskTime || new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
         
         const { data, error } = await supabase.from('tasks').insert([{
@@ -175,7 +180,13 @@ const ListPage = () => {
             completed: false
         }]).select();
 
-        if (!error && data) {
+        if (error) {
+            console.error("Errore aggiunta task:", error);
+            alert(`Errore nell'aggiunta dell'attività: ${error.message || 'Controlla la connessione o il database'}`);
+            return;
+        }
+
+        if (data && data.length > 0) {
             setTasks([data[0], ...tasks]);
             setNewTaskText("");
             setNewTaskTime("");

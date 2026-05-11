@@ -44,12 +44,25 @@ const ErrorInterceptor = () => {
 
         console.error = function (...args) {
             const message = args.map(a => (typeof a === 'object' ? safeStringify(a) : String(a))).join(' ');
+            
+            // Proviamo a estrarre un oggetto di dettaglio più utile se il primo argomento è un errore
+            let detailedInfo = null;
+            if (args[0] instanceof Error) {
+                detailedInfo = {
+                    message: args[0].message,
+                    stack: args[0].stack,
+                    name: args[0].name
+                };
+            } else if (typeof args[0] === 'object') {
+                detailedInfo = args[0];
+            }
+
             if (!message.includes('__NEXT_PRIVATE') && !message.includes('Warning: React does not recognize')) {
                 addLog({
                     level: 'error',
                     source: 'console.error',
-                    message: message,
-                    details: null // Evitiamo di passare 'args' che potrebbero contenere React fibers non serializzabili
+                    message: message.substring(0, 500), // Limitiamo per la preview
+                    details: detailedInfo
                 });
             }
             originalConsoleError.apply(console, args);
@@ -61,8 +74,8 @@ const ErrorInterceptor = () => {
                 addLog({
                     level: 'warn',
                     source: 'console.warn',
-                    message: message,
-                    details: null
+                    message: message.substring(0, 500),
+                    details: args.length > 1 || typeof args[0] === 'object' ? args : null
                 });
             }
             originalConsoleWarn.apply(console, args);
@@ -74,11 +87,30 @@ const ErrorInterceptor = () => {
             try {
                 const response = await originalFetch.apply(this, args);
                 if (!response.ok) {
+                    let errorBody = null;
+                    try {
+                        // Cloniamo la risposta per poter leggere il body senza consumare l'originale
+                        const cloned = response.clone();
+                        const contentType = cloned.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            errorBody = await cloned.json();
+                        } else {
+                            errorBody = await cloned.text();
+                        }
+                    } catch (e) {
+                        errorBody = "Impossibile leggere il corpo dell'errore";
+                    }
+
                     addLog({
                         level: response.status >= 500 ? 'error' : 'warn',
                         source: 'fetch',
                         message: `Fetch failed: ${response.status} ${response.statusText}`,
-                        details: { url: args[0], status: response.status }
+                        details: { 
+                            url: args[0], 
+                            status: response.status, 
+                            statusText: response.statusText,
+                            response: errorBody 
+                        }
                     });
                 }
                 return response;
@@ -87,7 +119,7 @@ const ErrorInterceptor = () => {
                     level: 'error',
                     source: 'fetch',
                     message: `Fetch network error: ${error.message}`,
-                    details: { url: args[0], stack: error.stack }
+                    details: { url: args[0], stack: error.stack, error: error }
                 });
                 throw error;
             }

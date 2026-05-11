@@ -310,8 +310,20 @@ const DebugConsole = () => {
                                     
                                     {/* Expanded Details */}
                                     {expandedLogId === log.id && log.details && (
-                                        <div style={{ padding: '8px', backgroundColor: '#111827', fontSize: '11px', borderTop: '1px solid #4b5563', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-                                            {JSON.stringify(log.details, null, 2)}
+                                        <div style={{ padding: '8px', backgroundColor: '#111827', fontSize: '11px', borderTop: '1px solid #4b5563', whiteSpace: 'pre-wrap', wordBreak: 'break-all', position: 'relative' }}>
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    navigator.clipboard.writeText(JSON.stringify(log.details, null, 2));
+                                                    alert('Dettagli copiati!');
+                                                }}
+                                                style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '9px', backgroundColor: '#374151', color: 'white', border: 'none', borderRadius: '4px', padding: '2px 6px', cursor: 'pointer' }}
+                                            >
+                                                Copia Dettagli
+                                            </button>
+                                            <pre style={{ margin: 0, overflowX: 'auto' }}>
+                                                {JSON.stringify(log.details, null, 2)}
+                                            </pre>
                                         </div>
                                     )}
                                 </div>
