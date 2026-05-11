@@ -268,6 +268,7 @@ const AnalyticsPage = () => {
                             <Area type="monotone" dataKey="val" stroke="var(--color-primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorMood)" />
                         </AreaChart>
                     </ResponsiveContainer>
+                    )}
                 </div>
             </div>
 
