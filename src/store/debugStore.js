@@ -7,12 +7,14 @@ const useDebugStore = create((set, get) => ({
         const newLog = {
             id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
             timestamp: new Date().toISOString(),
-            level: log.level || 'info', // 'info', 'warn', 'error', 'success'
+            level: log.level || 'info', 
             source: log.source || 'unknown',
             message: log.message || '',
-            details: log.details || null,
+            details: {
+                ...log.details,
+                page: window.location.pathname // Aggiungiamo la pagina corrente
+            },
         };
-        // Keep only last 100 logs to avoid memory leaks
         return { logs: [newLog, ...state.logs].slice(0, 100) };
     }),
 
