@@ -11,8 +11,14 @@ const AnalyticsPage = () => {
     const [moodData, setMoodData] = useState([]);
     const [taskData, setTaskData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isReady, setIsReady] = useState(false);
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [patients, setPatients] = useState([]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsReady(true), 300);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -244,8 +250,9 @@ const AnalyticsPage = () => {
                     <AppIcon name="grin" size={18} color="primary" /> Andamento Umore
                 </div>
                 <div style={styles.chartContainer}>
-                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-                        <AreaChart data={moodData}>
+                    {isReady && (
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
+                            <AreaChart data={moodData}>
                             <defs>
                                 <linearGradient id="colorMood" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
@@ -267,8 +274,9 @@ const AnalyticsPage = () => {
                     <AppIcon name="badge-check" size={18} color="primary" /> Attività Completate
                 </div>
                 <div style={styles.chartContainer}>
-                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-                        <BarChart data={taskData}>
+                    {isReady && (
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
+                            <BarChart data={taskData}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
                             <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />
                             <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />
@@ -277,6 +285,7 @@ const AnalyticsPage = () => {
                             <Bar dataKey="total" fill="#E5E7EB" radius={[4, 4, 0, 0]} barSize={20} />
                         </BarChart>
                     </ResponsiveContainer>
+                    )}
                 </div>
             </div>
 

@@ -32,7 +32,13 @@ export default function ReportUmorePage() {
   const [tab, setTab] = useState('giornaliero');
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
   const loggedInUser = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -201,17 +207,19 @@ export default function ReportUmorePage() {
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><span style={{ width: 12, height: 12, borderRadius: 4, backgroundColor: getMoodColor('sad') }} /> Triste</span>
               </div>
               <div style={{ marginTop: '20px', height: 220, position: 'relative' }}>
-                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-                  <BarChart data={monthlyData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="day" tick={{ fontSize: 11 }} />
-                    <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
-                    <Tooltip formatter={(value) => [value, 'registrazioni']} labelFormatter={(l) => `Giorno ${l}`} />
-                    <Bar dataKey="felice" fill={getMoodColor('happy')} name="Felice" radius={[4, 4, 0, 0]} stackId="a" />
-                    <Bar dataKey="neutro" fill={getMoodColor('neutral')} name="Neutro" radius={[4, 4, 0, 0]} stackId="a" />
-                    <Bar dataKey="triste" fill={getMoodColor('sad')} name="Triste" radius={[4, 4, 0, 0]} stackId="a" />
-                  </BarChart>
-                </ResponsiveContainer>
+                {isReady && (
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
+                    <BarChart data={monthlyData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="day" tick={{ fontSize: 11 }} />
+                      <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
+                      <Tooltip formatter={(value) => [value, 'registrazioni']} labelFormatter={(l) => `Giorno ${l}`} />
+                      <Bar dataKey="felice" fill={getMoodColor('happy')} name="Felice" radius={[4, 4, 0, 0]} stackId="a" />
+                      <Bar dataKey="neutro" fill={getMoodColor('neutral')} name="Neutro" radius={[4, 4, 0, 0]} stackId="a" />
+                      <Bar dataKey="triste" fill={getMoodColor('sad')} name="Triste" radius={[4, 4, 0, 0]} stackId="a" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
               </div>
             </>
           ) : (
@@ -225,15 +233,17 @@ export default function ReportUmorePage() {
           <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-primary-dark)', marginBottom: '12px' }}>Andamento del benessere (ultimi 12 mesi)</h2>
           {annualData.some((d) => d.benessere != null) ? (
             <div style={{ height: 260, position: 'relative' }}>
-              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-                <LineChart data={annualData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-                  <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
-                  <Tooltip formatter={(value) => [value != null ? `${value}%` : '—', 'Benessere']} />
-                  <Line type="monotone" dataKey="benessere" stroke="var(--color-primary)" strokeWidth={2} dot={{ r: 4 }} name="Benessere" connectNulls />
-                </LineChart>
-              </ResponsiveContainer>
+              {isReady && (
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
+                  <LineChart data={annualData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+                    <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
+                    <Tooltip formatter={(value) => [value != null ? `${value}%` : '—', 'Benessere']} />
+                    <Line type="monotone" dataKey="benessere" stroke="var(--color-primary)" strokeWidth={2} dot={{ r: 4 }} name="Benessere" connectNulls />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </div>
           ) : (
             <p style={styles.empty}>Non ci sono ancora abbastanza dati per il grafico annuale.</p>

@@ -86,6 +86,12 @@ export default function ClinicalDashboard() {
   const [logs, setLogs] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const user = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
 
@@ -327,18 +333,22 @@ export default function ClinicalDashboard() {
             <span>Mood Tracker (ultimi 7 giorni)</span>
           </div>
           {lineChartData.some((p) => p.mood != null) ? (
-            <ResponsiveContainer width="100%" height={220} minWidth={0}>
-              <LineChart data={lineChartData} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="short" tick={{ fontSize: 12 }} />
-                <YAxis domain={[0, 2]} ticks={[0, 1, 2]} tick={{ fontSize: 12 }} tickFormatter={(v) => (v === 2 ? 'Felice' : v === 1 ? 'Neutro' : 'Triste')} />
-                <Tooltip
-                  formatter={(value) => [value === 2 ? 'Felice' : value === 1 ? 'Neutro' : 'Triste', 'Umore']}
-                  labelFormatter={(label, payload) => payload?.[0]?.payload?.date ?? label}
-                />
-                <Line type="monotone" dataKey="benessere" stroke="var(--color-primary)" strokeWidth={2} dot={{ r: 4 }} name="Umore" />
-              </LineChart>
-            </ResponsiveContainer>
+            <div style={{ height: 220, position: 'relative' }}>
+              {isReady && (
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
+                  <LineChart data={lineChartData} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                    <XAxis dataKey="short" tick={{ fontSize: 12 }} />
+                    <YAxis domain={[0, 2]} ticks={[0, 1, 2]} tick={{ fontSize: 12 }} tickFormatter={(v) => (v === 2 ? 'Felice' : v === 1 ? 'Neutro' : 'Triste')} />
+                    <Tooltip
+                      formatter={(value) => [value === 2 ? 'Felice' : value === 1 ? 'Neutro' : 'Triste', 'Umore']}
+                      labelFormatter={(label, payload) => payload?.[0]?.payload?.date ?? label}
+                    />
+                    <Line type="monotone" dataKey="benessere" stroke="var(--color-primary)" strokeWidth={2} dot={{ r: 4 }} name="Umore" />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
+            </div>
           ) : (
             <div style={styles.empty}>Nessun dato umore negli ultimi 7 giorni.</div>
           )}
