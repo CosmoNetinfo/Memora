@@ -140,6 +140,14 @@ export default function ReportUmorePage() {
     dayCell: (color) => ({ aspectRatio: '1', borderRadius: '8px', backgroundColor: color, maxWidth: '44px' }),
   };
 
+  if (loading) {
+    return (
+      <div style={{ ...styles.container, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <p style={{ color: 'var(--color-text-secondary)' }}>Caricamento report...</p>
+      </div>
+    );
+  }
+
   return (
     <div style={styles.container} className="last-scroll-block">
       <header style={styles.header}>
@@ -192,8 +200,8 @@ export default function ReportUmorePage() {
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><span style={{ width: 12, height: 12, borderRadius: 4, backgroundColor: getMoodColor('neutral') }} /> Neutro</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><span style={{ width: 12, height: 12, borderRadius: 4, backgroundColor: getMoodColor('sad') }} /> Triste</span>
               </div>
-              <div style={{ marginTop: '20px', height: 220 }}>
-                <ResponsiveContainer width="100%" height="100%">
+              <div style={{ marginTop: '20px', height: 220, position: 'relative' }}>
+                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                   <BarChart data={monthlyData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="day" tick={{ fontSize: 11 }} />
@@ -216,8 +224,8 @@ export default function ReportUmorePage() {
         <div style={styles.card}>
           <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-primary-dark)', marginBottom: '12px' }}>Andamento del benessere (ultimi 12 mesi)</h2>
           {annualData.some((d) => d.benessere != null) ? (
-            <div style={{ height: 260 }}>
-              <ResponsiveContainer width="100%" height="100%">
+            <div style={{ height: 260, position: 'relative' }}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <LineChart data={annualData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                   <XAxis dataKey="month" tick={{ fontSize: 11 }} />

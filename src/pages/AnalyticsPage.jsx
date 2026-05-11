@@ -22,7 +22,7 @@ const AnalyticsPage = () => {
                 if (user.role !== 'patient') {
                     const { data: followed } = await supabase
                         .from('follows')
-                        .select('followed_id, profiles(id, name, surname)')
+                        .select('followed_id, profiles!followed_id(id, name, surname)')
                         .eq('follower_id', user.id);
                     
                     const patientList = followed?.map(f => f.profiles) || [];
@@ -127,7 +127,9 @@ const AnalyticsPage = () => {
         },
         chartContainer: {
             width: '100%',
-            height: '250px'
+            height: '250px',
+            position: 'relative',
+            minHeight: '250px'
         },
         patientSelector: {
             display: 'flex',
@@ -189,6 +191,14 @@ const AnalyticsPage = () => {
         return null;
     };
 
+    if (loading) {
+        return (
+            <div style={{ ...styles.container, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <p style={{ color: 'var(--color-text-secondary)' }}>Caricamento analisi...</p>
+            </div>
+        );
+    }
+
     return (
         <div style={styles.container}>
             <div style={styles.header}>
@@ -234,7 +244,7 @@ const AnalyticsPage = () => {
                     <AppIcon name="grin" size={18} color="primary" /> Andamento Umore
                 </div>
                 <div style={styles.chartContainer}>
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                         <AreaChart data={moodData}>
                             <defs>
                                 <linearGradient id="colorMood" x1="0" y1="0" x2="0" y2="1">
@@ -257,7 +267,7 @@ const AnalyticsPage = () => {
                     <AppIcon name="badge-check" size={18} color="primary" /> Attività Completate
                 </div>
                 <div style={styles.chartContainer}>
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                         <BarChart data={taskData}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
                             <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />

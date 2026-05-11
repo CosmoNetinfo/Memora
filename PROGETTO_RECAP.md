@@ -172,6 +172,14 @@ Creare una Progressive Web App (PWA) per supportare pazienti affetti da Alzheime
 - [x] Active state evidenziato
 - [x] Animazioni di transizione
 
+### 14. **Simulazione Ruoli (Admin)** ✓
+- [x] Accesso protetto via email whitelist (Daniele & Michele)
+- [x] Switcher ruoli istantaneo (Paziente, Medico, Caregiver, Familiare)
+- [x] Persistenza locale del ruolo simulato
+- [x] Badge informativo globale `SIMULAZIONE: [RUOLO]`
+- [x] Accesso garantito alla console anche in modalità simulata
+- [x] Reset rapido al ruolo originale
+
 ---
 
 ## 🚧 DA COMPLETARE / MIGLIORARE
@@ -400,5 +408,6 @@ AlzheimerApp/
 - ✅ **Activity Upgrade**: Categorie, ricorrenza e progress bar dinamica in home.
 - ✅ **Analytics & AI**: Creazione `AnalyticsPage` con grafici Recharts e `AIChatPage` con persistenza e export.
 - ✅ **Iconografia**: Aggiunta nuove icone premium (brain, search, crown).
+- ✅ **Admin Simulation**: Implementato Role Switcher per Daniele e Michele con badge informativo globale.
 
 **Ultimo aggiornamento**: 11 Maggio 2026

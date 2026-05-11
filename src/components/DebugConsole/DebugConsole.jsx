@@ -119,21 +119,21 @@ const DebugConsole = () => {
 
         // Destinatario predefinito
         const adminEmail = "admindany@gmail.com";
-        const subject = "CareLink Bug Report";
+        const subject = "Memora Bug Report";
         
         const action = prompt('Invia report:\n- Digita "email" per Mail\n- "wa" per WhatsApp\n- "copia" per Appunti', 'copia');
         
         if (action === 'email') {
             // Limitiamo la lunghezza del body per evitare che il mailto fallisca su alcuni browser/dispositivi
             const shortText = text.length > 1500 ? text.substring(0, 1500) + "\n\n... (Testo troncato, usa 'Copia' per il log completo)" : text;
-            const encodedBody = encodeURIComponent(`Bug Report da CareLink App:\n\n${shortText}`);
+            const encodedBody = encodeURIComponent(`Bug Report da Memora App:\n\n${shortText}`);
             window.location.href = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodedBody}`;
         } else if (action === 'wa') {
             const shortText = text.length > 800 ? text.substring(0, 800) + "..." : text;
-            const encodedText = encodeURIComponent(`Bug Report da CareLink App:\n\n${shortText}`);
+            const encodedText = encodeURIComponent(`Bug Report da Memora App:\n\n${shortText}`);
             window.open(`https://wa.me/?text=${encodedText}`, '_blank');
         } else if (action === 'copia') {
-            navigator.clipboard.writeText(`Bug Report da CareLink App:\n\n${text}`)
+            navigator.clipboard.writeText(`Bug Report da Memora App:\n\n${text}`)
                 .then(() => alert('Log completi copiati negli appunti!'))
                 .catch(() => alert('Errore durante la copia.'));
         }

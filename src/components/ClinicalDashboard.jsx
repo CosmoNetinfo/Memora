@@ -321,13 +321,13 @@ export default function ClinicalDashboard() {
 
       {/* Mood Tracker - Trend */}
       <div style={styles.section}>
-        <div style={styles.card}>
+        <div style={{ ...styles.card, position: 'relative' }}>
           <div style={styles.cardTitle}>
             <TrendingUp size={22} color="var(--color-primary)" />
             <span>Mood Tracker (ultimi 7 giorni)</span>
           </div>
           {lineChartData.some((p) => p.mood != null) ? (
-            <ResponsiveContainer width="100%" height={220}>
+            <ResponsiveContainer width="100%" height={220} minWidth={0}>
               <LineChart data={lineChartData} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
                 <XAxis dataKey="short" tick={{ fontSize: 12 }} />
