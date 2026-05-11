@@ -137,7 +137,8 @@ const AnalyticsPage = () => {
             width: '100%',
             height: '250px',
             position: 'relative',
-            minHeight: '250px'
+            minHeight: '250px',
+            display: 'block'
         },
         patientSelector: {
             display: 'flex',
@@ -253,7 +254,7 @@ const AnalyticsPage = () => {
                 </div>
                 <div style={styles.chartContainer}>
                     {isReady && (
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
                             <AreaChart data={moodData}>
                             <defs>
                                 <linearGradient id="colorMood" x1="0" y1="0" x2="0" y2="1">
@@ -278,7 +279,7 @@ const AnalyticsPage = () => {
                 </div>
                 <div style={styles.chartContainer}>
                     {isReady && (
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
                             <BarChart data={taskData}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
                             <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />

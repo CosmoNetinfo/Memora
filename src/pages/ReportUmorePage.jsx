@@ -208,9 +208,9 @@ export default function ReportUmorePage() {
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><span style={{ width: 12, height: 12, borderRadius: 4, backgroundColor: getMoodColor('neutral') }} /> Neutro</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><span style={{ width: 12, height: 12, borderRadius: 4, backgroundColor: getMoodColor('sad') }} /> Triste</span>
               </div>
-              <div style={{ marginTop: '20px', height: 220, position: 'relative' }}>
+              <div style={{ marginTop: '20px', height: 220, position: 'relative', width: '100%', display: 'block' }}>
                 {isReady && (
-                  <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
                     <BarChart data={monthlyData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                       <XAxis dataKey="day" tick={{ fontSize: 11 }} />
@@ -234,9 +234,9 @@ export default function ReportUmorePage() {
         <div style={styles.card}>
           <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-primary-dark)', marginBottom: '12px' }}>Andamento del benessere (ultimi 12 mesi)</h2>
           {annualData.some((d) => d.benessere != null) ? (
-            <div style={{ height: 260, position: 'relative' }}>
+            <div style={{ height: 260, position: 'relative', width: '100%', display: 'block' }}>
               {isReady && (
-                <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
                   <LineChart data={annualData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="month" tick={{ fontSize: 11 }} />
