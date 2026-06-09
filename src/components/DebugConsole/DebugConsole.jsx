@@ -221,7 +221,7 @@ const DebugConsole = () => {
                 </div>
                 <button 
                     onClick={() => setIsVisible(false)}
-                    style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: '1.1250rem'rem' }}
+                    style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: '1.125rem' }}
                 >
                     ×
                 </button>
@@ -233,7 +233,7 @@ const DebugConsole = () => {
                     onClick={() => setActiveTab('logs')}
                     style={{ 
                         flex: 1, padding: '10px', border: 'none', background: activeTab === 'logs' ? '#1f2937' : 'none', 
-                        color: activeTab === 'logs' ? '#10b981' : '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.7500rem'rem', fontWeight: 'bold'
+                        color: activeTab === 'logs' ? '#10b981' : '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 'bold'
                     }}
                 >
                     <Terminal size={14} /> Logs
@@ -242,7 +242,7 @@ const DebugConsole = () => {
                     onClick={() => setActiveTab('stats')}
                     style={{ 
                         flex: 1, padding: '10px', border: 'none', background: activeTab === 'stats' ? '#1f2937' : 'none', 
-                        color: activeTab === 'stats' ? '#10b981' : '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.7500rem'rem', fontWeight: 'bold'
+                        color: activeTab === 'stats' ? '#10b981' : '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 'bold'
                     }}
                 >
                     <Activity size={14} /> Database
@@ -251,7 +251,7 @@ const DebugConsole = () => {
                     onClick={() => setActiveTab('system')}
                     style={{ 
                         flex: 1, padding: '10px', border: 'none', background: activeTab === 'system' ? '#1f2937' : 'none', 
-                        color: activeTab === 'system' ? '#10b981' : '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.7500rem'rem', fontWeight: 'bold'
+                        color: activeTab === 'system' ? '#10b981' : '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 'bold'
                     }}
                 >
                     <Shield size={14} /> Sistema
@@ -299,10 +299,10 @@ const DebugConsole = () => {
                                         onClick={() => setExpandedLogId(expandedLogId === log.id ? null : log.id)}
                                         style={{ padding: '8px', display: 'flex', cursor: 'pointer', alignItems: 'flex-start', borderLeft: `4px solid ${getLevelColor(log.level)}` }}
                                     >
-                                        <div style={{ minWidth: '60px', fontSize: '0.6250rem'rem', color: '#9ca3af', paddingTop: '2px' }}>
+                                        <div style={{ minWidth: '60px', fontSize: '0.625rem', color: '#9ca3af', paddingTop: '2px' }}>
                                             {new Date(log.timestamp).toLocaleTimeString()}
                                         </div>
-                                        <div style={{ flex: 1, wordBreak: 'break-word', fontSize: '0.7500rem'rem' }}>
+                                        <div style={{ flex: 1, wordBreak: 'break-word', fontSize: '0.75rem' }}>
                                             <span style={{ color: '#9ca3af', marginRight: '8px' }}>[{log.source}]</span>
                                             {log.message}
                                         </div>
@@ -310,14 +310,14 @@ const DebugConsole = () => {
                                     
                                     {/* Expanded Details */}
                                     {expandedLogId === log.id && log.details && (
-                                        <div style={{ padding: '8px', backgroundColor: '#111827', fontSize: '0.6875rem'rem', borderTop: '1px solid #4b5563', whiteSpace: 'pre-wrap', wordBreak: 'break-all', position: 'relative' }}>
+                                        <div style={{ padding: '8px', backgroundColor: '#111827', fontSize: '0.6875rem', borderTop: '1px solid #4b5563', whiteSpace: 'pre-wrap', wordBreak: 'break-all', position: 'relative' }}>
                                             <button 
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     navigator.clipboard.writeText(JSON.stringify(log.details, null, 2));
                                                     alert('Dettagli copiati!');
                                                 }}
-                                                style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '0.5625rem'rem', backgroundColor: '#374151', color: 'white', border: 'none', borderRadius: '4px', padding: '2px 6px', cursor: 'pointer' }}
+                                                style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '0.5625rem', backgroundColor: '#374151', color: 'white', border: 'none', borderRadius: '4px', padding: '2px 6px', cursor: 'pointer' }}
                                             >
                                                 Copia Dettagli
                                             </button>
@@ -344,16 +344,16 @@ const DebugConsole = () => {
                     
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                         <div style={{ backgroundColor: '#374151', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
-                            <div style={{ fontSize: '1.5000rem'rem', fontWeight: 'bold' }}>{dbStats.users}</div>
-                            <div style={{ fontSize: '0.6250rem'rem', color: '#9ca3af', textTransform: 'uppercase' }}>Utenti</div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{dbStats.users}</div>
+                            <div style={{ fontSize: '0.625rem', color: '#9ca3af', textTransform: 'uppercase' }}>Utenti</div>
                         </div>
                         <div style={{ backgroundColor: '#374151', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
-                            <div style={{ fontSize: '1.5000rem'rem', fontWeight: 'bold' }}>{dbStats.posts}</div>
-                            <div style={{ fontSize: '0.6250rem'rem', color: '#9ca3af', textTransform: 'uppercase' }}>Post</div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{dbStats.posts}</div>
+                            <div style={{ fontSize: '0.625rem', color: '#9ca3af', textTransform: 'uppercase' }}>Post</div>
                         </div>
                         <div style={{ backgroundColor: '#374151', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
-                            <div style={{ fontSize: '1.5000rem'rem', fontWeight: 'bold' }}>{dbStats.messages}</div>
-                            <div style={{ fontSize: '0.6250rem'rem', color: '#9ca3af', textTransform: 'uppercase' }}>Messaggi</div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{dbStats.messages}</div>
+                            <div style={{ fontSize: '0.625rem', color: '#9ca3af', textTransform: 'uppercase' }}>Messaggi</div>
                         </div>
                     </div>
 
@@ -372,36 +372,36 @@ const DebugConsole = () => {
                 <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
                     <h3 style={{ margin: '0 0 15px 0', color: '#10b981' }}>Informazioni Sistema</h3>
                     
-                    <div style={{ backgroundColor: '#374151', padding: '10px', borderRadius: '8px', fontSize: '0.6875rem'rem', marginBottom: '20px' }}>
+                    <div style={{ backgroundColor: '#374151', padding: '10px', borderRadius: '8px', fontSize: '0.6875rem', marginBottom: '20px' }}>
                         <div style={{ marginBottom: '5px' }}><span style={{ color: '#9ca3af' }}>User Agent:</span> {navigator.userAgent.substring(0, 50)}...</div>
                         <div style={{ marginBottom: '5px' }}><span style={{ color: '#9ca3af' }}>Versione App:</span> 2.4.0-prod</div>
                         <div style={{ marginBottom: '5px' }}><span style={{ color: '#9ca3af' }}>Storage:</span> {Math.round(JSON.stringify(localStorage).length / 1024)} KB</div>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <h4 style={{ margin: '10px 0 5px 0', color: '#10b981', fontSize: '0.8125rem'rem' }}>Simulazione Ruolo</h4>
+                        <h4 style={{ margin: '10px 0 5px 0', color: '#10b981', fontSize: '0.8125rem' }}>Simulazione Ruolo</h4>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                             <button 
                                 onClick={() => handleSwitchRole('patient')}
-                                style={{ padding: '8px', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563', borderRadius: '6px', cursor: 'pointer', fontSize: '0.6875rem'rem' }}
+                                style={{ padding: '8px', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563', borderRadius: '6px', cursor: 'pointer', fontSize: '0.6875rem' }}
                             >
                                 Simula Paziente
                             </button>
                             <button 
                                 onClick={() => handleSwitchRole('caregiver')}
-                                style={{ padding: '8px', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563', borderRadius: '6px', cursor: 'pointer', fontSize: '0.6875rem'rem' }}
+                                style={{ padding: '8px', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563', borderRadius: '6px', cursor: 'pointer', fontSize: '0.6875rem' }}
                             >
                                 Simula Caregiver
                             </button>
                             <button 
                                 onClick={() => handleSwitchRole('healthcare')}
-                                style={{ padding: '8px', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563', borderRadius: '6px', cursor: 'pointer', fontSize: '0.6875rem'rem' }}
+                                style={{ padding: '8px', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563', borderRadius: '6px', cursor: 'pointer', fontSize: '0.6875rem' }}
                             >
                                 Simula Medico
                             </button>
                             <button 
                                 onClick={() => handleSwitchRole('family')}
-                                style={{ padding: '8px', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563', borderRadius: '6px', cursor: 'pointer', fontSize: '0.6875rem'rem' }}
+                                style={{ padding: '8px', backgroundColor: '#374151', color: 'white', border: '1px solid #4b5563', borderRadius: '6px', cursor: 'pointer', fontSize: '0.6875rem' }}
                             >
                                 Simula Familiare
                             </button>
@@ -430,7 +430,7 @@ const DebugConsole = () => {
                             <Trash2 size={18} /> Hard Reset App
                         </button>
                         
-                        <p style={{ fontSize: '0.6250rem'rem', color: '#9ca3af', textAlign: 'center', marginTop: '10px' }}>
+                        <p style={{ fontSize: '0.625rem', color: '#9ca3af', textAlign: 'center', marginTop: '10px' }}>
                             Accesso abilitato per il team di sviluppo. Usare con cautela.
                         </p>
                     </div>

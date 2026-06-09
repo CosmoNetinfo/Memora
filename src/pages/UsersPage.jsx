@@ -64,15 +64,15 @@ const UsersPage = () => {
 
     const styles = {
         container: { padding: '20px', backgroundColor: 'var(--color-bg-primary)', minHeight: '100vh', paddingBottom: '100px' },
-        title: { fontSize: '1.5000rem'rem', fontWeight: 'bold', marginBottom: '20px', color: 'var(--color-primary-dark)' },
+        title: { fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '20px', color: 'var(--color-primary-dark)' },
         userCard: { backgroundColor: 'white', borderRadius: '16px', padding: '16px', marginBottom: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '12px' },
         avatar: { width: '50px', height: '50px', borderRadius: '50%', backgroundColor: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
         userInfo: { flex: 1 },
         userName: { fontWeight: 'bold', fontSize: '1rem' },
-        userRole: { fontSize: '0.7500rem'rem', color: '#666' },
+        userRole: { fontSize: '0.75rem', color: '#666' },
         actions: { display: 'flex', gap: '8px' },
         badge: (role) => ({
-            fontSize: '0.6250rem'rem',
+            fontSize: '0.625rem',
             padding: '2px 8px',
             borderRadius: '10px',
             backgroundColor: role === 'super_admin' ? '#FECDD3' : (role === 'admin' ? '#FFD700' : (role === 'moderator' ? '#E0F2FE' : '#F3F4F6')),

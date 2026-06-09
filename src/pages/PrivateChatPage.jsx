@@ -112,7 +112,7 @@ const VoicePlayer = ({ url, isMe, userPhoto, userName }) => {
                         );
                     })}
                 </div>
-                <div style={{ fontSize: '0.6250rem'rem', opacity: 0.8, fontWeight: '600' }}>
+                <div style={{ fontSize: '0.625rem', opacity: 0.8, fontWeight: '600' }}>
                     {formatTime(isPlaying ? audioRef.current?.currentTime : duration)}
                 </div>
             </div>
@@ -130,7 +130,7 @@ const VoicePlayer = ({ url, isMe, userPhoto, userName }) => {
                     {userPhoto ? (
                         <img src={userPhoto} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="U" />
                     ) : (
-                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1250rem'rem', fontWeight: 'bold' }}>
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.125rem', fontWeight: 'bold' }}>
                             {userName?.[0]}
                         </div>
                     )}
@@ -499,11 +499,11 @@ const PrivateChatPage = () => {
         }),
         messageText: {
             margin: 0,
-            fontSize: '0.9375rem'rem',
+            fontSize: '0.9375rem',
             lineHeight: '1.4',
         },
         messageTime: {
-            fontSize: '0.6250rem'rem',
+            fontSize: '0.625rem',
             opacity: 0.7,
             textAlign: 'right',
             marginTop: '4px',
@@ -525,7 +525,7 @@ const PrivateChatPage = () => {
             padding: '10px 16px',
             borderRadius: '20px',
             border: '1px solid #E5E7EB',
-            fontSize: '0.9375rem'rem',
+            fontSize: '0.9375rem',
             outline: 'none',
             backgroundColor: '#F9FAFB',
         },
@@ -555,7 +555,7 @@ const PrivateChatPage = () => {
                 </div>
                 <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 'bold' }}>{receiverProfile?.name} {receiverProfile?.surname}</div>
-                    <div style={{ fontSize: '0.6875rem'rem', color: receiverProfile?.last_active && (new Date() - new Date(receiverProfile.last_active)) < 60000 ? '#10b981' : '#9CA3AF' }}>
+                    <div style={{ fontSize: '0.6875rem', color: receiverProfile?.last_active && (new Date() - new Date(receiverProfile.last_active)) < 60000 ? '#10b981' : '#9CA3AF' }}>
                         {receiverProfile?.last_active && (new Date() - new Date(receiverProfile.last_active)) < 60000 
                             ? 'Online' 
                             : receiverProfile?.last_active 

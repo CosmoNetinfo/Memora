@@ -104,13 +104,13 @@ const AIChatPage = () => {
             color: role === 'user' ? 'white' : '#1F2937',
             boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
             border: role === 'assistant' ? '1px solid #E5E7EB' : 'none',
-            fontSize: '0.9375rem'rem',
+            fontSize: '0.9375rem',
             lineHeight: '1.5'
         }),
         inputArea: { padding: '16px 20px', backgroundColor: 'white', borderTop: '1px solid #E5E7EB', display: 'flex', gap: '12px', alignItems: 'center' },
-        input: { flex: 1, padding: '12px 16px', borderRadius: '24px', border: '1px solid #D1D5DB', fontSize: '0.9375rem'rem', outline: 'none' },
+        input: { flex: 1, padding: '12px 16px', borderRadius: '24px', border: '1px solid #D1D5DB', fontSize: '0.9375rem', outline: 'none' },
         sendBtn: { backgroundColor: 'var(--color-primary)', color: 'white', border: 'none', width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-        typing: { fontSize: '0.7500rem'rem', color: '#9CA3AF', marginBottom: '8px' }
+        typing: { fontSize: '0.75rem', color: '#9CA3AF', marginBottom: '8px' }
     };
 
     return (
@@ -122,10 +122,10 @@ const AIChatPage = () => {
                     </div>
                     <div>
                         <div style={{ fontWeight: 'bold' }}>Assistente Memora</div>
-                        <div style={{ fontSize: '0.7500rem'rem', color: '#10B981' }}>Sempre attivo</div>
+                        <div style={{ fontSize: '0.75rem', color: '#10B981' }}>Sempre attivo</div>
                     </div>
                 </div>
-                <button onClick={handleExport} style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.8125rem'rem' }}>
+                <button onClick={handleExport} style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.8125rem' }}>
                     Esporta Chat
                 </button>
             </div>
@@ -134,7 +134,7 @@ const AIChatPage = () => {
                 {messages.map((m, i) => (
                     <div key={i} style={styles.bubble(m.role)}>
                         {m.content}
-                        <div style={{ fontSize: '0.6250rem'rem', opacity: 0.6, marginTop: '4px', textAlign: 'right' }}>
+                        <div style={{ fontSize: '0.625rem', opacity: 0.6, marginTop: '4px', textAlign: 'right' }}>
                             {new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </div>
                     </div>

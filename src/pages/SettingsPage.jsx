@@ -144,20 +144,20 @@ const SettingsPage = () => {
     container: { backgroundColor: "var(--color-bg-primary)", minHeight: "100%", padding: "var(--content-padding-x)", paddingBottom: "120px", width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box", overflowX: "hidden" },
     header: { display: "flex", alignItems: "center", marginBottom: "var(--section-gap)", gap: "12px" },
     backBtn: { padding: "8px", background: "white", borderRadius: "50%", color: "var(--color-primary-dark)", border: "none", boxShadow: "var(--card-shadow)" },
-    pageTitle: { fontSize: '1.5000rem'rem', fontWeight: "800", color: "var(--color-primary-dark)", margin: 0 },
+    pageTitle: { fontSize: '1.5rem', fontWeight: "800", color: "var(--color-primary-dark)", margin: 0 },
     profileSection: { backgroundColor: "white", borderRadius: "var(--card-radius)", padding: "var(--content-padding-y)", display: "flex", alignItems: "center", gap: "16px", marginBottom: "var(--section-gap)", border: "1px solid var(--color-border)", boxShadow: "var(--card-shadow)" },
     avatarWrap: { position: "relative", background: "none", border: "none", padding: 0, cursor: "pointer", display: "block", flexShrink: 0 },
     avatar: { width: "60px", height: "60px", borderRadius: "50%", backgroundColor: "var(--color-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", overflow: "hidden" },
-    avatarOverlay: { position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(0,0,0,0.5)", color: "white", fontSize: '0.6250rem'rem', padding: "2px", display: "flex", alignItems: "center", justifyContent: "center", gap: "2px", borderBottomLeftRadius: "50%", borderBottomRightRadius: "50%" },
-    sectionLabel: { fontSize: '0.8125rem'rem', fontWeight: "700", color: "var(--color-primary-dark)", textTransform: "uppercase", margin: "0 0 8px 12px", opacity: 0.7 },
+    avatarOverlay: { position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(0,0,0,0.5)", color: "white", fontSize: '0.625rem', padding: "2px", display: "flex", alignItems: "center", justifyContent: "center", gap: "2px", borderBottomLeftRadius: "50%", borderBottomRightRadius: "50%" },
+    sectionLabel: { fontSize: '0.8125rem', fontWeight: "700", color: "var(--color-primary-dark)", textTransform: "uppercase", margin: "0 0 8px 12px", opacity: 0.7 },
     menuCard: { backgroundColor: "white", borderRadius: "var(--card-radius)", overflow: "hidden", marginBottom: "var(--section-gap)", border: "1px solid var(--color-border)", boxShadow: "var(--card-shadow)", maxWidth: "100%", boxSizing: "border-box" },
     menuItem: { display: "flex", alignItems: "center", padding: "16px", borderBottom: "1px solid var(--color-bg-primary)", cursor: "pointer", justifyContent: "space-between", background: "none", width: "100%", textAlign: "left", border: "none" },
     iconWrapper: (color) => ({ width: "36px", height: "36px", borderRadius: "10px", backgroundColor: color, display: "flex", alignItems: "center", justifyContent: "center", color: "white", marginRight: "12px" }),
-    itemLabel: { fontSize: '1.0625rem'rem', fontWeight: "600", color: "var(--color-text-primary)" },
+    itemLabel: { fontSize: '1.0625rem', fontWeight: "600", color: "var(--color-text-primary)" },
     switch: (isOn) => ({ width: "51px", height: "31px", backgroundColor: isOn ? "--color-success" : "#E9E9EA", borderRadius: "16px", position: "relative" }), // Using color variables or defaults
     modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
     modal: { backgroundColor: 'white', borderRadius: 'var(--card-radius-lg)', padding: 'var(--content-padding-y)', width: '90%', maxWidth: '400px', boxShadow: 'var(--card-shadow)' },
-    primaryBtn: { width: '100%', padding: '16px', backgroundColor: 'var(--color-primary)', color: 'white', borderRadius: '14px', fontSize: '1.1250rem'rem', fontWeight: 'bold' }
+    primaryBtn: { width: '100%', padding: '16px', backgroundColor: 'var(--color-primary)', color: 'white', borderRadius: '14px', fontSize: '1.125rem', fontWeight: 'bold' }
   };
 
   return (
@@ -179,8 +179,8 @@ const SettingsPage = () => {
           </span>
         </button>
         <div>
-            <h2 style={{ fontSize: '1.1250rem'rem', margin: 0, fontWeight: '700', color: 'var(--color-primary-dark)' }}>{user.name} {user.surname}</h2>
-            <p style={{ color: "var(--color-primary)", margin: 0, fontSize: '0.8750rem'rem', fontWeight: '500' }}>Account Caregiver</p>
+            <h2 style={{ fontSize: '1.125rem', margin: 0, fontWeight: '700', color: 'var(--color-primary-dark)' }}>{user.name} {user.surname}</h2>
+            <p style={{ color: "var(--color-primary)", margin: 0, fontSize: '0.875rem', fontWeight: '500' }}>Account Caregiver</p>
           </div>
       </div>
 
@@ -191,7 +191,7 @@ const SettingsPage = () => {
             <div style={styles.iconWrapper("var(--color-primary)")}><AppIcon name={notifications ? 'bell' : 'bell-slash'} size={18} color="white" /></div>
             <div>
               <span style={styles.itemLabel}>Notifiche Push</span>
-              <div style={{fontSize: '0.7500rem'rem', color: '#888'}}>{notifications ? 'Attivate' : 'Clicca per attivare'}</div>
+              <div style={{fontSize: '0.75rem', color: '#888'}}>{notifications ? 'Attivate' : 'Clicca per attivare'}</div>
             </div>
           </div>
           <div style={{...styles.switch(notifications), backgroundColor: notifications ? 'var(--color-success)' : '#ddd'}}><div style={{width: 27, height: 27, background: 'white', borderRadius: '50%', position: 'absolute', top: 2, left: notifications ? 22 : 2, transition: '0.3s'}}/></div>
@@ -247,10 +247,10 @@ const SettingsPage = () => {
             <AppIcon name="shield-exclamation" size={20} color="accent" />
             <span style={{ fontWeight: '700' }}>Notifiche Bloccate</span>
           </div>
-          <p style={{ fontSize: '0.8750rem'rem', color: '#856404', margin: '0 0 12px 0', lineHeight: '1.4' }}>
+          <p style={{ fontSize: '0.875rem', color: '#856404', margin: '0 0 12px 0', lineHeight: '1.4' }}>
             Hai disattivato le notifiche per questa app. Ecco come riattivarle:
           </p>
-          <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '12px', fontSize: '0.8125rem'rem' }}>
+          <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '12px', fontSize: '0.8125rem' }}>
             {/iPad|iPhone|iPod/.test(navigator.userAgent) ? (
               <ol style={{ paddingLeft: '20px', margin: 0 }}>
                 <li>Vai nelle <b>Impostazioni</b> del tuo iPhone.</li>
@@ -277,7 +277,7 @@ const SettingsPage = () => {
             <div style={styles.iconWrapper("var(--color-accent)")}><AppIcon name="shield-exclamation" size={18} color="white" /></div>
             <div>
               <span style={styles.itemLabel}>Contatto SOS</span>
-              <div style={{fontSize: '0.7500rem'rem', color: '#888'}}>{sosNumber ? `Chiama: ${sosNumber}` : 'Non impostato'}</div>
+              <div style={{fontSize: '0.75rem', color: '#888'}}>{sosNumber ? `Chiama: ${sosNumber}` : 'Non impostato'}</div>
             </div>
           </div>
           <ChevronRight size={20} color="#ccc" />
@@ -296,8 +296,8 @@ const SettingsPage = () => {
           <div style={styles.modalOverlay}>
               <div style={styles.modal}>
                   <h3 style={{ color: 'var(--color-primary-dark)', marginBottom: '8px' }}>Imposta numero SOS</h3>
-                  <p style={{ fontSize: '0.8750rem'rem', color: '#666', marginBottom: '20px' }}>Il numero che potrai chiamare rapidamente in caso di bisogno.</p>
-                  <input style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #ddd', fontSize: '1.1250rem'rem', marginBottom: '20px' }} type="tel" value={tempSos} onChange={(e)=>setTempSos(e.target.value)} placeholder="Esempio: 333..." />
+                  <p style={{ fontSize: '0.875rem', color: '#666', marginBottom: '20px' }}>Il numero che potrai chiamare rapidamente in caso di bisogno.</p>
+                  <input style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #ddd', fontSize: '1.125rem', marginBottom: '20px' }} type="tel" value={tempSos} onChange={(e)=>setTempSos(e.target.value)} placeholder="Esempio: 333..." />
                   <button style={styles.primaryBtn} onClick={() => { localStorage.setItem("setting_sosNumber", tempSos); setSosNumber(tempSos); setIsEditingSos(false); }}>Salva Numero</button>
                   <button style={{ width: '100%', padding: '14px', background: 'none', color: '#888', marginTop: '8px' }} onClick={() => setIsEditingSos(false)}>Annulla</button>
               </div>
@@ -308,7 +308,7 @@ const SettingsPage = () => {
         Esci dall'Account
       </button>
 
-      <div style={{ textAlign: "center", marginTop: "40px", color: "#888", fontSize: '0.7500rem'rem', lineHeight: "1.6" }}>
+      <div style={{ textAlign: "center", marginTop: "40px", color: "#888", fontSize: '0.75rem', lineHeight: "1.6" }}>
         Memora x Airalzh &copy; 2026<br />
         <strong>Daniele Spalletti</strong> (sviluppatore) e <strong>Michele Mosca</strong> (web designer)<br />
         per <a href="https://www.cosmonet.info" target="_blank" style={{color: '#888', textDecoration: 'underline'}}>cosmonet.info</a>

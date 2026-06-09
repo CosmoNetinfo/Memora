@@ -48,7 +48,7 @@ const FindPeoplePage = () => {
     const styles = {
         container: { padding: '20px', backgroundColor: 'var(--color-bg-primary)', minHeight: '100vh', paddingBottom: '100px' },
         header: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' },
-        title: { fontSize: '1.5000rem'rem', fontWeight: 'bold', color: 'var(--color-primary-dark)', margin: 0 },
+        title: { fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--color-primary-dark)', margin: 0 },
         searchContainer: {
             position: 'relative',
             marginBottom: '20px',
@@ -96,10 +96,10 @@ const FindPeoplePage = () => {
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
         },
         userInfo: { flex: 1, minWidth: 0 },
-        userName: { fontWeight: 'bold', fontSize: '0.9375rem'rem', color: '#111' },
-        userRole: { fontSize: '0.7500rem'rem', color: '#6B7280' },
+        userName: { fontWeight: 'bold', fontSize: '0.9375rem', color: '#111' },
+        userRole: { fontSize: '0.75rem', color: '#6B7280' },
         roleBadge: {
-            fontSize: '0.6250rem'rem',
+            fontSize: '0.625rem',
             padding: '2px 8px',
             borderRadius: '10px',
             backgroundColor: '#F3F4F6',

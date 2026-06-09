@@ -70,7 +70,7 @@ const MessagesListPage = () => {
             boxSizing: 'border-box',
         },
         title: {
-            fontSize: '1.5000rem'rem',
+            fontSize: '1.5rem',
             fontWeight: 'bold',
             marginBottom: '20px',
             color: 'var(--color-primary-dark)',
@@ -100,7 +100,7 @@ const MessagesListPage = () => {
             justifyContent: 'center',
             color: 'white',
             fontWeight: 'bold',
-            fontSize: '1.1250rem'rem',
+            fontSize: '1.125rem',
             overflow: 'hidden',
         },
         content: {
@@ -115,7 +115,7 @@ const MessagesListPage = () => {
             alignItems: 'center',
         },
         lastMsg: {
-            fontSize: '0.8750rem'rem',
+            fontSize: '0.875rem',
             color: '#6B7280',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -123,7 +123,7 @@ const MessagesListPage = () => {
             marginTop: '2px',
         },
         time: {
-            fontSize: '0.7500rem'rem',
+            fontSize: '0.75rem',
             color: '#9CA3AF',
             fontWeight: 'normal',
         },

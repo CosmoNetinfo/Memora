@@ -336,7 +336,7 @@ const FeedPage = () => {
             borderRadius: '20px', 
             backgroundColor: active ? 'var(--color-primary)' : 'white', 
             color: active ? 'white' : '#666', 
-            fontSize: '0.8125rem'rem', 
+            fontSize: '0.8125rem', 
             fontWeight: 'bold', 
             border: 'none', 
             cursor: 'pointer', 
@@ -345,13 +345,13 @@ const FeedPage = () => {
         }),
         card: { backgroundColor: '#fff', margin: '0 0 var(--section-gap) 0', borderRadius: 'var(--card-radius)', padding: 'var(--content-padding-x)', boxShadow: 'var(--card-shadow)', maxWidth: '100%', minWidth: 0, boxSizing: 'border-box' },
         avatar: (mood) => ({ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', overflow: 'hidden', border: `3px solid ${getMoodColor(mood)}`, boxShadow: `0 2px 8px ${getMoodColor(mood)}40`, transition: 'all 0.3s ease' }),
-        avatarSmall: (mood) => ({ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', overflow: 'hidden', fontSize: '0.7500rem'rem', border: `2px solid ${getMoodColor(mood)}`, boxShadow: `0 2px 6px ${getMoodColor(mood)}40`, transition: 'all 0.3s ease' }),
+        avatarSmall: (mood) => ({ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', overflow: 'hidden', fontSize: '0.75rem', border: `2px solid ${getMoodColor(mood)}`, boxShadow: `0 2px 6px ${getMoodColor(mood)}40`, transition: 'all 0.3s ease' }),
         avatarImg: { width: '100%', height: '100%', objectFit: 'cover' },
-        input: { flex: 1, minWidth: 0, maxWidth: '100%', backgroundColor: '#F3F4F6', border: 'none', borderRadius: '22px', padding: '10px 16px', fontSize: '0.9375rem'rem', outline: 'none' },
+        input: { flex: 1, minWidth: 0, maxWidth: '100%', backgroundColor: '#F3F4F6', border: 'none', borderRadius: '22px', padding: '10px 16px', fontSize: '0.9375rem', outline: 'none' },
         btnPrimary: { backgroundColor: 'var(--color-primary)', color: 'white', border: 'none', padding: '8px 20px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer' },
-        actionBtn: { background: 'none', border: 'none', color: 'var(--color-primary-dark)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '600', fontSize: '0.8750rem'rem' },
+        actionBtn: { background: 'none', border: 'none', color: 'var(--color-primary-dark)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '600', fontSize: '0.875rem' },
         commentBubble: { backgroundColor: '#F3F4F6', padding: '8px 12px', borderRadius: 'var(--card-radius)', flex: 1, minWidth: 0, wordBreak: 'break-word' },
-        hashtagBadge: { backgroundColor: 'var(--color-accent)', color: 'var(--color-primary)', padding: '4px 10px', borderRadius: '12px', fontSize: '0.7500rem'rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', width: 'fit-content', marginBottom: '8px' }
+        hashtagBadge: { backgroundColor: 'var(--color-accent)', color: 'var(--color-primary)', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', width: 'fit-content', marginBottom: '8px' }
     };
 
     return (
@@ -367,7 +367,7 @@ const FeedPage = () => {
                 <div style={styles.searchBar}>
                     <AppIcon name="search" size={18} color="#999" />
                     <input 
-                        style={{ border: 'none', outline: 'none', flex: 1, fontSize: '0.8750rem'rem' }} 
+                        style={{ border: 'none', outline: 'none', flex: 1, fontSize: '0.875rem' }} 
                         placeholder="Cerca post o autori..." 
                         value={searchQuery}
                         onChange={(e) => { setSearchQuery(e.target.value); setActiveHashtag(null); }}
@@ -458,7 +458,7 @@ const FeedPage = () => {
                                     {authorData.role === 'healthcare' && <AppIcon name="stethoscope" size={16} color="primary" />}
                                     {authorData.mood && <span>{getMoodEmoji(authorData.mood)}</span>}
                                 </div>
-                                <div style={{ fontSize: '0.6875rem'rem', color: '#999' }}>{new Date(post.created_at).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
+                                <div style={{ fontSize: '0.6875rem', color: '#999' }}>{new Date(post.created_at).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
                             </div>
                         </Link>
                         { (post.author_id === user.id || user.role === 'admin') && !editingPostId && (
@@ -487,7 +487,7 @@ const FeedPage = () => {
                         </div>
                     )}
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f9f9f9', fontSize: '0.8125rem'rem', color: '#666' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f9f9f9', fontSize: '0.8125rem', color: '#666' }}>
                         <span>{post.likes || 0} Like</span>
                         <span onClick={() => toggleComments(post.id)} style={{cursor:'pointer'}}>{post.comment_count || 0} Commenti</span>
                     </div>
@@ -508,7 +508,7 @@ const FeedPage = () => {
                                     </div>
                                     <div style={styles.commentBubble}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <div style={{ fontWeight: '700', fontSize: '0.8125rem'rem' }}>{comm.author_name}</div>
+                                            <div style={{ fontWeight: '700', fontSize: '0.8125rem' }}>{comm.author_name}</div>
                                             {(comm.author_id === user.id || user.role === 'admin') && (
                                                 <div style={{ display: 'flex', gap: '6px' }}>
                                                     <button style={{ background: 'none', border: 'none', opacity: 0.5 }} onClick={() => { setEditingCommentId(comm.id); setEditingCommentText(comm.text); }}><AppIcon name="pencil" size={12} color="primary"/></button>
@@ -518,14 +518,14 @@ const FeedPage = () => {
                                         </div>
                                         {editingCommentId === comm.id ? (
                                             <div style={{ marginTop: '4px' }}>
-                                                <textarea style={{ ...styles.input, width: '100%', fontSize: '0.8125rem'rem' }} value={editingCommentText} onChange={(e) => setEditingCommentText(e.target.value)} />
+                                                <textarea style={{ ...styles.input, width: '100%', fontSize: '0.8125rem' }} value={editingCommentText} onChange={(e) => setEditingCommentText(e.target.value)} />
                                                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '6px', marginTop: '4px' }}>
-                                                    <button onClick={() => setEditingCommentId(null)} style={{ background: 'none', border: 'none', fontSize: '0.6875rem'rem' }}>Annulla</button>
-                                                    <button onClick={() => updateComment(comm.id, post.id)} style={{ background: 'var(--color-primary)', color: 'white', border: 'none', borderRadius: '10px', padding: '2px 8px', fontSize: '0.6875rem'rem' }}>Salva</button>
+                                                    <button onClick={() => setEditingCommentId(null)} style={{ background: 'none', border: 'none', fontSize: '0.6875rem' }}>Annulla</button>
+                                                    <button onClick={() => updateComment(comm.id, post.id)} style={{ background: 'var(--color-primary)', color: 'white', border: 'none', borderRadius: '10px', padding: '2px 8px', fontSize: '0.6875rem' }}>Salva</button>
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div style={{ fontSize: '0.8750rem'rem', color: '#333' }}>{renderTextWithLinks(comm.text)}</div>
+                                            <div style={{ fontSize: '0.875rem', color: '#333' }}>{renderTextWithLinks(comm.text)}</div>
                                         )}
                                     </div>
                                 </div>

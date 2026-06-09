@@ -419,7 +419,7 @@ const ProfilePage = () => {
             right: 0,
             background: 'rgba(0,0,0,0.5)',
             color: 'white',
-            fontSize: '0.6875rem'rem',
+            fontSize: '0.6875rem',
             padding: '4px',
             display: 'flex',
             alignItems: 'center',
@@ -437,7 +437,7 @@ const ProfilePage = () => {
             alignItems: 'center',
             justifyContent: 'center',
             color: 'white',
-            fontSize: '2.2500rem'rem',
+            fontSize: '2.25rem',
             fontWeight: 'bold',
             overflow: 'hidden',
             border: `4px solid ${getMoodColor(currentMood)}`,
@@ -457,7 +457,7 @@ const ProfilePage = () => {
             justifyContent: 'center',
         },
         name: {
-            fontSize: '1.5000rem'rem',
+            fontSize: '1.5rem',
             fontWeight: 'bold',
             color: '#1A1A1A',
             marginBottom: '4px',
@@ -469,7 +469,7 @@ const ProfilePage = () => {
             wordBreak: 'break-word',
         },
         moodEmoji: {
-            fontSize: '1.7500rem'rem',
+            fontSize: '1.75rem',
             lineHeight: 1,
         },
         roleBadge: {
@@ -477,7 +477,7 @@ const ProfilePage = () => {
             color: 'var(--color-primary)',
             padding: '4px 12px',
             borderRadius: '20px',
-            fontSize: '0.8125rem'rem',
+            fontSize: '0.8125rem',
             fontWeight: '600',
             marginBottom: '12px',
         },
@@ -518,7 +518,7 @@ const ProfilePage = () => {
             padding: '12px 0',
             borderBottom: '1px solid #F3F4F6',
             color: '#4B5563',
-            fontSize: '0.9375rem'rem',
+            fontSize: '0.9375rem',
         },
         actionCard: {
             backgroundColor: 'white',
@@ -538,7 +538,7 @@ const ProfilePage = () => {
             background: 'none',
             border: 'none',
             color: '#1F2937',
-            fontSize: '0.8750rem'rem',
+            fontSize: '0.875rem',
             fontWeight: '600',
             cursor: 'pointer',
             borderRadius: '12px',
@@ -568,7 +568,7 @@ const ProfilePage = () => {
         <div style={{ padding: '40px', textAlign: 'center', backgroundColor: 'var(--color-bg-primary)', height: '100vh' }}>
             <div style={{ textAlign: 'center', padding: '100px 20px' }}>
                 <h2 style={{ color: 'var(--color-primary-dark)' }}>Utente non trovato</h2>
-                <p style={{ color: '#999', fontSize: '0.7500rem'rem', marginTop: '20px', fontFamily: 'monospace' }}>
+                <p style={{ color: '#999', fontSize: '0.75rem', marginTop: '20px', fontFamily: 'monospace' }}>
                     ID: {id || loggedInUser?.id}<br/>
                     Status: Il profilo non esiste ancora nel database.<br/>
                     Azione: L'utente deve aver effettuato l'accesso almeno una volta.
@@ -581,7 +581,7 @@ const ProfilePage = () => {
                 </button>
 
                 <div style={{ marginTop: '50px', paddingTop: '20px', borderTop: '1px solid #eee' }}>
-                    <p style={{ color: '#666', fontSize: '0.8125rem'rem', marginBottom: '15px' }}>Problemi persistenti?</p>
+                    <p style={{ color: '#666', fontSize: '0.8125rem', marginBottom: '15px' }}>Problemi persistenti?</p>
                     <button 
                         onClick={async () => {
                             localStorage.clear();
@@ -652,7 +652,7 @@ const ProfilePage = () => {
                         {currentMood && <span style={styles.moodEmoji}>{getMoodEmoji(currentMood)}</span>}
                     </h1>
                 )}
-                <div style={{ color: '#999', fontSize: '0.6250rem'rem', marginTop: '-10px', marginBottom: '10px' }}>
+                <div style={{ color: '#999', fontSize: '0.625rem', marginTop: '-10px', marginBottom: '10px' }}>
                     ID: {user.id?.substring(0,8)}... | Last: {user.last_active ? new Date(user.last_active).toLocaleTimeString() : 'null'}
                 </div>
                 <div style={{
@@ -703,7 +703,7 @@ const ProfilePage = () => {
                                 padding: '12px',
                                 borderRadius: '12px',
                                 border: '1px solid #E5E7EB',
-                                fontSize: '0.8750rem'rem',
+                                fontSize: '0.875rem',
                                 fontFamily: 'inherit',
                                 resize: 'vertical',
                                 minHeight: '80px',
@@ -712,20 +712,20 @@ const ProfilePage = () => {
                             }}
                         />
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: '0.7500rem'rem', color: tempBio.length >= 300 ? '#EF4444' : '#9CA3AF' }}>
+                            <span style={{ fontSize: '0.75rem', color: tempBio.length >= 300 ? '#EF4444' : '#9CA3AF' }}>
                                 {tempBio.length}/300
                             </span>
                             <div style={{ display: 'flex', gap: '8px' }}>
                                 <button 
                                     onClick={() => setIsEditingBio(false)} 
-                                    style={{ background: 'none', border: 'none', color: '#6B7280', cursor: 'pointer', fontSize: '0.8750rem'rem', fontWeight: 'bold' }}
+                                    style={{ background: 'none', border: 'none', color: '#6B7280', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 'bold' }}
                                 >
                                     Annulla
                                 </button>
                                 <button 
                                     onClick={handleSaveBio} 
                                     disabled={savingBio}
-                                    style={{ background: 'var(--color-primary)', color: 'white', border: 'none', borderRadius: '20px', padding: '6px 16px', cursor: 'pointer', fontSize: '0.8750rem'rem', fontWeight: 'bold' }}
+                                    style={{ background: 'var(--color-primary)', color: 'white', border: 'none', borderRadius: '20px', padding: '6px 16px', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 'bold' }}
                                 >
                                     {savingBio ? '...' : 'Salva'}
                                 </button>
@@ -736,11 +736,11 @@ const ProfilePage = () => {
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '12px', width: '100%' }}>
                         {user.bio ? (
                             <>
-                                <p style={{ color: '#6B7280', fontSize: '0.8750rem'rem', margin: 0, padding: '0 20px', whiteSpace: 'pre-wrap' }}>{user.bio}</p>
+                                <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: 0, padding: '0 20px', whiteSpace: 'pre-wrap' }}>{user.bio}</p>
                                 {isOwnProfile && (
                                     <button 
                                         onClick={() => { setTempBio(user.bio); setIsEditingBio(true); }}
-                                        style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontSize: '0.7500rem'rem', fontWeight: 'bold', marginTop: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                        style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontSize: '0.75rem', fontWeight: 'bold', marginTop: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                                     >
                                         <AppIcon name="pencil" size={12} color="primary" /> Modifica Bio
                                     </button>
@@ -750,7 +750,7 @@ const ProfilePage = () => {
                             isOwnProfile && (
                                 <button 
                                     onClick={() => { setTempBio(""); setIsEditingBio(true); }}
-                                    style={{ background: 'none', border: '1px dashed #D1D5DB', borderRadius: '20px', padding: '8px 16px', color: '#6B7280', fontSize: '0.8125rem'rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                    style={{ background: 'none', border: '1px dashed #D1D5DB', borderRadius: '20px', padding: '8px 16px', color: '#6B7280', fontSize: '0.8125rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                                 >
                                     <AppIcon name="add" size={14} color="#6B7280" /> Aggiungi una bio
                                 </button>
@@ -763,11 +763,11 @@ const ProfilePage = () => {
                 <div style={{ display: 'flex', gap: '24px', marginTop: '16px' }}>
                     <div style={{ textAlign: 'center' }}>
                         <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{stats.following}</div>
-                        <div style={{ fontSize: '0.7500rem'rem', color: '#6B7280' }}>Seguiti</div>
+                        <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>Seguiti</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
                         <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{stats.followers}</div>
-                        <div style={{ fontSize: '0.7500rem'rem', color: '#6B7280' }}>Follower</div>
+                        <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>Follower</div>
                     </div>
                 </div>
 
@@ -838,7 +838,7 @@ const ProfilePage = () => {
                                     border: 'none', 
                                     borderRadius: '8px', 
                                     padding: '4px 8px', 
-                                    fontSize: '0.6875rem'rem', 
+                                    fontSize: '0.6875rem', 
                                     fontWeight: 'bold', 
                                     cursor: 'pointer',
                                     color: 'var(--color-primary)'
@@ -884,7 +884,7 @@ const ProfilePage = () => {
             <div style={styles.infoCard}>
                 <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '16px', color: 'var(--color-primary-dark)' }}>Attività Recenti</h3>
                 {activities.length === 0 ? (
-                    <div style={{ color: '#9CA3AF', fontSize: '0.8125rem'rem', textAlign: 'center', padding: '20px' }}>Nessuna attività registrata di recente.</div>
+                    <div style={{ color: '#9CA3AF', fontSize: '0.8125rem', textAlign: 'center', padding: '20px' }}>Nessuna attività registrata di recente.</div>
                 ) : (
                     activities.map((act, idx) => (
                         <div key={act.id} style={{ ...styles.infoRow, borderBottom: idx === activities.length - 1 ? 'none' : '1px solid #F3F4F6' }}>
@@ -905,12 +905,12 @@ const ProfilePage = () => {
                                 />
                             </div>
                             <div style={{ flex: 1, minWidth: 0, marginLeft: '10px' }}>
-                                <div style={{ fontSize: '0.8750rem'rem', fontWeight: '600', color: '#1F2937' }}>
+                                <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1F2937' }}>
                                     {act.action === 'task_completed' ? 'Task completato' : 
                                      act.action === 'mood_updated' ? 'Umore aggiornato' : 
                                      act.action === 'task_added' ? 'Nuovo task' : 'Attività'}
                                 </div>
-                                <div style={{ fontSize: '0.8125rem'rem', color: '#6B7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                <div style={{ fontSize: '0.8125rem', color: '#6B7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                     {act.details}
                                 </div>
                             </div>
@@ -925,7 +925,7 @@ const ProfilePage = () => {
                     <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '16px', color: 'var(--color-primary-dark)' }}>
                         Associa un Paziente
                     </h3>
-                    <p style={{ fontSize: '0.8125rem'rem', color: '#6B7280', marginBottom: '12px' }}>
+                    <p style={{ fontSize: '0.8125rem', color: '#6B7280', marginBottom: '12px' }}>
                         Inserisci l'email del paziente per monitorare il suo stato e la sua agenda.
                     </p>
                     <div style={{ display: 'flex', gap: '8px' }}>
@@ -939,7 +939,7 @@ const ProfilePage = () => {
                                 padding: '10px', 
                                 borderRadius: '12px', 
                                 border: '1px solid #E5E7EB',
-                                fontSize: '0.8750rem'rem'
+                                fontSize: '0.875rem'
                             }}
                         />
                         <button 
@@ -953,7 +953,7 @@ const ProfilePage = () => {
                                 padding: '0 16px', 
                                 fontWeight: 'bold',
                                 cursor: 'pointer',
-                                fontSize: '0.8125rem'rem'
+                                fontSize: '0.8125rem'
                             }}
                         >
                             {associating ? '...' : 'Associa'}
@@ -971,7 +971,7 @@ const ProfilePage = () => {
                     className="action-row-hover"
                 >
                     <AppIcon name="settings" size={20} color="primaryDark" />
-                    <span style={{ fontSize: '0.9375rem'rem' }}>Impostazioni App</span>
+                    <span style={{ fontSize: '0.9375rem' }}>Impostazioni App</span>
                 </button>
                 <Link 
                     to={`/report-umore/${user.id}`} 
@@ -979,7 +979,7 @@ const ProfilePage = () => {
                     className="action-row-hover"
                 >
                     <AppIcon name="calendar-lines" size={20} color="primaryDark" />
-                    <span style={{ fontSize: '0.9375rem'rem' }}>Report umore</span>
+                    <span style={{ fontSize: '0.9375rem' }}>Report umore</span>
                 </Link>
                 {(user.role === 'admin' || user.role === 'super_admin') && (
                     <button 
@@ -988,7 +988,7 @@ const ProfilePage = () => {
                         className="action-row-hover"
                     >
                         <AppIcon name="shield-check" size={20} color="primary" />
-                        <span style={{ fontSize: '0.9375rem'rem' }}>Gestione Utenti</span>
+                        <span style={{ fontSize: '0.9375rem' }}>Gestione Utenti</span>
                     </button>
                 )}
             </div>
@@ -1001,7 +1001,7 @@ const ProfilePage = () => {
                 </button>
             )}
 
-            <div style={{ textAlign: 'center', marginTop: '30px', color: '#9CA3AF', fontSize: '0.7500rem'rem' }}>
+            <div style={{ textAlign: 'center', marginTop: '30px', color: '#9CA3AF', fontSize: '0.75rem' }}>
                 Memora v1.0
             </div>
         </div>

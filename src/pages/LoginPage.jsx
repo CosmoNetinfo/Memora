@@ -108,11 +108,11 @@ const LoginPage = () => {
             boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
             border: '1px solid var(--color-border)'
         },
-        title: { fontSize: '1.6250rem'rem', fontWeight: '800', marginBottom: '8px', color: 'var(--color-primary)' },
-        subtitle: { fontSize: '0.9375rem'rem', color: '#666', marginBottom: '32px' },
+        title: { fontSize: '1.625rem', fontWeight: '800', marginBottom: '8px', color: 'var(--color-primary)' },
+        subtitle: { fontSize: '0.9375rem', color: '#666', marginBottom: '32px' },
         form: { display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left' },
         inputGroup: { marginBottom: '5px' },
-        label: { display: 'block', fontSize: '0.8125rem'rem', fontWeight: '600', color: '#444', marginBottom: '6px', marginLeft: '4px' },
+        label: { display: 'block', fontSize: '0.8125rem', fontWeight: '600', color: '#444', marginBottom: '6px', marginLeft: '4px' },
         inputWrapper: { position: 'relative', display: 'flex', alignItems: 'center' },
         icon: { position: 'absolute', left: '14px', color: '#999' },
         input: {
@@ -127,7 +127,7 @@ const LoginPage = () => {
         },
         button: {
             padding: '16px',
-            fontSize: '1.0625rem'rem',
+            fontSize: '1.0625rem',
             fontWeight: 'bold',
             backgroundColor: 'var(--color-primary)',
             color: 'white',
@@ -141,7 +141,7 @@ const LoginPage = () => {
         },
         errorBox: {
             backgroundColor: '#FFF0F0', color: '#D32F2F', padding: '12px', borderRadius: '8px', 
-            fontSize: '0.8750rem'rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px'
+            fontSize: '0.875rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px'
         }
     };
 
@@ -190,7 +190,7 @@ const LoginPage = () => {
                     </button>
                 </form>
 
-                <div style={{marginTop: '25px', fontSize: '0.8750rem'rem', color:'#666', borderTop:'1px solid #eee', paddingTop:'20px'}}>
+                <div style={{marginTop: '25px', fontSize: '0.875rem', color:'#666', borderTop:'1px solid #eee', paddingTop:'20px'}}>
                     Non hai un account? <br/>
                     <Link to="/signup" style={{color:'var(--color-primary)', fontWeight:'bold', textDecoration:'none', display:'inline-block', marginTop:'5px'}}>
                         Crea un nuovo account
@@ -198,7 +198,7 @@ const LoginPage = () => {
                 </div>
             </div>
 
-            <div style={{ marginTop: '40px', textAlign: 'center', fontSize: '0.6875rem'rem', color: '#999', lineHeight: '1.4' }}>
+            <div style={{ marginTop: '40px', textAlign: 'center', fontSize: '0.6875rem', color: '#999', lineHeight: '1.4' }}>
                 Memora x Airalzh © 2026<br />
                 <strong>Daniele Spalletti</strong> (sviluppatore) e <strong>Michele Mosca</strong> (web designer)<br />
                 per <a href="https://www.cosmonet.info" target="_blank" style={{color: '#999', textDecoration: 'underline'}}>cosmonet.info</a>

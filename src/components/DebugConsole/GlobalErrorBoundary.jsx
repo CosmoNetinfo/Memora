@@ -49,10 +49,10 @@ class GlobalErrorBoundary extends React.Component {
                         boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
                     }}>
                         <div style={{ fontSize: '3rem', marginBottom: '16px' }}>💥</div>
-                        <h1 style={{ fontSize: '1.5000rem'rem', fontWeight: 'bold', marginBottom: '8px' }}>
+                        <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '8px' }}>
                             Oops! Qualcosa è andato storto.
                         </h1>
-                        <p style={{ fontSize: '0.8750rem'rem', color: 'var(--color-text-secondary, #4b5563)', marginBottom: '24px' }}>
+                        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary, #4b5563)', marginBottom: '24px' }}>
                             Abbiamo riscontrato un errore imprevisto. I nostri sviluppatori sono stati (quasi) avvisati.
                         </p>
                         <button 

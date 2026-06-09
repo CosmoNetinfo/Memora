@@ -194,7 +194,7 @@ export default function ClinicalDashboard() {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
-      fontSize: '1.1250rem'rem',
+      fontSize: '1.125rem',
       fontWeight: 'bold',
       marginBottom: '16px',
       color: '#1A1A1A',
@@ -211,7 +211,7 @@ export default function ClinicalDashboard() {
     table: {
       width: '100%',
       borderCollapse: 'collapse',
-      fontSize: '0.8750rem'rem',
+      fontSize: '0.875rem',
     },
     th: {
       textAlign: 'left',
@@ -229,11 +229,11 @@ export default function ClinicalDashboard() {
       backgroundColor: '#F9FAFB',
       borderRadius: 'var(--card-radius)',
       marginBottom: '8px',
-      fontSize: '0.8750rem'rem',
+      fontSize: '0.875rem',
       color: '#374151',
     },
     noteMeta: {
-      fontSize: '0.7500rem'rem',
+      fontSize: '0.75rem',
       color: '#9CA3AF',
       marginTop: '6px',
     },
@@ -243,7 +243,7 @@ export default function ClinicalDashboard() {
       padding: '12px',
       borderRadius: 'var(--card-radius)',
       border: '1px solid #E5E7EB',
-      fontSize: '0.9375rem'rem',
+      fontSize: '0.9375rem',
       boxSizing: 'border-box',
       resize: 'vertical',
     },
@@ -261,7 +261,7 @@ export default function ClinicalDashboard() {
       textAlign: 'center',
       color: '#9CA3AF',
       padding: '20px',
-      fontSize: '0.8750rem'rem',
+      fontSize: '0.875rem',
     },
   };
 
@@ -319,7 +319,7 @@ export default function ClinicalDashboard() {
               <strong style={{ color: '#991B1B', display: 'block', marginBottom: '4px' }}>
                 Attenzione
               </strong>
-              <span style={{ color: '#B91C1C', fontSize: '0.8750rem'rem' }}>
+              <span style={{ color: '#B91C1C', fontSize: '0.875rem' }}>
                 Lo stato del paziente è risultato &quot;Triste&quot; per più di 2 giorni consecutivi. Valutare un contatto o un controllo.
               </span>
             </div>
@@ -340,8 +340,8 @@ export default function ClinicalDashboard() {
                 <ResponsiveContainer width="100%" height={220}>
                   <LineChart data={lineChartData} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                    <XAxis dataKey="short" tick={{ fontSize: '0.7500rem'rem' }} />
-                    <YAxis domain={[0, 2]} ticks={[0, 1, 2]} tick={{ fontSize: '0.7500rem'rem' }} tickFormatter={(v) => (v === 2 ? 'Felice' : v === 1 ? 'Neutro' : 'Triste')} />
+                    <XAxis dataKey="short" tick={{ fontSize: '0.75rem' }} />
+                    <YAxis domain={[0, 2]} ticks={[0, 1, 2]} tick={{ fontSize: '0.75rem' }} tickFormatter={(v) => (v === 2 ? 'Felice' : v === 1 ? 'Neutro' : 'Triste')} />
                     <Tooltip
                       formatter={(value) => [value === 2 ? 'Felice' : value === 1 ? 'Neutro' : 'Triste', 'Umore']}
                       labelFormatter={(label, payload) => payload?.[0]?.payload?.date ?? label}
@@ -412,14 +412,14 @@ export default function ClinicalDashboard() {
             {logs.length > 0 ? (
               logs.map(log => (
                 <div key={log.id} style={{ ...styles.noteItem, padding: '10px 0', borderBottom: '1px solid #f0f0f0' }}>
-                  <div style={{ fontWeight: '600', color: 'var(--color-primary-dark)', fontSize: '0.8125rem'rem' }}>
+                  <div style={{ fontWeight: '600', color: 'var(--color-primary-dark)', fontSize: '0.8125rem' }}>
                     {log.action === 'task_completed' && '✅ Task Completato'}
                     {log.action === 'task_uncompleted' && '⏳ Task Ripristinato'}
                     {log.action === 'task_added' && '➕ Nuovo Task'}
                     {log.action === 'mood_updated' && '🎭 Umore Aggiornato'}
                   </div>
-                  <div style={{ fontSize: '0.8750rem'rem', margin: '4px 0' }}>{log.details}</div>
-                  <div style={{ ...styles.noteMeta, fontSize: '0.6875rem'rem' }}>
+                  <div style={{ fontSize: '0.875rem', margin: '4px 0' }}>{log.details}</div>
+                  <div style={{ ...styles.noteMeta, fontSize: '0.6875rem' }}>
                     {new Date(log.created_at).toLocaleString('it-IT')}
                   </div>
                 </div>
