@@ -102,10 +102,10 @@ const SignupPage = () => {
             boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
             border: '1px solid var(--color-border)'
         },
-        title: { fontSize: '24px', fontWeight: '800', color: 'var(--color-primary)', marginBottom: '8px' },
-        subtitle: { fontSize: '14px', color: '#666', marginBottom: '24px' },
+        title: { fontSize: '1.5000rem'rem', fontWeight: '800', color: 'var(--color-primary)', marginBottom: '8px' },
+        subtitle: { fontSize: '0.8750rem'rem', color: '#666', marginBottom: '24px' },
         inputGroup: { marginBottom: '16px', textAlign: 'left' },
-        label: { display: 'block', fontSize: '13px', fontWeight: '600', color: '#444', marginBottom: '6px', marginLeft: '4px' },
+        label: { display: 'block', fontSize: '0.8125rem'rem', fontWeight: '600', color: '#444', marginBottom: '6px', marginLeft: '4px' },
         inputWrapper: { position: 'relative', display: 'flex', alignItems: 'center' },
         icon: { position: 'absolute', left: '14px', color: '#999' },
         input: {
@@ -113,7 +113,7 @@ const SignupPage = () => {
             padding: '14px 14px 14px 44px',
             borderRadius: '12px',
             border: '1px solid #ddd',
-            fontSize: '16px',
+            fontSize: '1rem',
             outline: 'none',
             backgroundColor: '#f9f9f9',
             transition: 'border-color 0.2s'
@@ -125,7 +125,7 @@ const SignupPage = () => {
             color: 'white',
             border: 'none',
             borderRadius: '12px',
-            fontSize: '16px',
+            fontSize: '1rem',
             fontWeight: 'bold',
             cursor: loading ? 'wait' : 'pointer',
             marginTop: '10px',
@@ -141,7 +141,7 @@ const SignupPage = () => {
                 <p style={styles.subtitle}>Unisciti alla nostra community</p>
 
                 {error && (
-                    <div style={{backgroundColor:'#FFF0F0', color:'#D32F2F', padding:'12px', borderRadius:'8px', fontSize:'13px', marginBottom:'20px', display:'flex', alignItems:'center', gap:'8px'}}>
+                    <div style={{backgroundColor:'#FFF0F0', color:'#D32F2F', padding:'12px', borderRadius:'8px', fontSize: '0.8125rem'rem', marginBottom:'20px', display:'flex', alignItems:'center', gap:'8px'}}>
                         <AlertCircle size={16}/> {error === 'User already registered' ? 'Utente già registrato.' : error}
                     </div>
                 )}
@@ -198,7 +198,7 @@ const SignupPage = () => {
                                     required 
                                 />
                             </div>
-                            <p style={{fontSize: '11px', color: '#888', marginTop: '4px', marginLeft: '4px'}}>
+                            <p style={{fontSize: '0.6875rem'rem', color: '#888', marginTop: '4px', marginLeft: '4px'}}>
                                 Inserisci l'email del paziente per associarti subito al suo profilo.
                             </p>
                         </div>
@@ -217,12 +217,12 @@ const SignupPage = () => {
                     </button>
                 </form>
 
-                <div style={{marginTop: '20px', fontSize:'14px', color:'#666'}}>
+                <div style={{marginTop: '20px', fontSize: '0.8750rem'rem', color:'#666'}}>
                     Hai già un account? <Link to="/login" style={{color:'var(--color-primary)', fontWeight:'bold', textDecoration:'none'}}>Accedi</Link>
                 </div>
             </div>
 
-            <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '11px', color: '#999', lineHeight: '1.4' }}>
+            <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.6875rem'rem', color: '#999', lineHeight: '1.4' }}>
                 Memora x Airalzh © 2026<br />
                 <strong>Daniele Spalletti</strong> (sviluppatore) e <strong>Michele Mosca</strong> (web designer)<br />
                 per <a href="https://www.cosmonet.info" target="_blank" style={{color: '#999', textDecoration: 'underline'}}>cosmonet.info</a>

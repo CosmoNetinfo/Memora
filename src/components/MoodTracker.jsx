@@ -65,16 +65,16 @@ const MoodTracker = ({ userRole, mood, setMood, moodToast, reduceMotion = false 
       minWidth: 0,
       boxSizing: 'border-box',
     },
-    title: { fontWeight: 'bold', fontSize: '18px', color: 'var(--color-primary-dark)' },
+    title: { fontWeight: 'bold', fontSize: '1.1250rem'rem', color: 'var(--color-primary-dark)' },
     lastMood: {
-      fontSize: '15px',
+      fontSize: '0.9375rem'rem',
       fontWeight: '600',
       color: 'var(--color-primary)',
       marginTop: '12px',
       marginBottom: '4px',
     },
-    toast: { fontSize: '13px', color: 'var(--color-primary)', fontWeight: '600', marginTop: '8px', display: 'block' },
-    hint: { fontSize: '12px', color: 'var(--color-text-secondary)', marginTop: '8px' },
+    toast: { fontSize: '0.8125rem'rem', color: 'var(--color-primary)', fontWeight: '600', marginTop: '8px', display: 'block' },
+    hint: { fontSize: '0.7500rem'rem', color: 'var(--color-text-secondary)', marginTop: '8px' },
   };
 
   return (

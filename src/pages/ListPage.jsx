@@ -207,7 +207,7 @@ const ListPage = () => {
     const styles = {
         container: { padding: 'var(--content-padding-y) var(--content-padding-x) 100px', width: '100%', maxWidth: '100%', minWidth: 0, boxSizing: 'border-box', overflowX: 'hidden' },
         header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--section-gap)' },
-        greeting: { fontSize: '28px', fontWeight: 'bold', color: '#1A1A1A' },
+        greeting: { fontSize: '1.7500rem'rem', fontWeight: 'bold', color: '#1A1A1A' },
         agendaCard: { background: 'var(--color-primary)', borderRadius: 'var(--card-radius-lg)', padding: 'var(--content-padding-y) 20px', color: 'white', marginBottom: 'var(--section-gap)', boxShadow: 'var(--card-shadow-outer)' },
         progressSection: { backgroundColor: 'rgba(255, 255, 255, 0.15)', borderRadius: '12px', padding: '12px', marginBottom: '20px' },
         progressBar: { width: '100%', height: '8px', backgroundColor: 'rgba(255, 255, 255, 0.3)', borderRadius: '4px', overflow: 'hidden', marginTop: '8px' },
@@ -215,13 +215,13 @@ const ListPage = () => {
         taskItem: { backgroundColor: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(10px)', borderRadius: 'var(--card-radius)', padding: '12px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', border: '1px solid rgba(255, 255, 255, 0.25)', cursor: 'pointer' },
         taskLeft: { display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 },
         taskIcon: (cat) => ({ backgroundColor: categories[cat || 'generic'].color, width: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }),
-        taskText: { fontWeight: '600', fontSize: '16px', wordBreak: 'break-word', minWidth: 0, color: 'white' },
+        taskText: { fontWeight: '600', fontSize: '1rem', wordBreak: 'break-word', minWidth: 0, color: 'white' },
         completedText: { textDecoration: 'line-through', opacity: 0.7 },
-        taskTime: { fontSize: '14px', opacity: 0.95, fontWeight: '600', color: 'white' },
-        manageBtn: { backgroundColor: 'white', color: 'var(--color-primary-dark)', padding: '12px 20px', borderRadius: '12px', fontWeight: 'bold', fontSize: '15px', marginTop: '10px', width: 'fit-content', cursor: 'pointer', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' },
+        taskTime: { fontSize: '0.8750rem'rem', opacity: 0.95, fontWeight: '600', color: 'white' },
+        manageBtn: { backgroundColor: 'white', color: 'var(--color-primary-dark)', padding: '12px 20px', borderRadius: '12px', fontWeight: 'bold', fontSize: '0.9375rem'rem', marginTop: '10px', width: 'fit-content', cursor: 'pointer', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' },
         inputArea: { backgroundColor: 'white', padding: 'var(--content-padding-y)', borderRadius: 'var(--card-radius)', boxShadow: 'var(--card-shadow-outer)', marginTop: 'var(--section-gap)', marginBottom: 'var(--section-gap)' },
-        input: { width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #E5E7EB', marginBottom: '10px', fontSize: '16px', boxSizing: 'border-box' },
-        select: { width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #E5E7EB', marginBottom: '10px', fontSize: '14px', backgroundColor: '#F9FAFB' }
+        input: { width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #E5E7EB', marginBottom: '10px', fontSize: '1rem', boxSizing: 'border-box' },
+        select: { width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #E5E7EB', marginBottom: '10px', fontSize: '0.8750rem'rem', backgroundColor: '#F9FAFB' }
     };
 
     return (
@@ -235,7 +235,7 @@ const ListPage = () => {
             <div className="home-block-item home-agenda">
             <div style={styles.agendaCard}>
                 <div style={styles.progressSection}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 'bold' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8750rem'rem', fontWeight: 'bold' }}>
                         <span>Progresso di Oggi</span>
                         <span>{completionStats}%</span>
                     </div>
@@ -244,7 +244,7 @@ const ListPage = () => {
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2500rem'rem', fontWeight: 'bold', marginBottom: '20px' }}>
                     <AppIcon name="calendar-lines" size={24} color="white" />
                     <span>Agenda di Oggi</span>
                 </div>
@@ -269,7 +269,7 @@ const ListPage = () => {
                             </div>
                             <div style={{ minWidth: 0 }}>
                                 <div style={{ ...styles.taskText, ...(task.completed ? styles.completedText : {}) }}>{task.text}</div>
-                                {task.recurrence !== 'none' && <div style={{ fontSize: '11px', opacity: 0.8 }}>{task.recurrence === 'daily' ? 'Ogni giorno' : 'Ogni settimana'}</div>}
+                                {task.recurrence !== 'none' && <div style={{ fontSize: '0.6875rem'rem', opacity: 0.8 }}>{task.recurrence === 'daily' ? 'Ogni giorno' : 'Ogni settimana'}</div>}
                             </div>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -314,10 +314,10 @@ const ListPage = () => {
                 </div>
                 <div className="home-block-item home-pillola last-scroll-block">
                     <motion.div style={{ backgroundColor: 'rgba(234, 172, 139, 0.25)', borderRadius: 'var(--card-radius-lg)', padding: 'var(--content-padding-y)', border: '1px solid rgba(234, 172, 139, 0.5)', boxShadow: 'var(--card-shadow-outer)' }}>
-                        <span style={{ color: 'var(--color-primary)', fontWeight: 'bold', fontSize: '14px', marginBottom: '8px', display: 'block' }}>Pillola di Benessere</span>
+                        <span style={{ color: 'var(--color-primary)', fontWeight: 'bold', fontSize: '0.8750rem'rem', marginBottom: '8px', display: 'block' }}>Pillola di Benessere</span>
                         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                             <AppIcon name="shoe-prints" size={24} color="var(--color-primary)" />
-                            <p style={{ color: 'var(--color-primary)', fontSize: '16px', fontStyle: 'italic', lineHeight: '1.6', margin: 0 }}>"{dailyQuoteData?.text ?? ''}"</p>
+                            <p style={{ color: 'var(--color-primary)', fontSize: '1rem', fontStyle: 'italic', lineHeight: '1.6', margin: 0 }}>"{dailyQuoteData?.text ?? ''}"</p>
                         </div>
                     </motion.div>
                 </div>

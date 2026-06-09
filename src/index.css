@@ -4,7 +4,7 @@
 
 :root {
   /* Root font size: Caratteri Grandi aumenta html a 21px (16 + ~30%) */
-  --base-font-size: 16px;
+  --base-font-size: 1rem;
   --base-size: 16px;
   --safe-padding: 5px;
 
@@ -139,7 +139,7 @@ html {
 
 /* Caratteri Grandi: aumenta la radice ~30% così tutti i rem si scalano */
 html.large-font-mode {
-  --base-font-size: 21px;
+  --base-font-size: 1.3125rem;
   --base-size: 21px;
 }
 
@@ -525,7 +525,7 @@ button:active {
   /* Unica variabile per spazio orizzontale così dx e sx sono identici */
   .app-container {
     --content-padding-x: var(--desktop-gutter);
-    font-size: 25px; /* +5pt circa (18px + ~7px) per migliore leggibilità desktop */
+    font-size: 1.5625rem; /* +5pt circa (18px + ~7px) per migliore leggibilità desktop */
     box-sizing: border-box !important;
     width: calc(100vw - var(--sidebar-width)) !important;
     padding-left: var(--desktop-gutter) !important;
@@ -967,7 +967,7 @@ button {
     min-width: 0;
   }
   .quote-text-responsive {
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
     line-height: 1.5 !important;
     word-wrap: break-word;
     overflow-wrap: break-word;

@@ -48,11 +48,11 @@ class GlobalErrorBoundary extends React.Component {
                         borderRadius: '16px',
                         boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
                     }}>
-                        <div style={{ fontSize: '48px', marginBottom: '16px' }}>💥</div>
-                        <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '16px' }}>💥</div>
+                        <h1 style={{ fontSize: '1.5000rem'rem', fontWeight: 'bold', marginBottom: '8px' }}>
                             Oops! Qualcosa è andato storto.
                         </h1>
-                        <p style={{ fontSize: '14px', color: 'var(--color-text-secondary, #4b5563)', marginBottom: '24px' }}>
+                        <p style={{ fontSize: '0.8750rem'rem', color: 'var(--color-text-secondary, #4b5563)', marginBottom: '24px' }}>
                             Abbiamo riscontrato un errore imprevisto. I nostri sviluppatori sono stati (quasi) avvisati.
                         </p>
                         <button 
@@ -63,7 +63,7 @@ class GlobalErrorBoundary extends React.Component {
                                 border: 'none',
                                 padding: '12px 24px',
                                 borderRadius: '8px',
-                                fontSize: '16px',
+                                fontSize: '1rem',
                                 fontWeight: '600',
                                 cursor: 'pointer',
                                 width: '100%',

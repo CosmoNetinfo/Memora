@@ -65,7 +65,7 @@ const Layout = () => {
                     color: 'white',
                     padding: '4px 12px',
                     borderRadius: '20px',
-                    fontSize: '10px',
+                    fontSize: '0.6250rem'rem',
                     fontWeight: 'bold',
                     zIndex: 10001,
                     boxShadow: '0 2px 10px rgba(0,0,0,0.3)',

@@ -135,15 +135,15 @@ export default function ReportUmorePage() {
     container: { padding: 'var(--content-padding-x)', paddingBottom: '100px' },
     header: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' },
     backBtn: { padding: '8px', background: 'white', borderRadius: '50%', border: '1px solid var(--color-border)', color: 'var(--color-primary-dark)', textDecoration: 'none', display: 'flex' },
-    title: { fontSize: '22px', fontWeight: '800', color: 'var(--color-primary-dark)', margin: 0 },
+    title: { fontSize: '1.3750rem'rem', fontWeight: '800', color: 'var(--color-primary-dark)', margin: 0 },
     tabs: { display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' },
     tab: (active) => ({
-      padding: '10px 18px', borderRadius: 'var(--card-radius)', border: 'none', fontSize: '14px', fontWeight: '600',
+      padding: '10px 18px', borderRadius: 'var(--card-radius)', border: 'none', fontSize: '0.8750rem'rem', fontWeight: '600',
       cursor: 'pointer', background: active ? 'var(--color-primary)' : 'white', color: active ? 'white' : 'var(--color-text-primary)',
       boxShadow: 'var(--card-shadow)',
     }),
     card: { backgroundColor: 'white', borderRadius: 'var(--card-radius)', padding: 'var(--content-padding-y)', marginBottom: '20px', boxShadow: 'var(--card-shadow)' },
-    empty: { textAlign: 'center', color: 'var(--color-text-secondary)', padding: '32px 16px', fontSize: '15px' },
+    empty: { textAlign: 'center', color: 'var(--color-text-secondary)', padding: '32px 16px', fontSize: '0.9375rem'rem' },
     dayGrid: { display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '6px', marginTop: '12px' },
     dayCell: (color) => ({ aspectRatio: '1', borderRadius: '8px', backgroundColor: color, maxWidth: '44px' }),
   };
@@ -173,16 +173,16 @@ export default function ReportUmorePage() {
 
       {tab === 'giornaliero' && (
         <div style={styles.card}>
-          <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-primary-dark)', marginBottom: '12px' }}>Ultimo umore registrato</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--color-primary-dark)', marginBottom: '12px' }}>Ultimo umore registrato</h2>
           {lastEntry ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 {lastEntry.mood === 'happy' && <AppIcon name="grin" size={32} color={getMoodColor('happy')} />}
                 {lastEntry.mood === 'neutral' && <AppIcon name="face-expressionless" size={32} color={getMoodColor('neutral')} />}
                 {lastEntry.mood === 'sad' && <AppIcon name="sad" size={32} color={getMoodColor('sad')} />}
-                <span style={{ fontWeight: '600', fontSize: '18px' }}>{MOOD_LABELS[lastEntry.mood]}</span>
+                <span style={{ fontWeight: '600', fontSize: '1.1250rem'rem' }}>{MOOD_LABELS[lastEntry.mood]}</span>
               </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-text-secondary)', fontSize: '15px' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-text-secondary)', fontSize: '0.9375rem'rem' }}>
                 <AppIcon name="calendar-lines" size={18} color="primary" />
                 {lastDate.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })} alle {lastDate.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
               </span>
@@ -195,7 +195,7 @@ export default function ReportUmorePage() {
 
       {tab === 'mensile' && (
         <div style={styles.card}>
-          <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-primary-dark)', marginBottom: '12px' }}>Umore per giorno (questo mese)</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--color-primary-dark)', marginBottom: '12px' }}>Umore per giorno (questo mese)</h2>
           {monthlyData.some((d) => d.mood) ? (
             <>
               <div style={styles.dayGrid}>
@@ -203,7 +203,7 @@ export default function ReportUmorePage() {
                   <div key={i} title={`Giorno ${d.day}: ${d.mood ? MOOD_LABELS[d.mood] : 'Nessun dato'}`} style={styles.dayCell(d.color)} />
                 ))}
               </div>
-              <div style={{ display: 'flex', gap: '16px', marginTop: '16px', fontSize: '13px' }}>
+              <div style={{ display: 'flex', gap: '16px', marginTop: '16px', fontSize: '0.8125rem'rem' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><span style={{ width: 12, height: 12, borderRadius: 4, backgroundColor: getMoodColor('happy') }} /> Felice</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><span style={{ width: 12, height: 12, borderRadius: 4, backgroundColor: getMoodColor('neutral') }} /> Neutro</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><span style={{ width: 12, height: 12, borderRadius: 4, backgroundColor: getMoodColor('sad') }} /> Triste</span>
@@ -213,8 +213,8 @@ export default function ReportUmorePage() {
                   <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
                     <BarChart data={monthlyData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="day" tick={{ fontSize: 11 }} />
-                      <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
+                      <XAxis dataKey="day" tick={{ fontSize: '0.6875rem'rem' }} />
+                      <YAxis tick={{ fontSize: '0.6875rem'rem' }} allowDecimals={false} />
                       <Tooltip formatter={(value) => [value, 'registrazioni']} labelFormatter={(l) => `Giorno ${l}`} />
                       <Bar dataKey="felice" fill={getMoodColor('happy')} name="Felice" radius={[4, 4, 0, 0]} stackId="a" />
                       <Bar dataKey="neutro" fill={getMoodColor('neutral')} name="Neutro" radius={[4, 4, 0, 0]} stackId="a" />
@@ -232,15 +232,15 @@ export default function ReportUmorePage() {
 
       {tab === 'annuale' && (
         <div style={styles.card}>
-          <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-primary-dark)', marginBottom: '12px' }}>Andamento del benessere (ultimi 12 mesi)</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--color-primary-dark)', marginBottom: '12px' }}>Andamento del benessere (ultimi 12 mesi)</h2>
           {annualData.some((d) => d.benessere != null) ? (
             <div style={{ height: 260, position: 'relative', width: '100%', display: 'block' }}>
               {isReady && (
                 <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={50}>
                   <LineChart data={annualData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-                    <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
+                    <XAxis dataKey="month" tick={{ fontSize: '0.6875rem'rem' }} />
+                    <YAxis domain={[0, 100]} tick={{ fontSize: '0.6875rem'rem' }} />
                     <Tooltip formatter={(value) => [value != null ? `${value}%` : '—', 'Benessere']} />
                     <Line type="monotone" dataKey="benessere" stroke="var(--color-primary)" strokeWidth={2} dot={{ r: 4 }} name="Benessere" connectNulls />
                   </LineChart>

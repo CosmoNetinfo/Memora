@@ -24,7 +24,7 @@ const ListItem = ({ text, isCompleted, onToggle }) => {
             flexShrink: 0,
         },
         text: {
-            fontSize: '18px',
+            fontSize: '1.1250rem'rem',
             color: isCompleted ? 'var(--color-text-secondary)' : 'var(--color-primary-dark)',
             textDecoration: isCompleted ? 'line-through' : 'none',
             fontWeight: isCompleted ? '400' : '600'

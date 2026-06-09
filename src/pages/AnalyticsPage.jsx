@@ -107,13 +107,13 @@ const AnalyticsPage = () => {
             marginBottom: '24px'
         },
         title: {
-            fontSize: '24px',
+            fontSize: '1.5000rem'rem',
             fontWeight: 'bold',
             color: 'var(--color-primary-dark)',
             margin: '0 0 8px 0'
         },
         subtitle: {
-            fontSize: '14px',
+            fontSize: '0.8750rem'rem',
             color: '#6B7280',
             margin: 0
         },
@@ -125,7 +125,7 @@ const AnalyticsPage = () => {
             marginBottom: '20px'
         },
         cardTitle: {
-            fontSize: '16px',
+            fontSize: '1rem',
             fontWeight: 'bold',
             marginBottom: '16px',
             display: 'flex',
@@ -154,7 +154,7 @@ const AnalyticsPage = () => {
             backgroundColor: active ? 'var(--color-primary)' : 'white',
             color: active ? 'white' : '#4B5563',
             border: `1px solid ${active ? 'var(--color-primary)' : '#E5E7EB'}`,
-            fontSize: '14px',
+            fontSize: '0.8750rem'rem',
             fontWeight: '600',
             whiteSpace: 'nowrap',
             cursor: 'pointer',
@@ -176,12 +176,12 @@ const AnalyticsPage = () => {
             gap: '4px'
         },
         statVal: {
-            fontSize: '20px',
+            fontSize: '1.2500rem'rem',
             fontWeight: 'bold',
             color: 'var(--color-primary)'
         },
         statLabel: {
-            fontSize: '12px',
+            fontSize: '0.7500rem'rem',
             color: '#9CA3AF'
         }
     };
@@ -191,8 +191,8 @@ const AnalyticsPage = () => {
             const moodMapRev = { 3: 'Felice 😊', 2: 'Neutro 😐', 1: 'Triste 😢' };
             return (
                 <div style={{ backgroundColor: 'white', padding: '10px', border: '1px solid #eee', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
-                    <p style={{ margin: 0, fontWeight: 'bold', fontSize: '12px' }}>{payload[0].payload.time}</p>
-                    <p style={{ margin: 0, color: 'var(--color-primary)', fontSize: '14px' }}>
+                    <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.7500rem'rem' }}>{payload[0].payload.time}</p>
+                    <p style={{ margin: 0, color: 'var(--color-primary)', fontSize: '0.8750rem'rem' }}>
                         {moodMapRev[payload[0].value] || 'N/A'}
                     </p>
                 </div>
@@ -264,14 +264,14 @@ const AnalyticsPage = () => {
                                 </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-                            <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />
-                            <YAxis domain={[1, 3]} ticks={[1, 2, 3]} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />
+                            <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fontSize: '0.6250rem'rem', fill: '#9CA3AF' }} />
+                            <YAxis domain={[1, 3]} ticks={[1, 2, 3]} axisLine={false} tickLine={false} tick={{ fontSize: '0.6250rem'rem', fill: '#9CA3AF' }} />
                             <Tooltip content={<CustomTooltip />} />
                             <Area type="monotone" dataKey="val" stroke="var(--color-primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorMood)" />
                         </AreaChart>
                     </ResponsiveContainer>
                     ) : (
-                        <div style={{ height: 250, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '12px' }}>
+                        <div style={{ height: 250, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '0.7500rem'rem' }}>
                             {loading ? 'Caricamento...' : 'Nessun dato umore disponibile'}
                         </div>
                     )}
@@ -287,15 +287,15 @@ const AnalyticsPage = () => {
                         <ResponsiveContainer width="100%" height={250}>
                             <BarChart data={taskData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-                            <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />
-                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} />
+                            <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: '0.6250rem'rem', fill: '#9CA3AF' }} />
+                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: '0.6250rem'rem', fill: '#9CA3AF' }} />
                             <Tooltip cursor={{ fill: '#F9FAFB' }} />
                             <Bar dataKey="completed" fill="var(--color-primary)" radius={[4, 4, 0, 0]} barSize={20} />
                             <Bar dataKey="total" fill="#E5E7EB" radius={[4, 4, 0, 0]} barSize={20} />
                         </BarChart>
                     </ResponsiveContainer>
                     ) : (
-                        <div style={{ height: 250, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '12px' }}>
+                        <div style={{ height: 250, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '0.7500rem'rem' }}>
                             {loading ? 'Caricamento...' : 'Nessun dato attività disponibile'}
                         </div>
                     )}
@@ -306,7 +306,7 @@ const AnalyticsPage = () => {
                 <div style={styles.cardTitle}>
                     <AppIcon name="brain" size={18} color="primary" /> Insight AI (Beta)
                 </div>
-                <p style={{ fontSize: '13px', color: '#4338CA', lineHeight: '1.6', margin: 0 }}>
+                <p style={{ fontSize: '0.8125rem'rem', color: '#4338CA', lineHeight: '1.6', margin: 0 }}>
                     Basandoci sugli ultimi 7 giorni, {selectedPatient?.name} ha mantenuto un umore stabile. 
                     Il tasso di completamento delle attività è aumentato del 15% rispetto alla settimana precedente. 
                     Suggerimento: Una passeggiata pomeridiana sembra correlata a un umore migliore la sera.

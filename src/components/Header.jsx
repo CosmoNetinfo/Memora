@@ -63,7 +63,7 @@ const Header = ({ title }) => {
             padding: '0 16px',
         },
         title: {
-            fontSize: '1.25rem',
+            fontSize: '0.0625rem'rem'.25rem',
             color: 'var(--color-primary-dark)',
             fontWeight: '700',
             letterSpacing: '-0.02em',
@@ -89,7 +89,7 @@ const Header = ({ title }) => {
             color: 'white',
             fontWeight: '600',
             overflow: 'hidden',
-            fontSize: '1rem',
+            fontSize: '0.0625rem'rem'rem',
             boxShadow: 'var(--shadow-sm)',
         },
         avatarImg: {

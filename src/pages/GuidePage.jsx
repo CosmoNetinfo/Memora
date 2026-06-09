@@ -30,7 +30,7 @@ const GuidePage = () => {
             color: 'var(--color-primary-dark)'
         },
         title: {
-            fontSize: '24px',
+            fontSize: '1.5000rem'rem',
             fontWeight: '800',
             margin: 0
         },
@@ -38,13 +38,13 @@ const GuidePage = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '10px',
-            fontSize: '18px',
+            fontSize: '1.1250rem'rem',
             fontWeight: '700',
             marginBottom: '12px',
             color: 'var(--color-primary)'
         },
         text: {
-            fontSize: '15px',
+            fontSize: '0.9375rem'rem',
             lineHeight: '1.6',
             color: '#4B5563',
             marginBottom: '16px'
@@ -59,7 +59,7 @@ const GuidePage = () => {
             alignItems: 'flex-start',
             gap: '10px',
             marginBottom: '12px',
-            fontSize: '14px'
+            fontSize: '0.8750rem'rem'
         },
         iconBox: {
             backgroundColor: 'var(--color-bg-primary)',
