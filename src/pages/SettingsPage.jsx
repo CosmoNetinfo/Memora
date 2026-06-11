@@ -147,7 +147,7 @@ const SettingsPage = () => {
     pageTitle: { fontSize: '1.5rem', fontWeight: "800", color: "var(--color-primary-dark)", margin: 0 },
     profileSection: { backgroundColor: "white", borderRadius: "var(--card-radius)", padding: "var(--content-padding-y)", display: "flex", alignItems: "center", gap: "16px", marginBottom: "var(--section-gap)", border: "1px solid var(--color-border)", boxShadow: "var(--card-shadow)" },
     avatarWrap: { position: "relative", background: "none", border: "none", padding: 0, cursor: "pointer", display: "block", flexShrink: 0 },
-    avatar: { width: "60px", height: "60px", borderRadius: "50%", backgroundColor: "var(--color-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", overflow: "hidden" },
+    avatar: { width: "3.75rem", height: "3.75rem", borderRadius: "50%", backgroundColor: "var(--color-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", overflow: "hidden" },
     avatarOverlay: { position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(0,0,0,0.5)", color: "white", fontSize: '0.625rem', padding: "2px", display: "flex", alignItems: "center", justifyContent: "center", gap: "2px", borderBottomLeftRadius: "50%", borderBottomRightRadius: "50%" },
     sectionLabel: { fontSize: '0.8125rem', fontWeight: "700", color: "var(--color-primary-dark)", textTransform: "uppercase", margin: "0 0 8px 12px", opacity: 0.7 },
     menuCard: { backgroundColor: "white", borderRadius: "var(--card-radius)", overflow: "hidden", marginBottom: "var(--section-gap)", border: "1px solid var(--color-border)", boxShadow: "var(--card-shadow)", maxWidth: "100%", boxSizing: "border-box" },

@@ -67,6 +67,12 @@ const Header = ({ title }) => {
             color: 'var(--color-primary-dark)',
             fontWeight: '700',
             letterSpacing: '-0.02em',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            maxWidth: 'calc(100vw - 180px)',
+            margin: '0 auto',
+            textAlign: 'center',
         },
         profileBtn: {
             position: 'absolute',
@@ -79,8 +85,8 @@ const Header = ({ title }) => {
             textDecoration: 'none'
         },
         avatar: {
-            width: '36px',
-            height: '36px',
+            width: '2.25rem',
+            height: '2.25rem',
             borderRadius: '50%',
             backgroundColor: 'var(--color-primary)',
             display: 'flex',
@@ -89,7 +95,7 @@ const Header = ({ title }) => {
             color: 'white',
             fontWeight: '600',
             overflow: 'hidden',
-            fontSize: '0.0625rem',
+            fontSize: '1rem',
             boxShadow: 'var(--shadow-sm)',
         },
         avatarImg: {

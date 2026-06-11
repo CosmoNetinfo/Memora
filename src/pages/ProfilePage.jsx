@@ -429,8 +429,8 @@ const ProfilePage = () => {
             borderBottomRightRadius: '50%',
         },
         avatar: {
-            width: '100px',
-            height: '100px',
+            width: '6.25rem',
+            height: '6.25rem',
             borderRadius: '50%',
             backgroundColor: 'var(--color-primary)',
             display: 'flex',
