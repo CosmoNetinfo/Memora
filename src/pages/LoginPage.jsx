@@ -25,8 +25,6 @@ const LoginPage = () => {
 
             if (error) throw error;
 
-            console.log("Login successo:", data);
-
             // Recupera il profilo per mantenere la compatibilità con il resto dell'app
             if (data.user) {
                 let { data: profile } = await supabase
@@ -37,7 +35,6 @@ const LoginPage = () => {
 
                 // SELF-HEALING: Se il profilo non esiste (trigger fallito?), crealo ora
                 if (!profile) {
-                    console.log("Profilo mancante, creazione fallback...");
                     const metadata = data.user.user_metadata || {};
                     const newProfile = {
                         id: data.user.id,
@@ -130,7 +127,7 @@ const LoginPage = () => {
             fontSize: '1.0625rem',
             fontWeight: 'bold',
             backgroundColor: 'var(--color-primary)',
-            color: 'white',
+            color: 'var(--color-on-primary)',
             border: 'none',
             borderRadius: '12px',
             cursor: loading ? 'wait' : 'pointer',
@@ -185,7 +182,7 @@ const LoginPage = () => {
                         </div>
                     </div>
 
-                    <button type="submit" style={styles.button} disabled={loading}>
+                    <button type="submit" className="btn-primary" style={styles.button} disabled={loading}>
                         {loading ? 'Acceso in corso...' : 'Accedi'}
                     </button>
                 </form>
@@ -200,8 +197,7 @@ const LoginPage = () => {
 
             <div style={{ marginTop: '40px', textAlign: 'center', fontSize: '0.6875rem', color: '#999', lineHeight: '1.4' }}>
                 Memora x Airalzh © 2026<br />
-                <strong>Daniele Spalletti</strong> (sviluppatore) e <strong>Michele Mosca</strong> (web designer)<br />
-                per <a href="https://www.cosmonet.info" target="_blank" style={{color: '#999', textDecoration: 'underline'}}>cosmonet.info</a>
+                Michele Mosca e Daniele Spalletti
             </div>
         </div>
     );

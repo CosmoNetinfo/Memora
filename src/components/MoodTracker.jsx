@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import AppIcon from './AppIcon';
+import { MOOD_COLORS } from '../utils/moodHistory';
 
 /** Colori faccine in ordine: verde, giallo, rosso (alto contrasto) */
 const MOOD_ACTIVE_COLORS = {
-  happy: '#16a34a',
-  neutral: '#ca8a04',
-  sad: '#dc2626',
+  happy: MOOD_COLORS.happy,
+  neutral: MOOD_COLORS.neutral,
+  sad: MOOD_COLORS.sad,
 };
 /** Colore faccine non selezionate: grigio visibile su sfondo chiaro */
 const MOOD_INACTIVE_COLOR = '#64748b';

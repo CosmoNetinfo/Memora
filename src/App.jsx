@@ -2,11 +2,11 @@ import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import GlobalErrorBoundary from './components/DebugConsole/GlobalErrorBoundary';
-import ErrorInterceptor from './components/DebugConsole/ErrorInterceptor';
-import DebugConsole from './components/DebugConsole/DebugConsole';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { supabase } from './supabaseClient';
+import { isDev } from './utils/dev';
+import { logout } from './utils/logout';
 import ListPage from './pages/ListPage';
 import ChatPage from './pages/ChatPage';
 import FeedPage from './pages/FeedPage';
@@ -24,27 +24,48 @@ import AnalyticsPage from './pages/AnalyticsPage';
 import AIChatPage from './pages/AIChatPage';
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = React.useState(!!localStorage.getItem('alzheimer_user'));
+    const [isAuthenticated, setIsAuthenticated] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const location = useLocation();
 
-    // Il vecchio gestore errori in localStorage è stato rimosso.
-    // Ora usiamo ErrorInterceptor (aggiunto in AppWrapper) che salva su zustand.
-
-    // Listener ufficiale per l'autenticazione
     React.useEffect(() => {
+        let mounted = true;
+
+        const initSession = async () => {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!mounted) return;
+
+                if (!session) {
+                    localStorage.removeItem('alzheimer_user');
+                    if (!isDev) localStorage.removeItem('simulated_role');
+                    setIsAuthenticated(false);
+                } else {
+                    setIsAuthenticated(true);
+                }
+            } finally {
+                if (mounted) setLoading(false);
+            }
+        };
+
+        initSession();
+
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            console.log("Evento Auth:", event);
             if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-                setIsAuthenticated(true);
+                setIsAuthenticated(!!session);
             } else if (event === 'SIGNED_OUT') {
+                localStorage.removeItem('alzheimer_user');
+                if (!isDev) localStorage.removeItem('simulated_role');
                 setIsAuthenticated(false);
             }
         });
-        return () => subscription.unsubscribe();
+
+        return () => {
+            mounted = false;
+            subscription.unsubscribe();
+        };
     }, []);
 
-    // Segnale di attività ONLINE
     React.useEffect(() => {
         let interval;
         if (isAuthenticated) {
@@ -53,41 +74,32 @@ function App() {
                 const userId = session?.user?.id;
                 if (!userId) return;
 
-                const { error } = await supabase
+                await supabase
                     .from('profiles')
                     .update({ last_active: new Date().toISOString() })
                     .eq('id', userId);
-
-                if (error) {
-                    console.error("❌ Errore segnale presenza:", error);
-                } else {
-                    console.log("🟢 Segnale attività inviato per:", userId);
-                    localStorage.setItem('last_active_signal', Date.now().toString());
-                }
             };
 
-            // Esegui immediatamente
             sendSignal();
-
-            // Interval ogni 30 secondi
             interval = setInterval(sendSignal, 30000);
         }
         return () => clearInterval(interval);
     }, [isAuthenticated]);
 
-    // Sincronizzazione profilo e controllo BAN
     React.useEffect(() => {
+        if (!isAuthenticated) return;
+
         const syncProfile = async () => {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
                 const userId = session?.user?.id;
 
                 if (!userId) {
-                    setLoading(false);
+                    localStorage.removeItem('alzheimer_user');
+                    setIsAuthenticated(false);
                     return;
                 }
 
-                // Recupera dati freschi usando l'ID ufficiale della sessione
                 const { data: profile, error } = await supabase
                     .from('profiles')
                     .select('*')
@@ -95,9 +107,7 @@ function App() {
                     .single();
 
                 if (error || !profile) {
-                    console.log("Profilo non trovato nel DB, provo a crearlo con ID sessione:", userId);
                     const { data: { user } } = await supabase.auth.getUser();
-                    
                     const newProfile = {
                         id: userId,
                         name: user?.user_metadata?.name || 'Utente',
@@ -107,23 +117,16 @@ function App() {
                         photo_url: user?.user_metadata?.photo_url || null
                     };
 
-                    const { data: created, error: createError } = await supabase
-                        .from('profiles')
-                        .upsert([newProfile])
-                        .select()
-                        .single();
-                    
-                    if (createError) {
-                        console.error("Errore creazione forzata profilo:", createError);
-                    } else {
-                        console.log("Profilo creato/aggiornato con successo via Session!");
-                    }
-                    setLoading(false);
+                    await supabase.from('profiles').upsert([newProfile]).select().single();
                     return;
                 }
 
-                // 2. Aggiornamento dati se cambiati (es. ruolo)
-                const simulatedRole = localStorage.getItem('simulated_role');
+                if (profile.is_banned) {
+                    await logout();
+                    return;
+                }
+
+                const simulatedRole = isDev ? localStorage.getItem('simulated_role') : null;
                 const updatedUser = {
                     id: userId,
                     name: profile.name,
@@ -135,27 +138,15 @@ function App() {
 
                 localStorage.setItem('alzheimer_user', JSON.stringify(updatedUser));
                 window.dispatchEvent(new Event('user_updated'));
-                console.log("Profilo sincronizzato con successo! ✅");
             } catch (e) {
-                console.error("Errore critico durante il sync:", e);
-            } finally {
-                setLoading(false);
+                console.error('Errore sync profilo:', e);
             }
         };
 
         syncProfile();
-    }, [isAuthenticated, location.pathname]); // Controlla a ogni cambio pagina o login
+    }, [isAuthenticated, location.pathname]);
 
-    // Ascolta cambiamenti al localStorage (es. login/logout)
-    React.useEffect(() => {
-        const checkAuth = () => {
-            setIsAuthenticated(!!localStorage.getItem('alzheimer_user'));
-        };
-        window.addEventListener('storage', checkAuth);
-        return () => window.removeEventListener('storage', checkAuth);
-    }, []);
-
-    if (loading && isAuthenticated) {
+    if (loading) {
         return <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-primary)' }}>Caricamento sessione...</div>;
     }
 
@@ -183,20 +174,39 @@ function App() {
                     <Route path="ai-chat" element={<AIChatPage />} />
                 </Route>
 
-                {/* Fallback per rotte inesistenti o redirect email (es. /confirm) */}
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </AnimatePresence>
     );
 }
 
+const DevTools = isDev
+    ? React.lazy(async () => {
+        const [{ default: ErrorInterceptor }, { default: DebugConsole }] = await Promise.all([
+            import('./components/DebugConsole/ErrorInterceptor'),
+            import('./components/DebugConsole/DebugConsole'),
+        ]);
+        return {
+            default: () => (
+                <>
+                    <ErrorInterceptor />
+                    <DebugConsole />
+                </>
+            ),
+        };
+    })
+    : null;
+
 const AppWrapper = () => (
     <GlobalErrorBoundary>
-        <ErrorInterceptor />
         <HashRouter>
             <App />
         </HashRouter>
-        <DebugConsole />
+        {DevTools && (
+            <React.Suspense fallback={null}>
+                <DevTools />
+            </React.Suspense>
+        )}
     </GlobalErrorBoundary>
 );
 

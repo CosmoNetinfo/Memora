@@ -45,12 +45,12 @@ const ListPage = () => {
     const [moodToast, setMoodToast] = useState(null);
 
     const categories = {
-        generic: { icon: 'calendar-lines', label: 'Generale', color: '#9CA3AF' },
-        meds: { icon: 'badge-check', label: 'Medicine', color: '#10B981' },
-        food: { icon: 'shoe-prints', label: 'Pasto', color: '#F59E0B' },
-        rest: { icon: 'face-expressionless', label: 'Riposo', color: '#6366F1' },
-        walk: { icon: 'shoe-prints', label: 'Passeggiata', color: '#8B5CF6' },
-        appointment: { icon: 'stethoscope', label: 'Visita', color: '#EF4444' }
+        generic: { icon: 'calendar-lines', label: 'Generale', iconColor: 'primaryDark' },
+        meds: { icon: 'badge-check', label: 'Medicine', iconColor: '#059669' },
+        food: { icon: 'shoe-prints', label: 'Pasto', iconColor: '#D97706' },
+        rest: { icon: 'face-expressionless', label: 'Riposo', iconColor: '#6366F1' },
+        walk: { icon: 'shoe-prints', label: 'Passeggiata', iconColor: 'primary' },
+        appointment: { icon: 'calendar-lines', label: 'Visita', iconColor: '#DC2626' },
     };
 
     const completionStats = useMemo(() => {
@@ -214,7 +214,17 @@ const ListPage = () => {
         progressFill: { height: '100%', backgroundColor: 'white', transition: 'width 0.5s ease-out' },
         taskItem: { backgroundColor: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(10px)', borderRadius: 'var(--card-radius)', padding: '12px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', border: '1px solid rgba(255, 255, 255, 0.25)', cursor: 'pointer' },
         taskLeft: { display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 },
-        taskIcon: (cat) => ({ backgroundColor: categories[cat || 'generic'].color, width: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }),
+        taskIcon: {
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            width: '36px',
+            height: '36px',
+            borderRadius: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 2px 8px rgba(74, 48, 79, 0.12)',
+            flexShrink: 0,
+        },
         taskText: { fontWeight: '600', fontSize: '1rem', wordBreak: 'break-word', minWidth: 0, color: 'white' },
         completedText: { textDecoration: 'line-through', opacity: 0.7 },
         taskTime: { fontSize: '0.875rem', opacity: 0.95, fontWeight: '600', color: 'white' },
@@ -264,8 +274,8 @@ const ListPage = () => {
                         onClick={() => toggleTask(task.id)}
                     >
                         <div style={styles.taskLeft}>
-                            <div style={styles.taskIcon(task.category)}>
-                                <AppIcon name={categories[task.category || 'generic'].icon} size={18} color="white" />
+                            <div style={styles.taskIcon}>
+                                <AppIcon name={categories[task.category || 'generic'].icon} size={18} color={categories[task.category || 'generic'].iconColor} />
                             </div>
                             <div style={{ minWidth: 0 }}>
                                 <div style={{ ...styles.taskText, ...(task.completed ? styles.completedText : {}) }}>{task.text}</div>
@@ -302,7 +312,7 @@ const ListPage = () => {
                         <option value="daily">Ogni giorno</option>
                         <option value="weekly">Ogni settimana</option>
                     </select>
-                    <button style={{ ...styles.manageBtn, backgroundColor: 'var(--color-primary)', color: 'white', width: '100%', marginTop: '10px' }} onClick={addTask}>Aggiungi</button>
+                    <button style={{ ...styles.manageBtn, backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)', width: '100%', marginTop: '10px' }} onClick={addTask}>Aggiungi</button>
                 </motion.div>
             )}
             </AnimatePresence>

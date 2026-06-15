@@ -139,7 +139,7 @@ export default function ReportUmorePage() {
     tabs: { display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' },
     tab: (active) => ({
       padding: '10px 18px', borderRadius: 'var(--card-radius)', border: 'none', fontSize: '0.875rem', fontWeight: '600',
-      cursor: 'pointer', background: active ? 'var(--color-primary)' : 'white', color: active ? 'white' : 'var(--color-text-primary)',
+      cursor: 'pointer', background: active ? 'var(--color-primary)' : 'white', color: active ? 'var(--color-on-primary)' : 'var(--color-text-primary)',
       boxShadow: 'var(--card-shadow)',
     }),
     card: { backgroundColor: 'white', borderRadius: 'var(--card-radius)', padding: 'var(--content-padding-y)', marginBottom: '20px', boxShadow: 'var(--card-shadow)' },

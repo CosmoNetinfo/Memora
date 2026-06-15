@@ -11,11 +11,28 @@ const UsersPage = () => {
     const currentUser = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
 
     useEffect(() => {
-        if (currentUser.role !== 'admin' && currentUser.role !== 'super_admin') {
-            navigate('/');
-            return;
-        }
-        fetchUsers();
+        const guard = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                navigate('/login');
+                return;
+            }
+
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('role')
+                .eq('id', session.user.id)
+                .single();
+
+            if (!profile || (profile.role !== 'admin' && profile.role !== 'super_admin')) {
+                navigate('/');
+                return;
+            }
+
+            fetchUsers();
+        };
+
+        guard();
     }, []);
 
     const fetchUsers = async () => {

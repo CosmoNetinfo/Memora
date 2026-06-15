@@ -101,7 +101,7 @@ const AIChatPage = () => {
             padding: '12px 16px',
             borderRadius: '16px',
             backgroundColor: role === 'user' ? 'var(--color-primary)' : 'white',
-            color: role === 'user' ? 'white' : '#1F2937',
+            color: role === 'user' ? 'var(--color-on-primary)' : '#1F2937',
             boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
             border: role === 'assistant' ? '1px solid #E5E7EB' : 'none',
             fontSize: '0.9375rem',
@@ -109,7 +109,7 @@ const AIChatPage = () => {
         }),
         inputArea: { padding: '16px 20px', backgroundColor: 'white', borderTop: '1px solid #E5E7EB', display: 'flex', gap: '12px', alignItems: 'center' },
         input: { flex: 1, padding: '12px 16px', borderRadius: '24px', border: '1px solid #D1D5DB', fontSize: '0.9375rem', outline: 'none' },
-        sendBtn: { backgroundColor: 'var(--color-primary)', color: 'white', border: 'none', width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        sendBtn: { backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' },
         typing: { fontSize: '0.75rem', color: '#9CA3AF', marginBottom: '8px' }
     };
 

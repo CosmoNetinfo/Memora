@@ -49,7 +49,10 @@ Ogni azione rilevante viene salvata nel database:
 
 ## 🔐 3. Sicurezza e Resilienza
 - **Auto-Healing**: Creazione automatica del profilo mancante al primo login.
-- **RLS (Row Level Security)**: Dati protetti e visibili solo a chi ne ha diritto.
+- **Sessione Supabase**: le rotte protette richiedono sessione valida (non solo localStorage).
+- **Logout**: centralizzato in `src/utils/logout.js` (signOut + pulizia storage).
+- **DebugConsole**: disponibile solo in build di sviluppo.
+- **RLS (Row Level Security)**: da rafforzare su Supabase — vedi `SICUREZZA_E_RACCOMANDAZIONI.md` e `sql_updates/security_rls_hardening.sql`.
 
 ---
 
@@ -57,5 +60,5 @@ Ogni azione rilevante viene salvata nel database:
 Installabile su Android e iOS come App nativa, con supporto per notifiche push.
 
 ---
-*Documentazione aggiornata al: 3 Maggio 2026*
+*Documentazione aggiornata al: 15 Giugno 2026*
 *Sviluppato da Daniele Spalletti e Michele Mosca per Cosmonet*

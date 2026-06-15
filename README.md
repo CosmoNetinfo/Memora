@@ -21,9 +21,13 @@ Il monitoraggio non è mai stato così chiaro.
 - **Real-time Status**: Sistema di heartbeat per segnalare lo stato "Online" e l'ultimo accesso in tempo reale.
 
 ### 🪲 Scarafaggio Diagnostico (Debug Console)
-Un sistema di telemetria avanzato integrato nell'app.
+Un sistema di telemetria avanzato integrato nell'app (**solo in modalità sviluppo**).
 - **Global Error Catching**: Cattura automatica di errori JavaScript e fallimenti di rete.
-- **Report Rapido**: Tasto dedicato per inviare i log tecnici via email all'amministratore (`admindany@gmail.com`).
+- **Report Rapido**: Tasto dedicato per inviare i log tecnici via email all'amministratore.
+
+### 🔐 Logout e privacy
+- **Disconnetti** disponibile dal profilo personale (logout Supabase completo).
+- I **pazienti** non possono nascondere email e posizione (policy di sicurezza assistita).
 
 ### ✉️ Notifiche Istantanee
 - **Badge Reattivo**: Un pallino rosso dinamico sulla bustina dei messaggi avvisa istantaneamente dell'arrivo di nuovi contenuti non letti.
@@ -60,6 +64,7 @@ npm run dev
 Se stai lavorando a questo progetto, è **fondamentale** seguire queste regole:
 1. Leggi sempre il file **[PROGETTO_RECAP.md](PROGETTO_RECAP.md)** per conoscere lo stato attuale dei lavori.
 2. Ogni volta che fai un push, aggiorna la sezione **Changelog** in fondo a `PROGETTO_RECAP.md`.
+3. Per **sicurezza e RLS Supabase**, consulta **[SICUREZZA_E_RACCOMANDAZIONI.md](SICUREZZA_E_RACCOMANDAZIONI.md)** (documento per Daniele / backend).
 
 *Sviluppato con dedizione da **Daniele Spalletti** (sviluppatore) e **Michele Mosca** (web designer) per **cosmonet.info**.*
 ---
