@@ -9,7 +9,9 @@
 ## Aprire la PR verso CosmoNet (Daniele)
 
 1. Vai al link compare (precompilato):
-   **https://github.com/CosmoNetinfo/AlzheimerApp/compare/main...M1k3-l0:feature/giugno-2026-aggiornamento**
+   **https://github.com/CosmoNetinfo/AlzheimerApp/compare/main...M1k3-l0:feature/giugno-2026-aggiornamento?expand=1**
+
+   > Se compare mostra "There isn't anything to compare", il branch non condivide la storia con `main`. Il branch è stato riallineato il 16/06/2026 — ricarica la pagina.
 
 2. Titolo suggerito:
    `Memora: audit sicurezza, pulizia codice e documentazione (Giugno 2026)`
