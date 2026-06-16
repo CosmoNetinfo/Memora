@@ -83,11 +83,11 @@ const UsersPage = () => {
         container: { padding: '20px', backgroundColor: 'var(--color-bg-primary)', minHeight: '100vh', paddingBottom: '100px' },
         title: { fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '20px', color: 'var(--color-primary-dark)' },
         userCard: { backgroundColor: 'white', borderRadius: '16px', padding: '16px', marginBottom: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '12px' },
-        avatar: { width: '50px', height: '50px', borderRadius: '50%', backgroundColor: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
-        userInfo: { flex: 1 },
-        userName: { fontWeight: 'bold', fontSize: '1rem' },
-        userRole: { fontSize: '0.75rem', color: '#666' },
-        actions: { display: 'flex', gap: '8px' },
+        avatar: { width: '50px', height: '50px', flexShrink: 0, borderRadius: '50%', backgroundColor: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+        userInfo: { flex: 1, minWidth: 0 },
+        userName: { fontWeight: 'bold', fontSize: '1rem', wordBreak: 'break-word' },
+        userRole: { fontSize: '0.75rem', color: '#666', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+        actions: { display: 'flex', gap: '8px', flexShrink: 0 },
         badge: (role) => ({
             fontSize: '0.625rem',
             padding: '2px 8px',
@@ -95,7 +95,7 @@ const UsersPage = () => {
             backgroundColor: role === 'super_admin' ? '#FECDD3' : (role === 'admin' ? '#FFD700' : (role === 'moderator' ? '#E0F2FE' : '#F3F4F6')),
             color: role === 'super_admin' ? '#E11D48' : (role === 'admin' ? '#000' : (role === 'moderator' ? '#0369A1' : '#666')),
             fontWeight: 'bold',
-            marginLeft: '8px'
+            whiteSpace: 'nowrap'
         })
     };
 
@@ -116,7 +116,7 @@ const UsersPage = () => {
                         {u.photo_url ? <img src={u.photo_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Avatar" /> : <User size={24} color="#999" />}
                     </div>
                     <Link to={`/profilo/${u.id}`} style={{...styles.userInfo, textDecoration: 'none', color: 'inherit'}}>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px', marginBottom: '4px' }}>
                             <span style={styles.userName}>{u.name} {u.surname}</span>
                             <span style={styles.badge(u.role)}>{u.role}</span>
                         </div>
