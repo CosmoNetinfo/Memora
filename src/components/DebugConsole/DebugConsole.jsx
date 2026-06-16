@@ -91,12 +91,13 @@ const DebugConsole = () => {
             }
         };
 
+        const toggleConsole = () => setIsVisible(v => !v);
         window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('toggle_debug_console', () => setIsVisible(v => !v));
+        window.addEventListener('toggle_debug_console', toggleConsole);
 
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('toggle_debug_console', () => setIsVisible(v => !v));
+            window.removeEventListener('toggle_debug_console', toggleConsole);
         };
     }, [isAdminWhitelisted]);
 
