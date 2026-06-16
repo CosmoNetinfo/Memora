@@ -1,78 +1,94 @@
-# Memora 🧠✨
+# Memora 🧠
 
-Un'applicazione mobile **Premium** progettata per supportare i pazienti affetti da Alzheimer, i loro caregiver e il personale medico. Memora offre strumenti intelligenti per la gestione quotidiana, la memoria e la socialità, unendo un'estetica raffinata a una tecnologia all'avanguardia.
+Memora è un'applicazione multipiattaforma progettata per supportare pazienti affetti da Alzheimer, i loro familiari, caregiver e medici specialisti. Un ecosistema unificato che facilita la comunicazione, il monitoraggio dell'umore, la condivisione di ricordi e la gestione delle emergenze, il tutto con un'interfaccia accessibile, pulita e rassicurante.
 
-## 🚀 Innovazioni & Funzionalità Killer
+## 🌟 Caratteristiche Principali
 
-### 🎙️ Messaggi Vocali "Premium Voice"
-Abbiamo reinventato la comunicazione vocale per renderla umana e accessibile.
-- **Interfaccia WhatsApp Style**: Player audio personalizzato con **waveform dinamica** e foto profilo integrata nel fumetto.
-- **Micro-interazioni**: Pulsanti Play/Pause fluidi e feedback visivo del progresso.
-- **Cloud Delivery**: Audio gestiti via Supabase Storage per una velocità di riproduzione immediata.
+- **Ruoli Multipli (RBAC):** L'app adatta la sua interfaccia e le sue funzionalità in base al ruolo dell'utente:
+  - 👴 **Paziente:** Interfaccia semplificata ad alta leggibilità, accesso rapido a chiamate di emergenza, galleria dei ricordi e chat con i propri cari.
+  - 👨‍👩‍👧 **Familiare / Caregiver:** Monitoraggio dell'umore del paziente in tempo reale, gestione dell'agenda medica, ricezione di alert e condivisione di foto.
+  - 🩺 **Medico:** Visione globale dell'andamento clinico (Analytics), report umore storicizzato, gestione sicura della cartella clinica e comunicazioni dirette con la rete di supporto.
+  - 👑 **Super Admin:** Visione di tutto il sistema, simulazione dei ruoli per test, gestione completa degli utenti e dei permessi.
+- **Diario e Memoriae (Social Feed):** Una bacheca condivisa, accessibile e sicura in cui familiari e pazienti possono caricare foto, ricordi testuali e messaggi vocali, per stimolare la funzione cognitiva.
+- **Chat e Messaggistica (Testo & Vocale):** 
+  - Chat pubbliche (gruppi familiari o gruppi di supporto).
+  - Chat private tra medici e familiari, familiari e pazienti.
+  - Supporto nativo ai **messaggi vocali** per pazienti che hanno difficoltà a digitare.
+  - Interfaccia "a pillola" moderna e intuitiva, con animazioni fluide.
+- **Monitoraggio Umore (Mood Tracker):** I pazienti o i caregiver possono aggiornare lo stato emotivo giornaliero (Felice, Normale, Triste). Il Medico può visualizzare un **Report Analytics** avanzato.
+- **Pulsante SOS (Floating):** Accesso sempre visibile in tutte le pagine per chiamate rapide ai contatti di emergenza impostati, fondamentale per la sicurezza del paziente.
+- **Supporto Accessibilità:** Testi grandi (`large-font-mode`), contrasti studiati appositamente per ipovedenti, UI con margini sicuri per evitare tocchi accidentali e transizioni "motion reduced" per evitare stress cognitivo.
+- **Applicazione Ibrida (PWA / Mobile):** 
+  - Web App responsiva, curata in ogni dettaglio sia su Desktop che Mobile.
+  - Preparata per la compilazione nativa iOS e Android tramite **Capacitor**.
 
-### 📈 Report Benessere & Mood Tracker 2.0
-Il monitoraggio non è mai stato così chiaro.
-- **Grafici Dinamici**: Visualizzazione storica dell'umore con dati scaricati in tempo reale dal database.
-- **Accesso Caregiver/Medico**: Possibilità di visualizzare i report di utenti specifici direttamente dal profilo del paziente.
-- **Analisi Prevalente**: Algoritmi che calcolano lo stato d'animo dominante per periodo.
+## 💻 Stack Tecnologico
 
-### 📔 Diario Attività & Monitoraggio Remoto
-- **Activity Log**: Un registro cronologico di ogni task completato, visualizzabile direttamente sul profilo dell'utente.
-- **Real-time Status**: Sistema di heartbeat per segnalare lo stato "Online" e l'ultimo accesso in tempo reale.
+Questo progetto è un'applicazione Single Page Application (SPA) reattiva, potenziata dalle moderne tecnologie del panorama frontend:
 
-### 🪲 Scarafaggio Diagnostico (Debug Console)
-Un sistema di telemetria avanzato integrato nell'app (**solo in modalità sviluppo**).
-- **Global Error Catching**: Cattura automatica di errori JavaScript e fallimenti di rete.
-- **Report Rapido**: Tasto dedicato per inviare i log tecnici via email all'amministratore.
+- **Core:** [React 18](https://reactjs.org/) + [Vite](https://vitejs.dev/) (per compilazione fulminea e HMR).
+- **Styling:** CSS Vanilla avanzato (Variabili CSS globali, design system fluido, clamp(), media queries per desktop/mobile).
+- **Routing:** React Router v6 per una navigazione dichiarativa sicura.
+- **Animazioni:** [Framer Motion](https://www.framer.com/motion/) per le transizioni di pagina morbide ("page transition") che garantiscono continuità cognitiva.
+- **State Management:** [Zustand](https://github.com/pmndrs/zustand) per la gestione fluida e scalabile dello stato (es. registrazione vocale, stato utente).
+- **Backend & Database:** [Supabase](https://supabase.com/) per Autenticazione (Auth), Database PostgreSQL in Realtime e Storage dei media (audio/foto).
+- **Mobile Native Wrapping:** [Capacitor](https://capacitorjs.com/) (Accesso a Geolocalizzazione, Haptics, Status Bar, ecc).
+- **Data Visualization:** Recharts per le analitiche mediche.
+- **Iconografia:** Lucide React.
 
-### 🔐 Logout e privacy
-- **Disconnetti** disponibile dal profilo personale (logout Supabase completo).
-- I **pazienti** non possono nascondere email e posizione (policy di sicurezza assistita).
+## 🚀 Come avviare l'ambiente di sviluppo
 
-### ✉️ Notifiche Istantanee
-- **Badge Reattivo**: Un pallino rosso dinamico sulla bustina dei messaggi avvisa istantaneamente dell'arrivo di nuovi contenuti non letti.
+1. **Clona la repository**
+   ```bash
+   git clone https://github.com/CosmoNetinfo/Memora.git
+   cd Memora
+   ```
 
-## 🎨 Design & Branding
-L'applicazione segue l'identità visiva ufficiale di **Airalzh Onlus** con un tocco moderno.
-- **Palette**: Viola Vibrante (`#9C69A7`), Prugna Scuro (`#4A304F`) e Lilla Chiarissimo (`#F7F3FA`).
-- **User Experience**: Design "Safe & Calm", icone grandi e chiare (AppIcon Custom System) e navigazione a prova di errore.
+2. **Installa le dipendenze**
+   Assicurati di avere Node.js installato.
+   ```bash
+   npm install
+   ```
 
-## 🛠️ Stack Tecnologico
-- **Frontend**: React + Vite + Framer Motion (per animazioni fluide).
-- **Backend**: Supabase (PostgreSQL + Real-time + Auth + Storage).
-- **Mobile Foundation**: Architettura ottimizzata per Capacitor per deployment nativo iOS/Android.
+3. **Configura le Variabili d'Ambiente**
+   Crea un file `.env` nella root del progetto e aggiungi le chiavi Supabase fornite dal team:
+   ```env
+   VITE_SUPABASE_URL=il_tuo_supabase_url
+   VITE_SUPABASE_ANON_KEY=la_tua_anon_key
+   ```
 
-## 📦 Installazione Locale
+4. **Avvia il server di sviluppo**
+   ```bash
+   npm run dev
+   ```
+   L'app sarà visibile all'indirizzo `http://localhost:5173`.
+
+## 📱 Build e Deploy Mobile (Capacitor)
+
+Il progetto è configurato per essere esportato come app nativa iOS e Android tramite Capacitor.
 
 ```bash
-# Clona il repository
-git clone https://github.com/CosmoNetinfo/AlzheimerApp.git
+# Esegui la build del progetto web
+npm run build
 
-# Entra nella cartella
-cd AlzheimerApp
+# Sincronizza i file web con le cartelle native
+npm run cap:sync
 
-# Installa le dipendenze
-npm install
+# Apri Android Studio per compilare l'app
+npm run android
 
-# Avvia l'app in modalità sviluppo
-npm run dev
+# Apri Xcode per compilare l'app (solo su macOS)
+npm run ios
 ```
 
----
+## 🛠️ Contribuire (Developer Guidelines)
 
-## 👥 Per i Collaboratori
-Se stai lavorando a questo progetto, è **fondamentale** seguire queste regole:
-1. Leggi sempre il file **[PROGETTO_RECAP.md](PROGETTO_RECAP.md)** per conoscere lo stato attuale dei lavori.
-2. Ogni volta che fai un push, aggiorna la sezione **Changelog** in fondo a `PROGETTO_RECAP.md`.
-3. Per **sicurezza e RLS Supabase**, consulta **[SICUREZZA_E_RACCOMANDAZIONI.md](SICUREZZA_E_RACCOMANDAZIONI.md)** (documento per Daniele / backend).
+- **UI/UX Philosophy:** Qualsiasi componente aggiunto deve essere accessibile. Non usare ombre eccessive, usa le variabili di design preimpostate nel `index.css` (es. `var(--color-bg-primary)`, `var(--card-radius)`).
+- **Responsive:** Lo sviluppo segue l'approccio mobile-first, ma la vista Desktop deve includere una `sidebar` permanente e margini generosi (`--desktop-gutter`). Controlla `index.css` sotto la media query `@media (min-width: 1024px)`.
+- **Debug:** Esiste una Console di Debug mobile interna per catturare errori in ambiente nativo (utile per risolvere i log non visibili sui device senza ispezione USB).
 
-*Sviluppato con dedizione da **Daniele Spalletti** (sviluppatore) e **Michele Mosca** (web designer) per **cosmonet.info**.*
----
+## 📄 Licenza & Team
 
-## 📄 License & Credits
+Sviluppata dal team **CosmoNetinfo** con la partecipazione del Web Designer **Michele** e del Developer **Daniele Spalletti**. 
 
-**AlzheimerApp** is developed and maintained by **[Cosmonet](https://www.cosmonet.info)**.
-
-© 2026 Cosmonet (https://www.cosmonet.info) — All rights reserved.
-
-This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
+Progetto riservato, tutti i diritti riservati.
