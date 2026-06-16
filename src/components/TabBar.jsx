@@ -56,13 +56,34 @@ const TabBar = () => {
         };
     }, [user.id, window.location.hash]);
 
+    /** Compensa viewBox e padding diversi tra le SVG (512 vs 24, pieno vs cerchio) */
+    const TAB_ICON_SCALE = {
+        home: 0.86,
+        comments: 0.9,
+        'users-alt': 0.92,
+        brain: 1,
+        user: 0.86,
+    };
+
+    const TabIcon = ({ name, filled }) => (
+        <span className={`${styles.tabIconSlot} ${filled ? styles.tabIconFilled : ''}`}>
+            <AppIcon
+                name={name}
+                size={24}
+                style={{ transform: `scale(${TAB_ICON_SCALE[name] ?? 1})` }}
+            />
+        </span>
+    );
+
+    const isHealthcare = user.role === 'healthcare';
+
     return (
         <nav className={`${styles.tabBar} bottom-navbar`} aria-label="Navigazione principale">
             <NavLink
                 to="/"
                 className={({ isActive }) => `${styles.tab} ${isActive ? styles.active : ''}`}
             >
-                <AppIcon name="home" size={24} />
+                <TabIcon name="home" />
                 <span className={styles.label}>HOME</span>
             </NavLink>
 
@@ -70,8 +91,12 @@ const TabBar = () => {
                 to="/chat"
                 className={({ isActive }) => `${styles.tab} ${isActive ? styles.active : ''}`}
             >
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <AppIcon name="comments" size={24} />
+                <span className={styles.tabIconSlot}>
+                    <AppIcon
+                        name="comments"
+                        size={24}
+                        style={{ transform: `scale(${TAB_ICON_SCALE.comments})` }}
+                    />
                     {hasUnreadGeneral && (
                         <div style={{
                             position: 'absolute',
@@ -85,7 +110,7 @@ const TabBar = () => {
                             boxShadow: '0 0 4px rgba(239, 68, 68, 0.4)'
                         }} />
                     )}
-                </div>
+                </span>
                 <span className={styles.label}>Chat</span>
             </NavLink>
 
@@ -93,23 +118,25 @@ const TabBar = () => {
                 to="/feed"
                 className={({ isActive }) => `${styles.tab} ${isActive ? styles.active : ''}`}
             >
-                <AppIcon name="users-alt" size={24} />
+                <TabIcon name="users-alt" />
                 <span className={styles.label}>Social</span>
             </NavLink>
 
-            <NavLink
-                to="/analytics"
-                className={({ isActive }) => `${styles.tab} ${isActive ? styles.active : ''}`}
-            >
-                <AppIcon name="brain" size={24} />
-                <span className={styles.label}>Analisi</span>
-            </NavLink>
+            {!isHealthcare && (
+                <NavLink
+                    to="/analytics"
+                    className={({ isActive }) => `${styles.tab} ${isActive ? styles.active : ''}`}
+                >
+                    <TabIcon name="brain" filled />
+                    <span className={styles.label}>Analisi</span>
+                </NavLink>
+            )}
 
             <NavLink
                 to="/profilo"
                 className={({ isActive }) => `${styles.tab} ${isActive ? styles.active : ''}`}
             >
-                <AppIcon name="user" size={24} />
+                <TabIcon name="user" />
                 <span className={styles.label}>Profilo</span>
             </NavLink>
         </nav>

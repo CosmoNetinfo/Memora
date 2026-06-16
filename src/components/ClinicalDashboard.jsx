@@ -1,7 +1,14 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { getMoodHistory, getMoodColor } from '../utils/moodHistory';
-import { AlertTriangle, Activity, FileText, TrendingUp, XCircle } from 'lucide-react';
+import { formatFullName } from '../utils/avatarUtils';
+import {
+  withMockMoodHistory,
+  withMockTasks,
+  withMockLogs,
+  withMockNotes,
+} from '../utils/clinicalMockData';
+import { AlertTriangle, Activity, FileText, TrendingUp, XCircle, Plus, RotateCcw } from 'lucide-react';
 import AppIcon from './AppIcon';
 import { supabase } from '../supabaseClient';
 
@@ -117,44 +124,42 @@ export default function ClinicalDashboard() {
   };
 
   const fetchPatientData = async (patientId) => {
-    // Carica umori
+    const patient = patients.find((p) => p.id === patientId) || selectedPatient;
+    const patientLabel = patient ? formatFullName(patient) : 'Il paziente';
+
     const { data: moodData } = await supabase
       .from('mood_history')
       .select('*')
       .eq('user_id', patientId)
       .order('created_at', { ascending: true });
-    
-    if (moodData) {
-      setHistory(moodData.map(m => ({ mood: m.mood, timestamp: m.created_at })));
-    }
 
-    // Carica task (agenda)
+    const dbHistory = moodData?.map((m) => ({ mood: m.mood, timestamp: m.created_at })) || [];
+    setHistory(withMockMoodHistory(patientId, dbHistory));
+
     const { data: taskData } = await supabase
       .from('tasks')
       .select('*')
       .eq('user_id', patientId)
       .order('created_at', { ascending: false });
-    
-    if (taskData) setTasks(taskData);
 
-    // Carica registro attività
+    setTasks(withMockTasks(patientId, taskData || []));
+
     const { data: logData } = await supabase
       .from('activity_log')
       .select('*')
       .eq('user_id', patientId)
       .order('created_at', { ascending: false })
       .limit(50);
-    
-    if (logData) setLogs(logData);
 
-    // Carica note
+    setLogs(withMockLogs(patientId, logData || []));
+
     const { data: noteData } = await supabase
       .from('clinical_notes')
       .select('*')
       .eq('patient_id', patientId)
       .order('created_at', { ascending: false });
-    
-    if (noteData) setNotes(noteData);
+
+    setNotes(withMockNotes(patientId, noteData || [], patientLabel));
   };
 
   const handleAddNote = async () => {
@@ -253,7 +258,7 @@ export default function ClinicalDashboard() {
       borderRadius: 'var(--card-radius)',
       border: 'none',
       backgroundColor: 'var(--color-primary)',
-      color: 'white',
+      color: 'var(--color-on-primary)',
       fontWeight: '600',
       cursor: 'pointer',
     },
@@ -304,7 +309,7 @@ export default function ClinicalDashboard() {
             onChange={(e) => setSelectedPatient(patients.find(p => p.id === e.target.value))}
           >
             {patients.map(p => (
-              <option key={p.id} value={p.id}>{p.name} {p.surname}</option>
+              <option key={p.id} value={p.id}>{formatFullName(p)}</option>
             ))}
           </select>
           {patients.length === 0 && <div style={styles.empty}>Nessun paziente trovato nel database.</div>}
@@ -412,11 +417,31 @@ export default function ClinicalDashboard() {
             {logs.length > 0 ? (
               logs.map(log => (
                 <div key={log.id} style={{ ...styles.noteItem, padding: '10px 0', borderBottom: '1px solid #f0f0f0' }}>
-                  <div style={{ fontWeight: '600', color: 'var(--color-primary-dark)', fontSize: '0.8125rem' }}>
-                    {log.action === 'task_completed' && '✅ Task Completato'}
-                    {log.action === 'task_uncompleted' && '⏳ Task Ripristinato'}
-                    {log.action === 'task_added' && '➕ Nuovo Task'}
-                    {log.action === 'mood_updated' && '🎭 Umore Aggiornato'}
+                  <div style={{ fontWeight: '600', color: 'var(--color-primary-dark)', fontSize: '0.8125rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {log.action === 'task_completed' && (
+                      <>
+                        <AppIcon name="badge-check" size={14} color="primary" />
+                        Task Completato
+                      </>
+                    )}
+                    {log.action === 'task_uncompleted' && (
+                      <>
+                        <RotateCcw size={14} color="var(--color-primary)" />
+                        Task Ripristinato
+                      </>
+                    )}
+                    {log.action === 'task_added' && (
+                      <>
+                        <Plus size={14} color="var(--color-primary)" />
+                        Nuovo Task
+                      </>
+                    )}
+                    {log.action === 'mood_updated' && (
+                      <>
+                        <TrendingUp size={14} color="var(--color-primary)" />
+                        Umore Aggiornato
+                      </>
+                    )}
                   </div>
                   <div style={{ fontSize: '0.875rem', margin: '4px 0' }}>{log.details}</div>
                   <div style={{ ...styles.noteMeta, fontSize: '0.6875rem' }}>

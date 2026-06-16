@@ -2,6 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import AppIcon from '../components/AppIcon';
+import {
+    withMockPrivateMessages,
+    formatPrivateMessage,
+    appendLocalPrivateMessage,
+} from '../utils/chatMockData';
+import { formatFullName, getSearchAvatarUrl } from '../utils/avatarUtils';
 
 const VoicePlayer = ({ url, isMe, userPhoto, userName }) => {
     const [isPlaying, setIsPlaying] = React.useState(false);
@@ -173,6 +179,7 @@ const PrivateChatPage = () => {
     const [inputText, setInputText] = useState("");
     const [loading, setLoading] = useState(true);
     const [receiverProfile, setReceiverProfile] = useState(null);
+    const [hasMockThread, setHasMockThread] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [recordingDuration, setRecordingDuration] = useState(0);
     const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -187,7 +194,6 @@ const PrivateChatPage = () => {
         if (!receiverId || !currentUserId) return;
         fetchReceiverProfile();
         fetchMessages();
-        markMessagesAsRead();
 
         const channel = supabase
             .channel(`private-chat-${[currentUserId, receiverId].sort().join('-')}`)
@@ -377,7 +383,12 @@ const PrivateChatPage = () => {
 
     const fetchReceiverProfile = async () => {
         const { data } = await supabase.from('profiles').select('*').eq('id', receiverId).single();
-        if (data) setReceiverProfile(data);
+        if (data) {
+            setReceiverProfile({
+                ...data,
+                photo_url: data.photo_url || data.photo || getSearchAvatarUrl(data),
+            });
+        }
     };
 
     const fetchMessages = async () => {
@@ -387,16 +398,22 @@ const PrivateChatPage = () => {
                 .select('*')
                 .or(`and(sender_id.eq.${currentUserId},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${currentUserId})`)
                 .order('created_at', { ascending: true });
-            
-            if (data) {
-                setMessages(data.map(msg => ({
-                    id: msg.id,
-                    text: msg.content,
-                    type: msg.type || 'text',
-                    sender: msg.sender_id === currentUserId ? 'me' : 'other',
-                    time: new Date(msg.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
-                })));
+
+            let profile = receiverProfile;
+            if (!profile) {
+                const { data: profileData } = await supabase.from('profiles').select('*').eq('id', receiverId).single();
+                profile = profileData ? {
+                    ...profileData,
+                    photo_url: profileData.photo_url || profileData.photo || getSearchAvatarUrl(profileData),
+                } : null;
+                if (profile) setReceiverProfile(profile);
             }
+
+            const merged = withMockPrivateMessages(data || [], currentUserId, profile, user);
+            const isMock = !(data?.length) && merged.length > 0;
+            setHasMockThread(isMock);
+            setMessages(merged.map((msg) => formatPrivateMessage(msg, currentUserId)));
+            if (!isMock) markMessagesAsRead();
         } catch (e) {
             console.error(e);
         }
@@ -414,9 +431,15 @@ const PrivateChatPage = () => {
     const handleSend = async () => {
         if (!inputText.trim()) return;
         const textToSend = inputText;
-        const tempId = Date.now(); // ID temporaneo per UI
-        
-        // Aggiunta ottimistica alla UI
+        setInputText("");
+        setTimeout(scrollToBottom, 50);
+
+        if (hasMockThread) {
+            setMessages((prev) => appendLocalPrivateMessage(prev, currentUserId, receiverId, textToSend));
+            return;
+        }
+
+        const tempId = Date.now();
         const newMessage = {
             id: tempId,
             text: textToSend,
@@ -425,10 +448,8 @@ const PrivateChatPage = () => {
             time: new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
             sending: true
         };
-        
+
         setMessages(prev => [...prev, newMessage]);
-        setInputText(""); 
-        setTimeout(scrollToBottom, 50);
 
         const { error, data } = await supabase.from('private_messages').insert([{
             content: textToSend,
@@ -437,12 +458,10 @@ const PrivateChatPage = () => {
         }]).select();
 
         if (error) {
-            // Rimuovi dalla UI se fallisce
             setMessages(prev => prev.filter(m => m.id !== tempId));
             setInputText(textToSend);
             alert("Errore invio");
         } else if (data && data[0]) {
-            // Aggiorna con ID reale del database
             setMessages(prev => prev.map(m => m.id === tempId ? { ...m, id: data[0].id, sending: false } : m));
         }
     };
@@ -491,7 +510,7 @@ const PrivateChatPage = () => {
             padding: '10px 14px',
             borderRadius: '18px',
             backgroundColor: sender === 'me' ? 'var(--color-primary)' : 'white',
-            color: sender === 'me' ? 'white' : 'var(--color-text-primary)',
+            color: sender === 'me' ? 'var(--color-on-primary)' : 'var(--color-text-primary)',
             alignSelf: sender === 'me' ? 'flex-end' : 'flex-start',
             boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
             borderBottomRightRadius: sender === 'me' ? '4px' : '18px',
@@ -534,6 +553,7 @@ const PrivateChatPage = () => {
             height: '40px',
             borderRadius: '50%',
             backgroundColor: 'var(--color-primary)',
+            color: 'var(--color-on-primary)',
             border: 'none',
             display: 'flex',
             justifyContent: 'center',
@@ -554,7 +574,7 @@ const PrivateChatPage = () => {
                     {receiverProfile?.photo_url ? <img src={receiverProfile.photo_url} style={{width:'100%',height:'100%',objectFit:'cover'}} alt="P" /> : receiverProfile?.name?.[0]}
                 </div>
                 <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 'bold' }}>{receiverProfile?.name} {receiverProfile?.surname}</div>
+                    <div style={{ fontWeight: 'bold' }}>{formatFullName(receiverProfile)}</div>
                     <div style={{ fontSize: '0.6875rem', color: receiverProfile?.last_active && (new Date() - new Date(receiverProfile.last_active)) < 60000 ? '#10b981' : '#9CA3AF' }}>
                         {receiverProfile?.last_active && (new Date() - new Date(receiverProfile.last_active)) < 60000 
                             ? 'Online' 

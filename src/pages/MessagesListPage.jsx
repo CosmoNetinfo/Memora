@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import AppIcon from '../components/AppIcon';
+import { formatFullName, getSearchAvatarUrl } from '../utils/avatarUtils';
+import { withMockConversations } from '../utils/chatMockData';
 
 const MessagesListPage = () => {
     const navigate = useNavigate();
@@ -26,34 +28,43 @@ const MessagesListPage = () => {
 
     const fetchConversations = async () => {
         try {
-            // Ottieni tutti i messaggi dove l'utente è mittente o destinatario
-            const { data, error } = await supabase
-                .from('private_messages')
-                .select('*, sender:profiles!private_messages_sender_id_fkey(*), receiver:profiles!private_messages_receiver_id_fkey(*)')
-                .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`)
-                .order('created_at', { ascending: false });
+            const [{ data, error }, { data: profiles }] = await Promise.all([
+                supabase
+                    .from('private_messages')
+                    .select('*, sender:profiles!private_messages_sender_id_fkey(*), receiver:profiles!private_messages_receiver_id_fkey(*)')
+                    .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`)
+                    .order('created_at', { ascending: false }),
+                supabase.from('profiles').select('*'),
+            ]);
 
             if (error) throw error;
 
-            if (data) {
-                // Raggruppa per l'altra persona
-                const convMap = {};
-                data.forEach(msg => {
-                    const otherUser = msg.sender_id === currentUserId ? msg.receiver : msg.sender;
-                    if (!otherUser) return;
-                    if (!convMap[otherUser.id]) {
-                        const isAudio = msg.content && typeof msg.content === 'string' && (msg.content.includes('.webm') || msg.content.includes('.mp4') || msg.content.includes('.m4a') || msg.content.includes('.wav'));
-                        convMap[otherUser.id] = {
-                            user: otherUser,
-                            lastMessage: isAudio ? '🎤 Messaggio vocale' : msg.content,
-                            time: new Date(msg.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
-                            date: new Date(msg.created_at),
-                            unread: !msg.is_read && msg.receiver_id === currentUserId
-                        };
-                    }
-                });
-                setConversations(Object.values(convMap).sort((a, b) => b.date - a.date));
-            }
+            const convMap = {};
+            (data || []).forEach((msg) => {
+                const otherUser = msg.sender_id === currentUserId ? msg.receiver : msg.sender;
+                if (!otherUser) return;
+                if (!convMap[otherUser.id]) {
+                    const isAudio = msg.content && typeof msg.content === 'string' && (msg.content.includes('.webm') || msg.content.includes('.mp4') || msg.content.includes('.m4a') || msg.content.includes('.wav'));
+                    convMap[otherUser.id] = {
+                        user: {
+                            ...otherUser,
+                            photo_url: otherUser.photo_url || otherUser.photo || getSearchAvatarUrl(otherUser),
+                        },
+                        lastMessage: isAudio ? 'Messaggio vocale' : msg.content,
+                        time: new Date(msg.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+                        date: new Date(msg.created_at),
+                        unread: !msg.is_read && msg.receiver_id === currentUserId,
+                    };
+                }
+            });
+
+            const merged = withMockConversations(
+                Object.values(convMap),
+                currentUserId,
+                profiles || [],
+                user,
+            );
+            setConversations(merged);
         } catch (e) {
             console.error("Errore fetch conversazioni:", e);
         } finally {
@@ -159,7 +170,7 @@ const MessagesListPage = () => {
                         </div>
                         <div style={styles.content}>
                             <div style={styles.name}>
-                                {conv.user.name} {conv.user.surname}
+                                {formatFullName(conv.user)}
                                 <span style={styles.time}>{conv.time}</span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

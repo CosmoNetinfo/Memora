@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Navigate } from 'react-router-dom';
 import { 
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
     BarChart, Bar, Legend, Cell, AreaChart, Area 
@@ -152,7 +153,7 @@ const AnalyticsPage = () => {
             padding: '8px 16px',
             borderRadius: '20px',
             backgroundColor: active ? 'var(--color-primary)' : 'white',
-            color: active ? 'white' : '#4B5563',
+            color: active ? 'var(--color-on-primary)' : '#4B5563',
             border: `1px solid ${active ? 'var(--color-primary)' : '#E5E7EB'}`,
             fontSize: '0.875rem',
             fontWeight: '600',
@@ -200,6 +201,10 @@ const AnalyticsPage = () => {
         }
         return null;
     };
+
+    if (user.role === 'healthcare') {
+        return <Navigate to="/" replace />;
+    }
 
     if (loading) {
         return (

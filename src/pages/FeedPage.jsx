@@ -3,6 +3,14 @@ import { Heart, Share2, X, Edit2, Check, Maximize2, User } from 'lucide-react';
 import AppIcon from '../components/AppIcon';
 import { supabase } from '../supabaseClient';
 import { Link } from 'react-router-dom';
+import { getMoodColor } from '../utils/moodHistory';
+import { getRoleBadgeStyle, getRoleLabel } from '../utils/avatarUtils';
+import {
+  withMockFeedPosts,
+  getMockCommentsForPosts,
+  buildMoodsFromProfiles,
+  isMockFeedId,
+} from '../utils/feedMockData';
 
 const FeedPage = () => {
     const [posts, setPosts] = useState([]);
@@ -31,16 +39,6 @@ const FeedPage = () => {
     });
 
     const user = JSON.parse(localStorage.getItem('alzheimer_user') || '{"name":"Utente"}');
-
-    // Helper functions for mood
-    const getMoodColor = (mood) => {
-        switch (mood) {
-            case 'happy': return '#22c55e';
-            case 'neutral': return '#eab308';
-            case 'sad': return '#ef4444';
-            default: return '#E5E7EB';
-        }
-    };
 
     const getMoodEmoji = (mood) => {
         switch (mood) {
@@ -160,58 +158,94 @@ const FeedPage = () => {
 
     const fetchPosts = async () => {
         try {
-            const { data, error } = await supabase
-                .from('posts')
-                .select('*, comments(count)')
-                .order('created_at', { ascending: false });
-            
+            const [{ data, error }, { data: profiles }] = await Promise.all([
+                supabase
+                    .from('posts')
+                    .select('*, comments(count)')
+                    .order('created_at', { ascending: false }),
+                supabase.from('profiles').select('*'),
+            ]);
+
             if (error) {
                 console.error("Errore fetch posts:", error);
                 return;
             }
 
-            if (data) {
-                const formattedPosts = data.map(p => ({
-                    ...p,
-                    comment_count: p.comments?.[0]?.count || 0
-                }));
-                setPosts(formattedPosts);
-                
-                // Fetch moods for all unique authors
-                const authorIds = [...new Set(data.map(p => p.author_id).filter(Boolean))];
-                fetchUserMoods(authorIds);
-                
-                fetchAllComments();
-            }
+            const formattedPosts = (data || []).map(p => ({
+                ...p,
+                comment_count: p.comments?.[0]?.count || 0
+            }));
+
+            const mergedPosts = withMockFeedPosts(formattedPosts, profiles || []);
+            setPosts(mergedPosts);
+
+            const moodsMap = buildMoodsFromProfiles(profiles || []);
+            setUserMoods(moodsMap);
+
+            await fetchAllComments(mergedPosts.filter((p) => p.isMock));
         } catch (e) {
             console.error("Errore fetch posts", e);
         }
         setLoading(false);
     };
 
-    const fetchAllComments = async () => {
+    const fetchAllComments = async (mockPosts) => {
         try {
             const { data, error } = await supabase
                 .from('comments')
                 .select('*')
                 .order('created_at', { ascending: true });
-            
-            if (!error && data) {
-                const commentsByPost = {};
-                data.forEach(comment => {
-                    if (!commentsByPost[comment.post_id]) commentsByPost[comment.post_id] = [];
-                    commentsByPost[comment.post_id].push(comment);
-                });
-                setComments(commentsByPost);
-            }
+
+            setComments((prev) => {
+                const commentsByPost = Array.isArray(mockPosts)
+                    ? getMockCommentsForPosts(mockPosts)
+                    : Object.fromEntries(
+                        Object.entries(prev).filter(([postId]) => isMockFeedId(postId))
+                    );
+
+                if (!error && data) {
+                    data.forEach((comment) => {
+                        if (!commentsByPost[comment.post_id]) commentsByPost[comment.post_id] = [];
+                        commentsByPost[comment.post_id].push(comment);
+                    });
+                }
+                return commentsByPost;
+            });
         } catch (e) {
             console.error("Errore fetch commenti:", e);
         }
     };
 
+    const toggleComments = (postId) => {
+        setShowCommentsFor((prev) => (prev === postId ? null : postId));
+    };
+
     const addComment = async (postId) => {
         if (!newCommentText.trim()) return;
         const text = newCommentText.trim();
+
+        if (isMockFeedId(postId)) {
+            const commentObj = {
+                id: `mock-comment-local-${Date.now()}`,
+                post_id: postId,
+                author_id: user.id || (user.name + (user.surname || '')),
+                author_name: user.name + ' ' + (user.surname || ''),
+                author_photo: user.photo,
+                text,
+                created_at: new Date().toISOString(),
+                isMock: true,
+            };
+            setComments((prev) => ({
+                ...prev,
+                [postId]: [...(prev[postId] || []), commentObj],
+            }));
+            setPosts((prev) => prev.map((p) => (
+                p.id === postId ? { ...p, comment_count: (p.comment_count || 0) + 1 } : p
+            )));
+            setNewCommentText('');
+            return;
+        }
+
         const commentObj = {
             post_id: postId,
             author_id: user.id || (user.name + (user.surname || '')),
@@ -220,7 +254,7 @@ const FeedPage = () => {
             text
         };
 
-        const { data: inserted, error } = await supabase
+        const { error } = await supabase
             .from('comments')
             .insert([commentObj], { returning: 'representation' });
 
@@ -228,18 +262,30 @@ const FeedPage = () => {
             alert("Errore nel salvare il commento: " + error.message);
         } else {
             setNewCommentText('');
-            // UI updates via realtime
         }
     };
 
     const updateComment = async (commentId, postId) => {
         if (!editingCommentText.trim()) return;
+
+        if (isMockFeedId(commentId) || isMockFeedId(postId)) {
+            setComments((prev) => ({
+                ...prev,
+                [postId]: (prev[postId] || []).map((c) => (
+                    c.id === commentId ? { ...c, text: editingCommentText.trim() } : c
+                )),
+            }));
+            setEditingCommentId(null);
+            setEditingCommentText('');
+            return;
+        }
+
         try {
             const { error } = await supabase
                 .from('comments')
                 .update({ text: editingCommentText.trim() })
                 .eq('id', commentId);
-            
+
             if (error) throw error;
             setEditingCommentId(null);
             setEditingCommentText('');
@@ -250,9 +296,20 @@ const FeedPage = () => {
 
     const deleteComment = async (commentId, postId) => {
         if (!window.confirm("Eliminare il commento?")) return;
-        try { 
-            await supabase.from('comments').delete().eq('id', commentId); 
-            // Update local count immediately for better UX
+
+        if (isMockFeedId(commentId) || isMockFeedId(postId)) {
+            setComments((prev) => ({
+                ...prev,
+                [postId]: (prev[postId] || []).filter((c) => c.id !== commentId),
+            }));
+            setPosts((prev) => prev.map((p) => (
+                p.id === postId ? { ...p, comment_count: Math.max(0, (p.comment_count || 1) - 1) } : p
+            )));
+            return;
+        }
+
+        try {
+            await supabase.from('comments').delete().eq('id', commentId);
             setPosts(prev => prev.map(p => p.id === postId ? { ...p, comment_count: Math.max(0, (p.comment_count || 1) - 1) } : p));
             fetchAllComments();
         } catch (e) {}
@@ -264,6 +321,8 @@ const FeedPage = () => {
         setPosts(prev => prev.map(p => p.id === postId ? { ...p, likes: (p.likes || 0) + 1 } : p));
         setLikedPosts(prev => [...prev, postId]);
 
+        if (isMockFeedId(postId)) return;
+
         try {
             const { error } = await supabase
                 .from('posts')
@@ -272,7 +331,7 @@ const FeedPage = () => {
             if (error) throw error;
         } catch (e) {
             setLikedPosts(prev => prev.filter(id => id !== postId));
-            fetchPosts(); 
+            fetchPosts();
         }
     };
 
@@ -299,6 +358,16 @@ const FeedPage = () => {
 
     const updatePost = async (postId) => {
         if (!editingText.trim()) return;
+
+        if (isMockFeedId(postId)) {
+            setPosts((prev) => prev.map((p) => (
+                p.id === postId ? { ...p, text: editingText.trim() } : p
+            )));
+            setEditingPostId(null);
+            setEditingText('');
+            return;
+        }
+
         try {
             const { error } = await supabase
                 .from('posts')
@@ -314,6 +383,17 @@ const FeedPage = () => {
 
     const deletePost = async (postId) => {
         if (!window.confirm("Eliminare il post?")) return;
+
+        if (isMockFeedId(postId)) {
+            setPosts((prev) => prev.filter((p) => p.id !== postId));
+            setComments((prev) => {
+                const next = { ...prev };
+                delete next[postId];
+                return next;
+            });
+            return;
+        }
+
         try { await supabase.from('posts').delete().eq('id', postId); } catch (e) {}
     };
 
@@ -335,7 +415,7 @@ const FeedPage = () => {
             padding: '6px 14px', 
             borderRadius: '20px', 
             backgroundColor: active ? 'var(--color-primary)' : 'white', 
-            color: active ? 'white' : '#666', 
+            color: active ? 'var(--color-on-primary)' : '#666', 
             fontSize: '0.8125rem', 
             fontWeight: 'bold', 
             border: 'none', 
@@ -348,10 +428,11 @@ const FeedPage = () => {
         avatarSmall: (mood) => ({ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', overflow: 'hidden', fontSize: '0.75rem', border: `2px solid ${getMoodColor(mood)}`, boxShadow: `0 2px 6px ${getMoodColor(mood)}40`, transition: 'all 0.3s ease' }),
         avatarImg: { width: '100%', height: '100%', objectFit: 'cover' },
         input: { flex: 1, minWidth: 0, maxWidth: '100%', backgroundColor: '#F3F4F6', border: 'none', borderRadius: '22px', padding: '10px 16px', fontSize: '0.9375rem', outline: 'none' },
-        btnPrimary: { backgroundColor: 'var(--color-primary)', color: 'white', border: 'none', padding: '8px 20px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer' },
+        btnPrimary: { backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)', border: 'none', padding: '8px 20px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer' },
         actionBtn: { background: 'none', border: 'none', color: 'var(--color-primary-dark)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '600', fontSize: '0.875rem' },
         commentBubble: { backgroundColor: '#F3F4F6', padding: '8px 12px', borderRadius: 'var(--card-radius)', flex: 1, minWidth: 0, wordBreak: 'break-word' },
-        hashtagBadge: { backgroundColor: 'var(--color-accent)', color: 'var(--color-primary)', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', width: 'fit-content', marginBottom: '8px' }
+        hashtagBadge: { backgroundColor: 'var(--color-accent)', color: 'var(--color-primary)', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', width: 'fit-content', marginBottom: '8px' },
+        roleBadge: { fontSize: '0.625rem', fontWeight: '700', padding: '2px 7px', borderRadius: '10px', lineHeight: 1.3, flexShrink: 0 },
     };
 
     return (
@@ -377,10 +458,9 @@ const FeedPage = () => {
 
                 <div style={styles.filterRow} className="no-scrollbar">
                     <button style={styles.filterChip(roleFilter === 'all')} onClick={() => setRoleFilter('all')}>Tutti</button>
-                    <button style={styles.filterChip(roleFilter === 'healthcare')} onClick={() => setRoleFilter('healthcare')}>Dottori</button>
+                    <button style={styles.filterChip(roleFilter === 'healthcare')} onClick={() => setRoleFilter('healthcare')}>Medico</button>
                     <button style={styles.filterChip(roleFilter === 'patient')} onClick={() => setRoleFilter('patient')}>Pazienti</button>
                     <button style={styles.filterChip(roleFilter === 'caregiver')} onClick={() => setRoleFilter('caregiver')}>Caregiver</button>
-                    <button style={styles.filterChip(roleFilter === 'family')} onClick={() => setRoleFilter('family')}>Famiglia</button>
                 </div>
 
                 {activeHashtag && (
@@ -452,16 +532,17 @@ const FeedPage = () => {
                                 {post.author_photo ? <img src={post.author_photo} style={styles.avatarImg} alt="Autore" /> : (post.author?.[0] || 'U')}
                             </div>
                             <div>
-                                <div style={{ fontWeight: '700', color: 'var(--color-primary-dark)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <div style={{ fontWeight: '700', color: 'var(--color-primary-dark)', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                                     {post.author}
-                                    {authorData.role === 'admin' && <AppIcon name="crown" size={14} color="primary" />}
-                                    {authorData.role === 'healthcare' && <AppIcon name="stethoscope" size={16} color="primary" />}
-                                    {authorData.mood && <span>{getMoodEmoji(authorData.mood)}</span>}
+                                    <span style={{ ...styles.roleBadge, ...getRoleBadgeStyle() }}>
+                                        {getRoleLabel(authorData.role)}
+                                    </span>
+                                    {authorData.mood && <span aria-label={`Umore: ${authorData.mood}`}>{getMoodEmoji(authorData.mood)}</span>}
                                 </div>
                                 <div style={{ fontSize: '0.6875rem', color: '#999' }}>{new Date(post.created_at).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
                             </div>
                         </Link>
-                        { (post.author_id === user.id || user.role === 'admin') && !editingPostId && (
+                        { (post.author_id === user.id || user.role === 'admin') && !editingPostId && !post.isMock && (
                             <div style={{ display: 'flex', gap: '8px' }}>
                                 <button style={{ background: 'none', border: 'none' }} onClick={() => { setEditingPostId(post.id); setEditingText(post.text); }}><AppIcon name="pencil" size={18} color="primary" /></button>
                                 <button style={{ background: 'none', border: 'none' }} onClick={() => deletePost(post.id)}><AppIcon name="trash" size={18} color="error" /></button>
@@ -482,8 +563,15 @@ const FeedPage = () => {
                     )}
                     
                     {post.image && (
-                        <div style={{ width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderRadius: '12px', margin: '8px 0', cursor: 'zoom-in' }} onClick={() => setEnlargedImage(post.image)}>
-                            <img src={post.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Post" />
+                        <div style={{ width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderRadius: '12px', margin: '8px 0', cursor: 'zoom-in', backgroundColor: '#EDE6F3' }} onClick={() => setEnlargedImage(post.image)}>
+                            <img
+                                src={post.image}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                alt="Post"
+                                loading="lazy"
+                                referrerPolicy="no-referrer"
+                                onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
+                            />
                         </div>
                     )}
 
@@ -521,7 +609,7 @@ const FeedPage = () => {
                                                 <textarea style={{ ...styles.input, width: '100%', fontSize: '0.8125rem' }} value={editingCommentText} onChange={(e) => setEditingCommentText(e.target.value)} />
                                                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '6px', marginTop: '4px' }}>
                                                     <button onClick={() => setEditingCommentId(null)} style={{ background: 'none', border: 'none', fontSize: '0.6875rem' }}>Annulla</button>
-                                                    <button onClick={() => updateComment(comm.id, post.id)} style={{ background: 'var(--color-primary)', color: 'white', border: 'none', borderRadius: '10px', padding: '2px 8px', fontSize: '0.6875rem' }}>Salva</button>
+                                                    <button onClick={() => updateComment(comm.id, post.id)} style={{ background: 'var(--color-primary)', color: 'var(--color-on-primary)', border: 'none', borderRadius: '10px', padding: '2px 8px', fontSize: '0.6875rem' }}>Salva</button>
                                                 </div>
                                             </div>
                                         ) : (

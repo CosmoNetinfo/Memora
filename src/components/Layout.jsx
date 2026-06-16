@@ -3,6 +3,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import TabBar from './TabBar';
 import Header from './Header';
+import FloatingSosButton from './FloatingSosButton';
+import { isDev } from '../utils/dev';
 
 const pageTransition = (reduced) => ({
     initial: reduced ? false : { opacity: 0, x: 20 },
@@ -29,9 +31,11 @@ const Layout = () => {
     const isFullPage = currentPath.includes('chat') || 
                        currentPath.includes('profilo') || 
                        ['/', '/chat', '/feed', '/profilo'].includes(currentPath);
-    const isChatPage = currentPath.includes('chat');
+    const isPrivateChatPage = currentPath.includes('chat-privata');
+    const isGroupChatPage = currentPath === '/chat' || currentPath.startsWith('/chat?');
+    const isChatFillLayout = isGroupChatPage || isPrivateChatPage;
     const isProfilePage = currentPath.includes('profilo');
-    const hideTabBar = currentPath.includes('chat-privata');
+    const hideTabBar = isPrivateChatPage;
     const isGuidePage = currentPath.includes('guida');
     
     const getTitle = (path) => {
@@ -51,7 +55,7 @@ const Layout = () => {
         return 'Memora';
     };
 
-    const simulatedRole = localStorage.getItem('simulated_role');
+    const simulatedRole = isDev ? localStorage.getItem('simulated_role') : null;
 
     return (
         <div className={`app-container${isFullPage ? ' full-page' : ''}`}>
@@ -80,18 +84,19 @@ const Layout = () => {
                 </div>
             )}
             <Header title={getTitle(currentPath)} />
-            <main className={`main-content${isFullPage ? ' full-page' : ''}${isChatPage ? ' full-page-fill' : ''}${isProfilePage ? ' page-profilo' : ''}${isGuidePage ? ' page-guida' : ''}`} style={{ paddingTop: 'var(--header-height)' }}>
+            <main className={`main-content${isFullPage ? ' full-page' : ''}${isChatFillLayout ? ' full-page-fill' : ''}${isProfilePage ? ' page-profilo' : ''}${isGuidePage ? ' page-guida' : ''}`} style={{ paddingTop: 'var(--header-height)' }}>
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={location.pathname}
                         {...pageTransition(reduceMotion)}
-                        style={{ height: '100%' }}
+                        style={isChatFillLayout ? { height: '100%', minHeight: 0 } : undefined}
                     >
                         <Outlet />
                     </motion.div>
                 </AnimatePresence>
             </main>
             {!hideTabBar && <TabBar />}
+            <FloatingSosButton />
         </div>
     );
 };

@@ -3,8 +3,10 @@ import { LogOut } from 'lucide-react';
 import AppIcon from '../components/AppIcon';
 import { supabase } from '../supabaseClient';
 import { useNavigate, Link, useParams } from 'react-router-dom';
-import { getMoodColor, addMoodEntry } from '../utils/moodHistory';
+import { getMoodColor } from '../utils/moodHistory';
 import { getCurrentPosition, getAddressFromCoords } from '../utils/locationService';
+import { logout } from '../utils/logout';
+import { isDev } from '../utils/dev';
 
 const ProfilePage = () => {
     const { id } = useParams();
@@ -30,9 +32,17 @@ const ProfilePage = () => {
     const [savingName, setSavingName] = useState(false);
     const [privacySettings, setPrivacySettings] = useState({ hide_location: false, hide_email: false });
     const [savingPrivacy, setSavingPrivacy] = useState(false);
+    const [activitiesOpen, setActivitiesOpen] = useState(false);
     const fileInputRef = useRef(null);
 
-    const isPatient = user?.role === 'patient';
+    const getEffectiveRole = (dbRole) => {
+        if (!isOwnProfile) return dbRole;
+        const simulated = isDev ? localStorage.getItem('simulated_role') : null;
+        return simulated || loggedInUser?.role || dbRole;
+    };
+
+    const effectiveRole = getEffectiveRole(user?.role);
+    const isPatient = effectiveRole === 'patient';
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -69,12 +79,20 @@ const ProfilePage = () => {
                 }
 
                 if (data) {
+                    const role = getEffectiveRole(data.role);
                     setCurrentMood(data.current_mood);
                     setUser({
                         ...data,
+                        role,
                         photo: data.photo_url
                     });
-                    if (data.privacy_settings) setPrivacySettings(data.privacy_settings);
+                    if (data.privacy_settings) {
+                        setPrivacySettings(
+                            role === 'patient'
+                                ? { hide_location: false, hide_email: false }
+                                : data.privacy_settings
+                        );
+                    }
                 } else if (isOwnProfile && loggedInUser) {
                     // SELF-HEALING: Se è il proprio profilo ma manca nel DB, crealo
                     console.log("Profile missing, creating fallback...");
@@ -163,11 +181,9 @@ const ProfilePage = () => {
         }
     };
 
-    const handleLogout = () => {
-        if (window.confirm("Sei sicuro di voler uscire?")) {
-            localStorage.removeItem('alzheimer_user');
-            window.location.href = '/login';
-        }
+    const handleLogout = async () => {
+        if (!window.confirm('Sei sicuro di voler uscire?')) return;
+        await logout();
     };
 
     const handlePhotoChange = async (e) => {
@@ -200,35 +216,6 @@ const ProfilePage = () => {
         } finally {
             setUploadingPhoto(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
-        }
-    };
-
-    const handleMoodSelect = async (mood) => {
-        if (!isPatient) return;
-        setCurrentMood(mood);
-        addMoodEntry(mood);
-        try {
-            if (user.id) {
-                // 1. Aggiorna l'umore nel profilo per visualizzazione immediata
-                await supabase.from('profiles').update({ 
-                    current_mood: mood 
-                }).eq('id', user.id);
-
-                // 2. Registra nello storico per i medici
-                await supabase.from('mood_history').insert([{
-                    user_id: user.id,
-                    mood: mood
-                }]);
-
-                // 3. REGISTRO ATTIVITÀ
-                await supabase.from('activity_log').insert([{
-                    user_id: user.id,
-                    action: 'mood_updated',
-                    details: `Umore: ${mood}`
-                }]);
-            }
-        } catch (e) {
-            console.error("Error saving mood", e);
         }
     };
 
@@ -305,6 +292,7 @@ const ProfilePage = () => {
     };
 
     const handleTogglePrivacy = async (key) => {
+        if (isPatient) return;
         const newVal = !privacySettings[key];
         const updatedSettings = { ...privacySettings, [key]: newVal };
         setPrivacySettings(updatedSettings);
@@ -375,6 +363,23 @@ const ProfilePage = () => {
             case 'admin': return 'Amministratore';
             case 'moderator': return 'Moderatore';
             default: return 'Utente'; 
+        }
+    };
+
+    const getActivityLabel = (action) => {
+        switch (action) {
+            case 'task_completed': return 'Task completato';
+            case 'mood_updated': return 'Umore aggiornato';
+            case 'task_added': return 'Nuovo task';
+            default: return 'Attività';
+        }
+    };
+
+    const getActivityIcon = (action) => {
+        switch (action) {
+            case 'task_completed': return 'badge-check';
+            case 'mood_updated': return 'grin';
+            default: return 'add';
         }
     };
 
@@ -473,35 +478,17 @@ const ProfilePage = () => {
             lineHeight: 1,
         },
         roleBadge: {
-            backgroundColor: 'var(--color-accent)',
-            color: 'var(--color-primary)',
+            backgroundColor: 'var(--color-primary)',
+            color: 'var(--color-on-primary)',
             padding: '4px 12px',
             borderRadius: '20px',
             fontSize: '0.8125rem',
             fontWeight: '600',
             marginBottom: '12px',
-        },
-        moodIconContainer: {
-            display: 'flex',
-            gap: '12px',
-            marginTop: '12px',
-            justifyContent: 'center',
-        },
-        moodBtn: (mood) => ({
-            width: '48px',
-            height: '48px',
-            borderRadius: 'var(--card-radius)',
-            backgroundColor: currentMood === mood ? 'var(--color-accent)' : '#F3F4F6',
-            border: currentMood === mood ? `2px solid ${getMoodColor(mood)}` : '2px solid transparent',
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            transform: currentMood === mood ? 'scale(1.25)' : 'scale(1)',
-            padding: 0,
-            font: 'inherit',
-        }),
+            gap: '6px',
+        },
         infoCard: {
             backgroundColor: 'white',
             borderRadius: 'var(--card-radius-lg)',
@@ -546,19 +533,20 @@ const ProfilePage = () => {
         },
         logoutBtn: {
             width: '100%',
-            padding: '16px',
+            padding: '12px 0',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '12px',
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            gap: '8px',
+            backgroundColor: 'transparent',
             border: 'none',
             color: '#EF4444',
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            borderRadius: '20px',
+            fontSize: '0.9375rem',
+            fontWeight: '600',
             cursor: 'pointer',
             marginTop: '10px',
+            textDecoration: 'underline',
+            textUnderlineOffset: '3px',
         }
     };
 
@@ -634,7 +622,7 @@ const ProfilePage = () => {
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
                         <input style={{ ...styles.input, width: '45%' }} value={tempName} onChange={e => setTempName(e.target.value)} placeholder="Nome" />
                         <input style={{ ...styles.input, width: '45%' }} value={tempSurname} onChange={e => setTempSurname(e.target.value)} placeholder="Cognome" />
-                        <button onClick={handleSaveName} style={{ border: 'none', background: 'var(--color-primary)', color: 'white', borderRadius: '12px', padding: '0 12px' }}><AppIcon name="badge-check" size={18} color="white" /></button>
+                        <button onClick={handleSaveName} style={{ border: 'none', background: 'var(--color-primary)', color: 'var(--color-on-primary)', borderRadius: '12px', padding: '0 12px' }}><AppIcon name="badge-check" size={18} color="white" /></button>
                     </div>
                 ) : (
                     <h1 style={styles.name}>
@@ -652,44 +640,11 @@ const ProfilePage = () => {
                         {currentMood && <span style={styles.moodEmoji}>{getMoodEmoji(currentMood)}</span>}
                     </h1>
                 )}
-                <div style={{ color: '#999', fontSize: '0.625rem', marginTop: '-10px', marginBottom: '10px' }}>
-                    ID: {user.id?.substring(0,8)}... | Last: {user.last_active ? new Date(user.last_active).toLocaleTimeString() : 'null'}
-                </div>
-                <div style={{
-                    ...styles.roleBadge,
-                    ...((user.role === 'admin' || user.role === 'super_admin' || user.role === 'moderator') ? {
-                        background: user.role === 'super_admin' ? 'linear-gradient(45deg, #FF4B2B, #FF416C)' : 
-                                    (user.role === 'admin' ? 'linear-gradient(45deg, #FFD700, #FFA500)' : '#E0F2FE'),
-                        color: user.role === 'super_admin' ? '#FFF' : 
-                               (user.role === 'admin' ? '#000' : '#0369A1'),
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        boxShadow: user.role === 'super_admin' ? '0 2px 10px rgba(255, 65, 108, 0.4)' : 
-                                   (user.role === 'admin' ? '0 2px 10px rgba(255, 215, 0, 0.4)' : 'none'),
-                        border: user.role === 'super_admin' ? '1px solid #FF416C' : 
-                                (user.role === 'admin' ? '1px solid #DAA520' : '1px solid #BAE6FD')
-                    } : {})
-                }}>
-                    {(user.role === 'admin' || user.role === 'super_admin') && <AppIcon name="crown" size={16} color={user.role === 'super_admin' ? 'white' : 'black'} />}
-                    {user.role === 'moderator' && <AppIcon name="shield-check" size={16} color="#0369A1" />}
-                    {user.role === 'healthcare' && <AppIcon name="stethoscope" size={16} color="currentColor" />}
+                <div style={styles.roleBadge}>
+                    {(user.role === 'admin' || user.role === 'super_admin') && <AppIcon name="crown" size={16} color="white" />}
+                    {user.role === 'moderator' && <AppIcon name="shield-check" size={16} color="white" />}
                     {getRoleLabel(user.role)}
                 </div>
-
-                {isPatient && (
-                    <div style={styles.moodIconContainer}>
-                        <button type="button" style={styles.moodBtn('happy')} onClick={() => handleMoodSelect('happy')} aria-label="Felice">
-                            <AppIcon name="grin" size={24} color={currentMood === 'happy' ? getMoodColor('happy') : '#9CA3AF'} />
-                        </button>
-                        <button type="button" style={styles.moodBtn('neutral')} onClick={() => handleMoodSelect('neutral')} aria-label="Neutro">
-                            <AppIcon name="face-expressionless" size={24} color={currentMood === 'neutral' ? getMoodColor('neutral') : '#9CA3AF'} />
-                        </button>
-                        <button type="button" style={styles.moodBtn('sad')} onClick={() => handleMoodSelect('sad')} aria-label="Triste">
-                            <AppIcon name="sad" size={24} color={currentMood === 'sad' ? getMoodColor('sad') : '#9CA3AF'} />
-                        </button>
-                    </div>
-                )}
 
                 {isEditingBio ? (
                     <div style={{ marginTop: '16px', width: '100%', boxSizing: 'border-box', padding: '0 16px' }}>
@@ -725,7 +680,7 @@ const ProfilePage = () => {
                                 <button 
                                     onClick={handleSaveBio} 
                                     disabled={savingBio}
-                                    style={{ background: 'var(--color-primary)', color: 'white', border: 'none', borderRadius: '20px', padding: '6px 16px', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 'bold' }}
+                                    style={{ background: 'var(--color-primary)', color: 'var(--color-on-primary)', border: 'none', borderRadius: '20px', padding: '6px 16px', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 'bold' }}
                                 >
                                     {savingBio ? '...' : 'Salva'}
                                 </button>
@@ -778,7 +733,7 @@ const ProfilePage = () => {
                             style={{
                                 flex: 1,
                                 backgroundColor: isFollowing ? 'white' : 'var(--color-primary)',
-                                color: isFollowing ? 'var(--color-primary)' : 'white',
+                                color: isFollowing ? 'var(--color-primary)' : 'var(--color-on-primary)',
                                 border: `2px solid var(--color-primary)`,
                                 borderRadius: '25px',
                                 padding: '10px 20px',
@@ -792,8 +747,8 @@ const ProfilePage = () => {
                         <button 
                             onClick={() => navigate(`/chat-privata/${user.id}`)}
                             style={{
-                                backgroundColor: 'var(--color-accent)',
-                                color: 'var(--color-primary)',
+                                backgroundColor: 'var(--color-primary)',
+                                color: 'var(--color-on-primary)',
                                 border: 'none',
                                 borderRadius: '25px',
                                 padding: '10px 20px',
@@ -804,7 +759,7 @@ const ProfilePage = () => {
                                 cursor: 'pointer'
                             }}
                         >
-                            <AppIcon name="paper-plane" size={18} color="primary" />
+                            <AppIcon name="paper-plane" size={18} color="white" />
                             Messaggio
                         </button>
                     </div>
@@ -825,7 +780,7 @@ const ProfilePage = () => {
                     <AppIcon name="map-marker" size={20} color="primary" />
                     <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span>
-                            {isOwnProfile || !privacySettings?.hide_location 
+                            {isOwnProfile || user?.role === 'patient' || !privacySettings?.hide_location
                                 ? (user?.location || 'Posizione non impostata') 
                                 : 'Posizione nascosta'}
                         </span>
@@ -834,14 +789,15 @@ const ProfilePage = () => {
                                 onClick={handleUpdateLocation} 
                                 disabled={updatingLocation}
                                 style={{ 
-                                    background: 'var(--color-accent)', 
+                                    background: 'var(--color-primary)', 
                                     border: 'none', 
                                     borderRadius: '8px', 
-                                    padding: '4px 8px', 
-                                    fontSize: '0.6875rem', 
+                                    padding: '6px 10px', 
+                                    fontSize: '0.75rem', 
                                     fontWeight: 'bold', 
-                                    cursor: 'pointer',
-                                    color: 'var(--color-primary)'
+                                    cursor: updatingLocation ? 'wait' : 'pointer',
+                                    color: 'var(--color-on-primary)',
+                                    opacity: updatingLocation ? 0.7 : 1,
                                 }}
                             >
                                 {updatingLocation ? '...' : 'Aggiorna'}
@@ -855,8 +811,8 @@ const ProfilePage = () => {
                 </div>
             </div>
 
-            {/* Privacy Settings Card (Only for own profile) */}
-            {isOwnProfile && (
+            {/* Privacy Settings Card — non disponibile per i pazienti */}
+            {isOwnProfile && !isPatient && (
                 <div style={styles.infoCard}>
                     <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '16px', color: 'var(--color-primary-dark)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <AppIcon name="lock" size={18} color="primary" /> Impostazioni Privacy
@@ -866,7 +822,8 @@ const ProfilePage = () => {
                         <input 
                             type="checkbox" 
                             checked={privacySettings.hide_location} 
-                            onChange={() => handleTogglePrivacy('hide_location')} 
+                            onChange={() => handleTogglePrivacy('hide_location')}
+                            disabled={savingPrivacy}
                         />
                     </div>
                     <div style={{ ...styles.infoRow, borderBottom: 'none', justifyContent: 'space-between' }}>
@@ -874,7 +831,8 @@ const ProfilePage = () => {
                         <input 
                             type="checkbox" 
                             checked={privacySettings.hide_email} 
-                            onChange={() => handleTogglePrivacy('hide_email')} 
+                            onChange={() => handleTogglePrivacy('hide_email')}
+                            disabled={savingPrivacy}
                         />
                     </div>
                 </div>
@@ -882,40 +840,87 @@ const ProfilePage = () => {
             
             {/* Attività Recenti Card */}
             <div style={styles.infoCard}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '16px', color: 'var(--color-primary-dark)' }}>Attività Recenti</h3>
                 {activities.length === 0 ? (
-                    <div style={{ color: '#9CA3AF', fontSize: '0.8125rem', textAlign: 'center', padding: '20px' }}>Nessuna attività registrata di recente.</div>
-                ) : (
-                    activities.map((act, idx) => (
-                        <div key={act.id} style={{ ...styles.infoRow, borderBottom: idx === activities.length - 1 ? 'none' : '1px solid #F3F4F6' }}>
-                            <div style={{ 
-                                width: '32px', 
-                                height: '32px', 
-                                borderRadius: '50%', 
-                                backgroundColor: act.action === 'task_completed' ? '#ECFDF5' : '#F5F3FF', 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }}>
-                                <AppIcon 
-                                    name={act.action === 'task_completed' ? 'badge-check' : act.action === 'mood_updated' ? 'grin' : 'add'} 
-                                    size={16} 
-                                    color={act.action === 'task_completed' ? 'success' : 'primary'} 
-                                />
-                            </div>
-                            <div style={{ flex: 1, minWidth: 0, marginLeft: '10px' }}>
-                                <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1F2937' }}>
-                                    {act.action === 'task_completed' ? 'Task completato' : 
-                                     act.action === 'mood_updated' ? 'Umore aggiornato' : 
-                                     act.action === 'task_added' ? 'Nuovo task' : 'Attività'}
-                                </div>
-                                <div style={{ fontSize: '0.8125rem', color: '#6B7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    {act.details}
-                                </div>
-                            </div>
+                    <>
+                        <h3 style={{ fontSize: '1rem', fontWeight: 'bold', margin: '0 0 16px', color: 'var(--color-primary-dark)' }}>
+                            Attività Recenti
+                        </h3>
+                        <div style={{ color: '#9CA3AF', fontSize: '0.8125rem', textAlign: 'center', padding: '20px' }}>
+                            Nessuna attività registrata di recente.
                         </div>
-                    ))
+                    </>
+                ) : (
+                    <>
+                        <button
+                            type="button"
+                            onClick={() => setActivitiesOpen((open) => !open)}
+                            aria-expanded={activitiesOpen}
+                            style={{
+                                width: '100%',
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                gap: '12px',
+                                marginBottom: activitiesOpen ? '16px' : 0,
+                            }}
+                        >
+                            <div style={{ textAlign: 'left', minWidth: 0 }}>
+                                <h3 style={{ fontSize: '1rem', fontWeight: 'bold', margin: 0, color: 'var(--color-primary-dark)' }}>
+                                    Attività Recenti
+                                    <span style={{ fontWeight: '600', color: '#9CA3AF', marginLeft: '6px' }}>
+                                        ({activities.length})
+                                    </span>
+                                </h3>
+                                {!activitiesOpen && (
+                                    <p style={{ margin: '6px 0 0', fontSize: '0.8125rem', color: '#6B7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                        Ultima: {getActivityLabel(activities[0].action)} · {activities[0].details}
+                                    </p>
+                                )}
+                            </div>
+                            <AppIcon
+                                name="angle-right"
+                                size={18}
+                                color="primaryDark"
+                                style={{
+                                    transform: activitiesOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+                                    transition: 'transform 0.2s ease',
+                                    flexShrink: 0,
+                                }}
+                            />
+                        </button>
+                        {activitiesOpen && activities.map((act, idx) => (
+                            <div key={act.id} style={{ ...styles.infoRow, borderBottom: idx === activities.length - 1 ? 'none' : '1px solid #F3F4F6' }}>
+                                <div style={{ 
+                                    width: '32px', 
+                                    height: '32px', 
+                                    borderRadius: '50%', 
+                                    backgroundColor: act.action === 'task_completed' ? '#ECFDF5' : '#F5F3FF', 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center',
+                                    flexShrink: 0
+                                }}>
+                                    <AppIcon 
+                                        name={getActivityIcon(act.action)} 
+                                        size={16} 
+                                        color={act.action === 'task_completed' ? 'success' : 'primary'} 
+                                    />
+                                </div>
+                                <div style={{ flex: 1, minWidth: 0, marginLeft: '10px' }}>
+                                    <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1F2937' }}>
+                                        {getActivityLabel(act.action)}
+                                    </div>
+                                    <div style={{ fontSize: '0.8125rem', color: '#6B7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                        {act.details}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </>
                 )}
             </div>
 
@@ -947,7 +952,7 @@ const ProfilePage = () => {
                             disabled={associating}
                             style={{ 
                                 backgroundColor: 'var(--color-primary)', 
-                                color: 'white', 
+                                color: 'var(--color-on-primary)', 
                                 border: 'none', 
                                 borderRadius: '12px', 
                                 padding: '0 16px', 

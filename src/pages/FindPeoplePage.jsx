@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Search, User, ChevronRight } from 'lucide-react';
+import { Search, ChevronRight } from 'lucide-react';
 import AppIcon from '../components/AppIcon';
 import { supabase } from '../supabaseClient';
 import { useNavigate, Link } from 'react-router-dom';
+import { getUserCardStyle, getRoleBadgeStyle, formatFullName, getRoleLabel } from '../utils/avatarUtils';
+import SearchUserAvatar from '../components/SearchUserAvatar';
 
 const FindPeoplePage = () => {
     const navigate = useNavigate();
@@ -36,15 +38,6 @@ const FindPeoplePage = () => {
         return fullName.includes(searchQuery.toLowerCase()) || u.email?.toLowerCase().includes(searchQuery.toLowerCase());
     });
 
-    const getRoleLabel = (r) => {
-        switch(r) { 
-            case 'patient': return 'Paziente'; 
-            case 'caregiver': return 'Caregiver'; 
-            case 'healthcare': return 'Medico'; 
-            default: return 'Utente'; 
-        }
-    };
-
     const styles = {
         container: { padding: '20px', backgroundColor: 'var(--color-bg-primary)', minHeight: '100vh', paddingBottom: '100px' },
         header: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' },
@@ -72,7 +65,6 @@ const FindPeoplePage = () => {
             color: '#9CA3AF',
         },
         userCard: { 
-            backgroundColor: 'white', 
             borderRadius: '16px', 
             padding: '12px 16px', 
             marginBottom: '10px', 
@@ -81,19 +73,7 @@ const FindPeoplePage = () => {
             alignItems: 'center', 
             gap: '12px',
             textDecoration: 'none',
-            color: 'inherit'
-        },
-        avatar: { 
-            width: '48px', 
-            height: '48px', 
-            borderRadius: '50%', 
-            backgroundColor: '#eee', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            overflow: 'hidden',
-            border: '2px solid white',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            color: 'inherit',
         },
         userInfo: { flex: 1, minWidth: 0 },
         userName: { fontWeight: 'bold', fontSize: '0.9375rem', color: '#111' },
@@ -102,11 +82,9 @@ const FindPeoplePage = () => {
             fontSize: '0.625rem',
             padding: '2px 8px',
             borderRadius: '10px',
-            backgroundColor: '#F3F4F6',
-            color: '#666',
             fontWeight: 'bold',
             marginTop: '2px',
-            display: 'inline-block'
+            display: 'inline-block',
         }
     };
 
@@ -138,13 +116,15 @@ const FindPeoplePage = () => {
                         <div style={{ textAlign: 'center', padding: '40px', color: '#9CA3AF' }}>Nessun utente trovato</div>
                     ) : (
                         filteredUsers.map(u => (
-                            <Link key={u.id} to={`/profilo/${u.id}`} style={styles.userCard}>
-                                <div style={styles.avatar}>
-                                    {u.photo_url ? <img src={u.photo_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Avatar" /> : <User size={24} color="#999" />}
-                                </div>
+                            <Link
+                                key={u.id}
+                                to={`/profilo/${u.id}`}
+                                style={{ ...styles.userCard, ...getUserCardStyle(u.role) }}
+                            >
+                                <SearchUserAvatar user={u} size={48} />
                                 <div style={styles.userInfo}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <div style={styles.userName}>{u.name} {u.surname}</div>
+                                        <div style={styles.userName}>{formatFullName(u)}</div>
                                         <div style={{ 
                                             width: '8px', 
                                             height: '8px', 
@@ -152,7 +132,9 @@ const FindPeoplePage = () => {
                                             backgroundColor: (u.last_active && (new Date() - new Date(u.last_active)) < 600000) ? '#10B981' : '#EF4444' 
                                         }} />
                                     </div>
-                                    <div style={styles.roleBadge}>{getRoleLabel(u.role)}</div>
+                                    <div style={{ ...styles.roleBadge, ...getRoleBadgeStyle() }}>
+                                        {getRoleLabel(u.role)}
+                                    </div>
                                 </div>
                                 <ChevronRight size={18} color="#D1D5DB" />
                             </Link>

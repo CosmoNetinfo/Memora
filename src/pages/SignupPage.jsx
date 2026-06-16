@@ -122,7 +122,7 @@ const SignupPage = () => {
             width: '100%',
             padding: '16px',
             backgroundColor: 'var(--color-primary)',
-            color: 'white',
+            color: 'var(--color-on-primary)',
             border: 'none',
             borderRadius: '12px',
             fontSize: '1rem',
@@ -212,7 +212,7 @@ const SignupPage = () => {
                         </div>
                     </div>
 
-                    <button type="submit" style={styles.button} disabled={loading}>
+                    <button type="submit" className="btn-primary" style={styles.button} disabled={loading}>
                         {loading ? 'Creazione in corso...' : 'Registrati'}
                     </button>
                 </form>
@@ -224,8 +224,7 @@ const SignupPage = () => {
 
             <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.6875rem', color: '#999', lineHeight: '1.4' }}>
                 Memora x Airalzh © 2026<br />
-                <strong>Daniele Spalletti</strong> (sviluppatore) e <strong>Michele Mosca</strong> (web designer)<br />
-                per <a href="https://www.cosmonet.info" target="_blank" style={{color: '#999', textDecoration: 'underline'}}>cosmonet.info</a>
+                Michele Mosca e Daniele Spalletti
             </div>
         </div>
     );

@@ -3,7 +3,7 @@
 **Progetto**: Memora - App per supporto Alzheimer  
 **Sviluppatori**: Daniele Spalletti & Michele Mosca (CosmoNet.info)  
 **Cliente**: Airalzh  
-**Ultimo Aggiornamento**: 1 Marzo 2026
+**Ultimo Aggiornamento**: 15 Giugno 2026
 
 ---
 
@@ -72,7 +72,7 @@ Creare una Progressive Web App (PWA) per supportare pazienti affetti da Alzheime
 - [x] **Profilo**:
   - **Bordo colorato avatar** (🟢 Verde = Felice, 🟡 Giallo = Neutro, 🔴 Rosso = Triste)
   - **Emoji accanto al nome** (😊😐😢)
-  - Selettore mood per pazienti (3 pulsanti)
+  - ~~Selettore mood per pazienti (3 pulsanti)~~ → rimosso dal profilo (solo Home)
   - Visualizzazione mood per caregiver
 - [x] **Feed (MemoraBook)**:
   - Bordo colorato su avatar di ogni post
@@ -400,9 +400,20 @@ AlzheimerApp/
 
 ---
 
-## 📅 CHANGELOG ULTIMA SESSIONE (11 Maggio 2026)
+## 📅 CHANGELOG ULTIMA SESSIONE (15 Giugno 2026)
 
-### Ore 14:00 - 15:30 (Sviluppo v2)
+### Audit, sicurezza client e pulizia codice
+- ✅ **Logout centralizzato** (`src/utils/logout.js`): Supabase `signOut`, pulizia storage, redirect `#/login`. Pulsante **Disconnetti** solo in Profilo.
+- ✅ **Auth hardened**: sessione Supabase obbligatoria; account bannati → logout; admin `/users` verifica ruolo da DB.
+- ✅ **DebugConsole dev-only**: non inclusa nel bundle production.
+- ✅ **Privacy pazienti**: impossibile nascondere email/posizione; sezione privacy nascosta in Profilo e Impostazioni.
+- ✅ **SOS FAB**: pulsante flottante caregiver/paziente con validazione `tel:` (`src/utils/phone.js`).
+- ✅ **UI/Branding**: badge ruolo viola, filtri feed, mock feed/chat/clinica, fix scroll, icona map-marker profilo.
+- ✅ **Pulizia**: rimossi `ListItem.jsx`, `debug_schema.js`, duplicati `assets/new_icon/`, logo login fix (`logo.svg`).
+- ✅ **Documento sicurezza**: `SICUREZZA_E_RACCOMANDAZIONI.md` per Daniele (RLS e roadmap backend).
+- 📄 **SQL**: bozza RLS in `sql_updates/security_rls_hardening.sql` (da applicare su Supabase).
+
+### Ore 14:00 - 15:30 (Sviluppo v2 — 11 Maggio 2026)
 - ✅ **Social Expansion**: Ricerca, hashtag, editing e cancellazione post/commenti.
 - ✅ **Profile & Privacy**: Modifica info personali e toggle privacy per email/posizione.
 - ✅ **Activity Upgrade**: Categorie, ricorrenza e progress bar dinamica in home.
@@ -410,4 +421,4 @@ AlzheimerApp/
 - ✅ **Iconografia**: Aggiunta nuove icone premium (brain, search, crown).
 - ✅ **Admin Simulation**: Implementato Role Switcher per Daniele e Michele con badge informativo globale.
 
-**Ultimo aggiornamento**: 11 Maggio 2026
+**Ultimo aggiornamento**: 15 Giugno 2026

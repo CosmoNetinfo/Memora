@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppIcon from '../components/AppIcon';
-import { BookOpen, User, Shield, Stethoscope, Heart } from 'lucide-react';
+import { BookOpen, User, Stethoscope, Heart } from 'lucide-react';
 
 const GuidePage = () => {
     const navigate = useNavigate();
@@ -62,13 +62,16 @@ const GuidePage = () => {
             fontSize: '0.875rem'
         },
         iconBox: {
-            backgroundColor: 'var(--color-bg-primary)',
+            backgroundColor: 'var(--color-bg-secondary)',
             padding: '6px',
             borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexShrink: 0
+            flexShrink: 0,
+            width: '28px',
+            height: '28px',
+            boxSizing: 'border-box',
         }
     };
 
@@ -116,7 +119,7 @@ const GuidePage = () => {
                 </div>
                 <ul style={styles.featureList}>
                     <li style={styles.featureItem}>
-                        <div style={styles.iconBox}><Shield size={16} color="primary" /></div>
+                        <div style={styles.iconBox}><AppIcon name="shield-check" size={16} color="primary" /></div>
                         <div><strong>Monitoraggio:</strong> Controlla in tempo reale lo stato del tuo caro, l'umore e il completamento dei task.</div>
                     </li>
                     <li style={styles.featureItem}>
@@ -153,7 +156,7 @@ const GuidePage = () => {
                     onClick={() => navigate(-1)}
                     style={{ 
                         backgroundColor: 'var(--color-primary)', 
-                        color: 'white', 
+                        color: 'var(--color-on-primary)', 
                         border: 'none', 
                         padding: '12px 24px', 
                         borderRadius: '12px', 

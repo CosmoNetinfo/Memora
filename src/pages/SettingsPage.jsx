@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  LogOut,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import AppIcon from "../components/AppIcon";
 import { supabase } from "../supabaseClient";
+import { isDev } from '../utils/dev';
+import { dialPhoneNumber } from '../utils/phone';
 
 const SettingsPage = () => {
   const navigate = useNavigate();
@@ -25,6 +26,9 @@ const SettingsPage = () => {
   const [sosNumber, setSosNumber] = useState(() => localStorage.getItem("setting_sosNumber") || "");
   const [isEditingSos, setIsEditingSos] = useState(false);
   const [tempSos, setTempSos] = useState(sosNumber);
+
+  const effectiveRole = (isDev && localStorage.getItem('simulated_role')) || user?.role;
+  const isPatient = effectiveRole === 'patient';
 
   useEffect(() => {
     const checkStatus = async () => {
@@ -100,13 +104,6 @@ const SettingsPage = () => {
     else document.documentElement.classList.remove("large-font-mode");
   }, [isLargeFont]);
 
-  const handleLogout = () => {
-    if (window.confirm("Disconnettere l'account?")) {
-      localStorage.removeItem("alzheimer_user");
-      window.location.href = "/login";
-    }
-  };
-
   const handlePhotoChange = async (e) => {
     const file = e.target?.files?.[0];
     if (!file || !file.type.startsWith("image/")) return;
@@ -157,7 +154,7 @@ const SettingsPage = () => {
     switch: (isOn) => ({ width: "51px", height: "31px", backgroundColor: isOn ? "--color-success" : "#E9E9EA", borderRadius: "16px", position: "relative" }), // Using color variables or defaults
     modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
     modal: { backgroundColor: 'white', borderRadius: 'var(--card-radius-lg)', padding: 'var(--content-padding-y)', width: '90%', maxWidth: '400px', boxShadow: 'var(--card-shadow)' },
-    primaryBtn: { width: '100%', padding: '16px', backgroundColor: 'var(--color-primary)', color: 'white', borderRadius: '14px', fontSize: '1.125rem', fontWeight: 'bold' }
+    primaryBtn: { width: '100%', padding: '16px', backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)', borderRadius: '14px', fontSize: '1.125rem', fontWeight: 'bold' }
   };
 
   return (
@@ -216,6 +213,7 @@ const SettingsPage = () => {
 
       <h3 style={styles.sectionLabel}>Privacy e Dati</h3>
       <div style={styles.menuCard}>
+        {user.role !== 'healthcare' && (
         <button style={styles.menuItem} onClick={() => navigate('/analytics')}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={styles.iconWrapper("#6366F1")}><AppIcon name="brain" size={18} color="white" /></div>
@@ -223,6 +221,7 @@ const SettingsPage = () => {
           </div>
           <ChevronRight size={20} color="#ccc" />
         </button>
+        )}
 
         <button style={styles.menuItem} onClick={() => navigate('/ai-chat')}>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -232,6 +231,7 @@ const SettingsPage = () => {
           <ChevronRight size={20} color="#ccc" />
         </button>
 
+        {!isPatient && (
         <button style={styles.menuItem} onClick={() => navigate('/profilo')}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={styles.iconWrapper("#F59E0B")}><AppIcon name="lock" size={18} color="white" /></div>
@@ -239,6 +239,7 @@ const SettingsPage = () => {
           </div>
           <ChevronRight size={20} color="#ccc" />
         </button>
+        )}
       </div>
 
       {isDenied && (
@@ -272,7 +273,7 @@ const SettingsPage = () => {
 
       <h3 style={styles.sectionLabel}>Sicurezza</h3>
       <div style={styles.menuCard}>
-        <button style={styles.menuItem} onClick={() => { if(!sosNumber) setIsEditingSos(true); else window.location.href=`tel:${sosNumber}`; }}>
+        <button style={styles.menuItem} onClick={() => { if (!sosNumber) setIsEditingSos(true); else dialPhoneNumber(sosNumber); }}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={styles.iconWrapper("var(--color-accent)")}><AppIcon name="shield-exclamation" size={18} color="white" /></div>
             <div>
@@ -283,7 +284,7 @@ const SettingsPage = () => {
           <ChevronRight size={20} color="#ccc" />
         </button>
 
-        <button style={{ ...styles.menuItem, borderBottom: "none" }} onClick={() => window.location.href="tel:02809767"}>
+        <button style={{ ...styles.menuItem, borderBottom: "none" }} onClick={() => dialPhoneNumber('02809767')}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={styles.iconWrapper("var(--color-success)")}><AppIcon name="shield-check" size={18} color="white" /></div>
             <span style={styles.itemLabel}>Pronto Alzheimer</span>
@@ -304,14 +305,9 @@ const SettingsPage = () => {
           </div>
       )}
 
-      <button style={{ width: '100%', padding: '18px', background: 'white', color: 'var(--color-error)', borderRadius: '16px', fontWeight: 'bold', border: '1px solid var(--color-error)' }} onClick={handleLogout}>
-        Esci dall'Account
-      </button>
-
       <div style={{ textAlign: "center", marginTop: "40px", color: "#888", fontSize: '0.75rem', lineHeight: "1.6" }}>
         Memora x Airalzh &copy; 2026<br />
-        <strong>Daniele Spalletti</strong> (sviluppatore) e <strong>Michele Mosca</strong> (web designer)<br />
-        per <a href="https://www.cosmonet.info" target="_blank" style={{color: '#888', textDecoration: 'underline'}}>cosmonet.info</a>
+        Michele Mosca e Daniele Spalletti
       </div>
     </div>
   );

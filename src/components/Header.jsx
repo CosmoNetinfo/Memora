@@ -54,7 +54,7 @@ const Header = ({ title }) => {
             left: 0,
             right: 0,
             height: 'var(--header-height)',
-            backgroundColor: 'var(--color-bg-primary)',
+            backgroundColor: 'var(--color-header-bg)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -76,7 +76,9 @@ const Header = ({ title }) => {
         },
         profileBtn: {
             position: 'absolute',
-            left: '24px',
+            left: '16px',
+            top: '50%',
+            transform: 'translateY(-50%)',
             background: 'none',
             border: 'none',
             cursor: 'pointer',
@@ -103,16 +105,25 @@ const Header = ({ title }) => {
             height: '100%',
             objectFit: 'cover'
         },
-        settingsBtn: {
+        headerActionBtn: (right) => ({
             position: 'absolute',
-            right: '16px',
+            right,
+            top: '50%',
+            transform: 'translateY(-50%)',
             background: 'none',
             border: 'none',
             color: 'var(--color-primary)',
             cursor: 'pointer',
-            padding: '8px',
+            padding: 0,
             borderRadius: '10px',
-        }
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textDecoration: 'none',
+            flexShrink: 0,
+        }),
     };
 
     return (
@@ -127,11 +138,11 @@ const Header = ({ title }) => {
                 </div>
             </Link>
             <h1 style={styles.title}>{title}</h1>
-            <Link to="/cerca-persone" style={{ ...styles.settingsBtn, right: '96px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} className="app-header-search">
-                <Search size={24} />
+            <Link to="/cerca-persone" style={styles.headerActionBtn('96px')} className="app-header-search">
+                <Search size={24} strokeWidth={2.25} />
             </Link>
-            <Link to="/messaggi" style={{ ...styles.settingsBtn, right: '56px' }} className="app-header-messages">
-                <div style={{ position: 'relative', display: 'flex' }}>
+            <Link to="/messaggi" style={styles.headerActionBtn('56px')} className="app-header-messages">
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <AppIcon name="envelope" size={24} />
                     {hasUnreadPrivate && (
                         <div style={{
@@ -147,7 +158,7 @@ const Header = ({ title }) => {
                     )}
                 </div>
             </Link>
-            <Link to="/impostazioni" className="app-header-settings" style={styles.settingsBtn}>
+            <Link to="/impostazioni" className="app-header-settings" style={styles.headerActionBtn('16px')}>
                 <AppIcon name="settings" size={24} />
             </Link>
         </header>
