@@ -5,7 +5,7 @@ import React from 'react';
  */
 const AuthHeader = () => (
     <header className="auth-header">
-        <img src="/logo.svg" alt="Memora" className="auth-header__logo" />
+        <img src="/app-icon.png" alt="Memora" className="auth-header__logo" />
         <span className="auth-logo-title">MEMORA</span>
     </header>
 );
