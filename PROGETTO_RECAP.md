@@ -395,7 +395,7 @@ AlzheimerApp/
 
 **Sviluppatori**: Daniele Spalletti & Michele Mosca  
 **Azienda**: CosmoNet.info  
-**Email**: info@cosmonet.info  
+**Email**: admindany@gmail.com  
 **Cliente**: Airalzh  
 
 ---
