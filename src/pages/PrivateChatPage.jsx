@@ -504,6 +504,7 @@ const PrivateChatPage = () => {
             flex: 1,
             overflowY: 'auto',
             padding: '20px 16px',
+            paddingBottom: '140px', // Extra padding for fixed input + tabbar
             display: 'flex',
             flexDirection: 'column',
             gap: '12px',
