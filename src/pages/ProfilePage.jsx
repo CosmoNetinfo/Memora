@@ -355,6 +355,7 @@ const ProfilePage = () => {
     };
 
     const getRoleLabel = (r) => {
+        if (['admindany@gmail.com', 'michele.mosca.7991@gmail.com'].includes(user.email)) return 'Super Admin';
         switch(r) { 
             case 'patient': return 'Paziente'; 
             case 'caregiver': return 'Caregiver'; 

@@ -179,7 +179,7 @@ const SettingsPage = () => {
         </button>
         <div>
             <h2 style={{ fontSize: '1.125rem', margin: 0, fontWeight: '700', color: 'var(--color-primary-dark)' }}>{user.name} {user.surname}</h2>
-            <p style={{ color: "var(--color-primary)", margin: 0, fontSize: '0.875rem', fontWeight: '500' }}>Account Caregiver</p>
+            <p style={{ color: "var(--color-primary)", margin: 0, fontSize: '0.875rem', fontWeight: '500' }}>Account {['admindany@gmail.com', 'michele.mosca.7991@gmail.com'].includes(user.email) ? 'Super Admin' : (user.role ? user.role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Caregiver')}</p>
           </div>
       </div>
 
