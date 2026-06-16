@@ -393,6 +393,7 @@ const ProfilePage = () => {
             overflowX: 'hidden',
             paddingTop: '32px', // Spazio extra per staccarsi dall'header fisso
         },
+        innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%' },
         headerCard: {
             backgroundColor: 'white',
             borderRadius: 'var(--card-radius-lg)',
@@ -597,6 +598,7 @@ const ProfilePage = () => {
 
     return (
         <div style={styles.container} className="last-scroll-block">
+            <div style={styles.innerContainer}>
             {/* Minimal Header Card */}
             <div style={styles.headerCard}>
                 <div style={styles.avatarContainer}>
@@ -1009,6 +1011,7 @@ const ProfilePage = () => {
 
             <div style={{ textAlign: 'center', marginTop: '30px', color: '#9CA3AF', fontSize: '0.75rem' }}>
                 Memora v1.0
+            </div>
             </div>
         </div>
     );
