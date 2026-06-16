@@ -478,10 +478,13 @@ const PrivateChatPage = () => {
         header: {
             padding: '12px 16px',
             backgroundColor: 'white',
-            borderBottom: '1px solid var(--color-border)',
+            borderRadius: 'var(--card-radius-lg)',
+            margin: '0 16px',
+            marginTop: '12px',
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
+            boxShadow: 'var(--card-shadow)',
             zIndex: 10,
             cursor: 'pointer',
         },
@@ -530,8 +533,7 @@ const PrivateChatPage = () => {
         inputArea: {
             padding: '12px 16px',
             paddingBottom: 'calc(12px + env(safe-area-inset-bottom))',
-            backgroundColor: 'white',
-            borderTop: '1px solid var(--color-border)',
+            backgroundColor: 'transparent',
             display: 'flex',
             alignItems: 'center',
             gap: '10px',
@@ -539,14 +541,30 @@ const PrivateChatPage = () => {
             bottom: 0,
             zIndex: 100,
         },
+        inputPill: {
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            borderRadius: '30px',
+            padding: '4px 4px 4px 16px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+        },
         input: {
             flex: 1,
-            padding: '10px 16px',
-            borderRadius: '20px',
-            border: '1px solid #E5E7EB',
+            border: 'none',
             fontSize: '0.9375rem',
             outline: 'none',
-            backgroundColor: '#F9FAFB',
+            backgroundColor: 'transparent',
+            padding: '8px 0',
+        },
+        input: {
+            flex: 1,
+            border: 'none',
+            fontSize: '0.9375rem',
+            outline: 'none',
+            backgroundColor: 'transparent',
+            padding: '8px 0',
         },
         sendButton: {
             width: '40px',
@@ -608,9 +626,18 @@ const PrivateChatPage = () => {
                 <div ref={messagesEndRef} />
             </div>
 
-            <div style={styles.inputArea}>
+            <div style={{
+                padding: '12px 16px',
+                paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
+                backgroundColor: 'transparent',
+                display: 'flex',
+                justifyContent: 'center',
+                position: 'sticky',
+                bottom: 0,
+                zIndex: 100,
+            }}>
                 {isRecording ? (
-                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 15px', color: '#EF4444' }}>
+                    <div className="custom-chat-input" style={{ color: '#EF4444', justifyContent: 'space-between', padding: '0 15px', minHeight: '48px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#EF4444' }} />
                             <span>Registrazione... {Math.floor(recordingDuration / 60)}:{(recordingDuration % 60).toString().padStart(2, '0')}</span>
@@ -618,26 +645,26 @@ const PrivateChatPage = () => {
                         <button onClick={stopRecording} style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontWeight: 'bold', cursor: 'pointer' }}>Invia</button>
                     </div>
                 ) : (
-                    <>
+                    <div className="custom-chat-input">
                         <input
                             type="text"
-                            placeholder="Messaggio..."
-                            style={styles.input}
+                            placeholder="Scrivi un messaggio..."
+                            className="inner-input"
                             value={inputText}
                             onChange={e => setInputText(e.target.value)}
                             onKeyPress={e => e.key === 'Enter' && handleSend()}
                         />
                         <button 
                             onClick={startRecording} 
-                            style={{ background: 'none', border: 'none', padding: '10px', cursor: 'pointer' }}
+                            style={{ background: 'none', border: 'none', padding: '8px', cursor: 'pointer', color: '#9C69A7' }}
                             title="Registra vocale"
                         >
-                            <AppIcon name="microphone" size={24} color="primary" />
+                            <AppIcon name="microphone" size={24} color="inherit" />
                         </button>
-                        <button style={styles.sendButton} onClick={handleSend} disabled={!inputText.trim()}>
-                            <AppIcon name="paper-plane" size={20} color="white" />
+                        <button className="send-button-circle" onClick={handleSend} disabled={!inputText.trim()}>
+                            <AppIcon name="paper-plane" size={22} color="white" />
                         </button>
-                    </>
+                    </div>
                 )}
             </div>
         </div>
