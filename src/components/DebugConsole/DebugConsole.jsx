@@ -27,7 +27,7 @@ const DebugConsole = () => {
                 try {
                     const user = JSON.parse(userRaw);
                     const isWhitelisted = ADMIN_EMAILS.includes(user.email);
-                    setIsAdminWhitelisted(isWhitelisted || user.role === 'super_admin');
+                    setIsAdminWhitelisted(isWhitelisted || ['admin', 'super_admin', 'moderatore'].includes(user.role));
                 } catch (err) {}
             } else {
                 setIsAdminWhitelisted(false);
@@ -79,7 +79,7 @@ const DebugConsole = () => {
                 let currentIsAdmin = false;
                 try {
                     const user = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
-                    currentIsAdmin = ADMIN_EMAILS.includes(user.email) || user.role === 'super_admin';
+                    currentIsAdmin = ADMIN_EMAILS.includes(user.email) || ['admin', 'super_admin', 'moderatore'].includes(user.role);
                 } catch(err){}
 
                 if (!currentIsAdmin) {
