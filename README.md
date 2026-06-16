@@ -1,4 +1,8 @@
-# Memora 🧠
+<p align="center">
+  <img src="public/app-icon.png" alt="Memora Logo" width="150" />
+</p>
+
+<h1 align="center">Memora</h1>
 
 Memora è un'applicazione multipiattaforma progettata per supportare pazienti affetti da Alzheimer, i loro familiari, caregiver e medici specialisti. Un ecosistema unificato che facilita la comunicazione, il monitoraggio dell'umore, la condivisione di ricordi e la gestione delle emergenze, il tutto con un'interfaccia accessibile, pulita e rassicurante.
 
