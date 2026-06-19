@@ -76,10 +76,11 @@ const MessagesListPage = () => {
         container: {
             width: '100%',
             backgroundColor: 'var(--color-bg-primary)',
-            minHeight: '100%',
+            minHeight: '100vh',
             padding: '20px 16px 100px 16px',
             boxSizing: 'border-box',
         },
+        innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%' },
         title: {
             fontSize: '1.5rem',
             fontWeight: 'bold',
@@ -149,7 +150,8 @@ const MessagesListPage = () => {
     if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Caricamento messaggi...</div>;
 
     return (
-        <div style={styles.container}>
+        <div style={styles.container} className="last-scroll-block">
+            <div style={styles.innerContainer}>
             <h1 style={styles.title}>
                 <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}>
                     <AppIcon name="arrow-left" size={28} color="primary" />
@@ -184,6 +186,7 @@ const MessagesListPage = () => {
                     </div>
                 ))
             )}
+            </div>
         </div>
     );
 };

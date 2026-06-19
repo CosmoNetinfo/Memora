@@ -8,7 +8,7 @@
   --base-size: 16px;
   --safe-padding: 5px;
 
-  /* Memora – Airalzh brand palette (airalzh.it) */
+  /* Memora â€“ Airalzh brand palette (airalzh.it) */
   --color-primary: #9C69A7;
   --color-primary-dark: #4A304F;
   --color-primary-soft: #D4C4E0;
@@ -63,7 +63,7 @@
   --font-memoriae: 'Plus Jakarta Sans', sans-serif;
 
   /* Layout uniforme per tutte le pagine: si allarga/stringe col viewport (come auth/agenda) */
-  --page-max-width: 1200px;
+  --page-max-width: 800px;
   --page-padding-x: 24px;
   --page-padding-x-mobile: 6px;
   /* Desktop: margine uguale sx e dx (rispetto alla dashboard laterale), contenuti centrati */
@@ -88,7 +88,7 @@
   margin-bottom: 12px;
 }
 
-/* Titolo MEMORA – Lexend 800, compatto, colore prugna */
+/* Titolo MEMORA â€“ Lexend 800, compatto, colore prugna */
 .auth-logo-title {
   font-family: 'Lexend', sans-serif !important;
   font-weight: 800;
@@ -100,7 +100,7 @@
   text-align: center;
 }
 
-/* Auth (Login/Signup): layout fluido come la sezione agenda – si allarga e si stringe col viewport */
+/* Auth (Login/Signup): layout fluido come la sezione agenda â€“ si allarga e si stringe col viewport */
 .auth-page {
   width: 100%;
   max-width: 100%;
@@ -150,7 +150,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Caratteri Grandi: aumenta la radice ~30% così tutti i rem si scalano */
+/* Caratteri Grandi: aumenta la radice ~30% cosÃ¬ tutti i rem si scalano */
 html.large-font-mode {
   --base-font-size: 1.3125rem;
   --base-size: 21px;
@@ -190,7 +190,7 @@ button:active {
   opacity: 0.8;
 }
 
-/* Header: gerarchia visiva e profondità leggera (HIG) */
+/* Header: gerarchia visiva e profonditÃ  leggera (HIG) */
 .app-header {
   box-shadow: var(--header-shadow);
   backdrop-filter: blur(8px);
@@ -282,7 +282,7 @@ button:active {
   box-sizing: border-box;
 }
 
-/* Compatibilità full-page */
+/* CompatibilitÃ  full-page */
 .app-container.full-page {
   width: 100%;
   max-width: 100%;
@@ -519,7 +519,7 @@ button:active {
     max-width: min(calc(var(--app-max-width) - var(--sidebar-width)), calc(100vw - var(--sidebar-width)));
   }
 
-  /* Header: inizia dopo la sidebar; padding = content-gap così saluto/titolo non tagliati e allineati alle card */
+  /* Header: inizia dopo la sidebar; padding = content-gap cosÃ¬ saluto/titolo non tagliati e allineati alle card */
   .app-header {
     left: var(--sidebar-width) !important;
     width: calc(100vw - var(--sidebar-width)) !important;
@@ -561,10 +561,10 @@ button:active {
 
 /* Desktop: margini sx e dx uguali ovunque (togliendo la dashboard), forzati */
 @media (min-width: 1024px) {
-  /* Unica variabile per spazio orizzontale così dx e sx sono identici */
+  /* Unica variabile per spazio orizzontale cosÃ¬ dx e sx sono identici */
   .app-container {
     --content-padding-x: var(--desktop-gutter);
-    font-size: 1.5625rem; /* +5pt circa (18px + ~7px) per migliore leggibilità desktop */
+    font-size: 1.5625rem; /* +5pt circa (18px + ~7px) per migliore leggibilitÃ  desktop */
     box-sizing: border-box !important;
     width: calc(100vw - var(--sidebar-width)) !important;
     padding-left: var(--desktop-gutter) !important;
@@ -648,7 +648,7 @@ button:active {
     padding: 0 var(--desktop-gutter) !important;
   }
 
-  /* Chat desktop: composer più basso */
+  /* Chat desktop: composer piÃ¹ basso */
   .chat-messages-container {
     padding-top: 24px !important;
     padding-bottom: var(--chat-messages-bottom-gap) !important;
@@ -678,7 +678,7 @@ button:active {
   }
 }
 
-/* Mobile (≤768px): contenuto a tutto schermo, niente accavallamento con header fisso */
+/* Mobile (â‰¤768px): contenuto a tutto schermo, niente accavallamento con header fisso */
 @media screen and (max-width: 768px) {
   main,
   .main-content,
@@ -690,7 +690,7 @@ button:active {
     background-color: var(--color-bg-primary);
   }
 
-  /* Padding-top obbligatorio così lo scroll non fa passare il contenuto sotto l'header */
+  /* Padding-top obbligatorio cosÃ¬ lo scroll non fa passare il contenuto sotto l'header */
   .main-content {
     padding-top: calc(var(--header-height) + 16px) !important;
     padding-bottom: 0;
@@ -803,7 +803,7 @@ button {
 .home-agenda { order: 1; }
 .home-stato-paziente { order: 2; }
 .home-pillola { order: 3; }
-/* Mobile: la colonna destra non è un box, i figli partecipano all'ordine flex */
+/* Mobile: la colonna destra non Ã¨ un box, i figli partecipano all'ordine flex */
 .home-right-column {
   display: contents;
 }
@@ -881,7 +881,7 @@ button {
   }
 }
 
-/* Agenda / riga attività: icona "+" in rem (scala con Caratteri Grandi) */
+/* Agenda / riga attivitÃ : icona "+" in rem (scala con Caratteri Grandi) */
 .agenda-item-row {
   display: flex !important;
   align-items: flex-start !important;
@@ -1019,7 +1019,7 @@ button {
 
 /* Pillola di Benessere: responsive su mobile, testo a capo e font leggermente ridotto */
 @media screen and (max-width: 768px) {
-  /* Su mobile le bolle chat occupano più spazio */
+  /* Su mobile le bolle chat occupano piÃ¹ spazio */
   .message-bubble {
     max-width: 85% !important;
   }
@@ -1050,41 +1050,38 @@ button {
 
 /* Caratteri Grandi: tutto scala via html font-size (rem); nessuna regola aggiuntiva necessaria */
 
- 
- / *   - - -   O n e S i g n a l   S l i d e d o w n   C u s t o m i z a t i o n s   - - -   * / 
- # o n e s i g n a l - s l i d e d o w n - d i a l o g   { 
-     b o r d e r - r a d i u s :   2 4 p x   ! i m p o r t a n t ; 
-     b o x - s h a d o w :   0   1 0 p x   4 0 p x   r g b a ( 7 4 ,   4 8 ,   7 9 ,   0 . 1 5 )   ! i m p o r t a n t ; 
-     o v e r f l o w :   h i d d e n   ! i m p o r t a n t ; 
- } 
- 
- # o n e s i g n a l - s l i d e d o w n - d i a l o g   # s l i d e d o w n - b o d y - i c o n   i m g , 
- # o n e s i g n a l - s l i d e d o w n - d i a l o g   # s l i d e d o w n - b o d y - i c o n   s v g   { 
-     d i s p l a y :   n o n e   ! i m p o r t a n t ; 
- } 
- 
- # o n e s i g n a l - s l i d e d o w n - d i a l o g   # s l i d e d o w n - b o d y - i c o n   { 
-     b a c k g r o u n d - i m a g e :   u r l ( ' / a p p - i c o n . p n g ' )   ! i m p o r t a n t ; 
-     b a c k g r o u n d - s i z e :   c o v e r   ! i m p o r t a n t ; 
-     b a c k g r o u n d - p o s i t i o n :   c e n t e r   ! i m p o r t a n t ; 
-     b a c k g r o u n d - r e p e a t :   n o - r e p e a t   ! i m p o r t a n t ; 
-     b o r d e r - r a d i u s :   1 6 p x   ! i m p o r t a n t ; 
-     w i d t h :   6 4 p x   ! i m p o r t a n t ; 
-     h e i g h t :   6 4 p x   ! i m p o r t a n t ; 
-     b o x - s h a d o w :   0   4 p x   1 2 p x   r g b a ( 7 4 ,   4 8 ,   7 9 ,   0 . 2 )   ! i m p o r t a n t ; 
- } 
- 
- # o n e s i g n a l - s l i d e d o w n - a l l o w - b u t t o n   { 
-     b o r d e r - r a d i u s :   2 0 p x   ! i m p o r t a n t ; 
-     b a c k g r o u n d - c o l o r :   v a r ( - - c o l o r - p r i m a r y )   ! i m p o r t a n t ; 
-     c o l o r :   w h i t e   ! i m p o r t a n t ; 
-     f o n t - w e i g h t :   b o l d   ! i m p o r t a n t ; 
- } 
- 
- # o n e s i g n a l - s l i d e d o w n - c a n c e l - b u t t o n   { 
-     b o r d e r - r a d i u s :   2 0 p x   ! i m p o r t a n t ; 
-     c o l o r :   v a r ( - - c o l o r - p r i m a r y )   ! i m p o r t a n t ; 
-     f o n t - w e i g h t :   b o l d   ! i m p o r t a n t ; 
- } 
-  
- 
+/* --- OneSignal Slidedown Customizations --- */
+#onesignal-slidedown-dialog {
+  border-radius: 24px !important;
+  box-shadow: 0 10px 40px rgba(74, 48, 79, 0.15) !important;
+  overflow: hidden !important;
+}
+
+#onesignal-slidedown-dialog #slidedown-body-icon img,
+#onesignal-slidedown-dialog #slidedown-body-icon svg {
+  display: none !important;
+}
+
+#onesignal-slidedown-dialog #slidedown-body-icon {
+  background-image: url('/app-icon.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border-radius: 16px !important;
+  width: 64px !important;
+  height: 64px !important;
+  box-shadow: 0 4px 12px rgba(74, 48, 79, 0.2) !important;
+}
+
+#onesignal-slidedown-allow-button {
+  border-radius: 20px !important;
+  background-color: var(--color-primary) !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+#onesignal-slidedown-cancel-button {
+  border-radius: 20px !important;
+  color: var(--color-primary) !important;
+  font-weight: bold !important;
+}

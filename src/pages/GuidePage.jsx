@@ -14,6 +14,7 @@ const GuidePage = () => {
             minHeight: '100vh',
             boxSizing: 'border-box'
         },
+        innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%' },
         section: {
             backgroundColor: 'white',
             borderRadius: '24px',
@@ -77,6 +78,7 @@ const GuidePage = () => {
 
     return (
         <div style={styles.container} className="last-scroll-block">
+            <div style={styles.innerContainer}>
             <div style={styles.header}>
                 <BookOpen size={28} />
                 <h1 style={styles.title}>Guida all'Utilizzo</h1>
@@ -166,6 +168,7 @@ const GuidePage = () => {
                 >
                     Ho capito, torna indietro
                 </button>
+            </div>
             </div>
         </div>
     );

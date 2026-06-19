@@ -132,7 +132,8 @@ export default function ReportUmorePage() {
   }, [history]);
 
   const styles = {
-    container: { padding: 'var(--content-padding-x)', paddingBottom: '100px' },
+    container: { padding: 'var(--content-padding-x)', paddingBottom: '100px', backgroundColor: 'var(--color-bg-primary)', minHeight: '100vh', width: '100%', boxSizing: 'border-box' },
+    innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%' },
     header: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' },
     backBtn: { padding: '8px', background: 'white', borderRadius: '50%', border: '1px solid var(--color-border)', color: 'var(--color-primary-dark)', textDecoration: 'none', display: 'flex' },
     title: { fontSize: '1.375rem', fontWeight: '800', color: 'var(--color-primary-dark)', margin: 0 },
@@ -158,6 +159,7 @@ export default function ReportUmorePage() {
 
   return (
     <div style={styles.container} className="last-scroll-block">
+      <div style={styles.innerContainer}>
       <header style={styles.header}>
         <Link to="/" style={styles.backBtn} aria-label="Indietro"><ChevronLeft size={24} /></Link>
         <h1 style={styles.title}>Report Umore</h1>
@@ -252,6 +254,7 @@ export default function ReportUmorePage() {
           )}
         </div>
       )}
+      </div>
     </div>
   );
 }

@@ -104,6 +104,7 @@ const AnalyticsPage = () => {
             minHeight: '100vh',
             boxSizing: 'border-box'
         },
+        innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%' },
         header: {
             marginBottom: '24px'
         },
@@ -215,7 +216,8 @@ const AnalyticsPage = () => {
     }
 
     return (
-        <div style={styles.container}>
+        <div style={styles.container} className="last-scroll-block">
+            <div style={styles.innerContainer}>
             <div style={styles.header}>
                 <h1 style={styles.title}>Analisi e Benessere</h1>
                 <p style={styles.subtitle}>Monitoraggio andamento per {selectedPatient?.name || 'Utente'}</p>
@@ -316,6 +318,7 @@ const AnalyticsPage = () => {
                     Il tasso di completamento delle attività è aumentato del 15% rispetto alla settimana precedente. 
                     Suggerimento: Una passeggiata pomeridiana sembra correlata a un umore migliore la sera.
                 </p>
+            </div>
             </div>
         </div>
     );

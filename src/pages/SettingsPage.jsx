@@ -171,6 +171,7 @@ const SettingsPage = () => {
 
   const styles = {
     container: { backgroundColor: "var(--color-bg-primary)", minHeight: "100%", padding: "var(--content-padding-x)", paddingBottom: "120px", width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box", overflowX: "hidden" },
+    innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%' },
     header: { display: "flex", alignItems: "center", marginBottom: "var(--section-gap)", gap: "12px" },
     backBtn: { padding: "8px", background: "white", borderRadius: "50%", color: "var(--color-primary-dark)", border: "none", boxShadow: "var(--card-shadow)" },
     pageTitle: { fontSize: '1.5rem', fontWeight: "800", color: "var(--color-primary-dark)", margin: 0 },
@@ -191,6 +192,7 @@ const SettingsPage = () => {
 
   return (
     <div style={styles.container} className="last-scroll-block">
+      <div style={styles.innerContainer}>
       <div style={styles.header}>
         <button onClick={() => navigate(-1)} style={styles.backBtn}><ChevronLeft size={24} /></button>
         <h1 style={styles.pageTitle}>Impostazioni</h1>
@@ -352,9 +354,11 @@ const SettingsPage = () => {
           </div>
       )}
 
-      <div style={{ textAlign: "center", marginTop: "40px", color: "#888", fontSize: '0.75rem', lineHeight: "1.6" }}>
+      <div style={{ textAlign: "center", marginTop: "30px", color: "#9CA3AF", fontSize: '0.75rem' }}>
+        Memora v1.0<br />
         Memora x Airalzh &copy; 2026<br />
         Michele Mosca Web Designer e Daniele Spalletti Developer
+      </div>
       </div>
     </div>
   );

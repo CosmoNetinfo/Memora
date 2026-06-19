@@ -93,6 +93,7 @@ const AIChatPage = () => {
 
     const styles = {
         container: { display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: '#F9FAFB' },
+        innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' },
         header: { padding: '16px 20px', backgroundColor: 'white', borderBottom: '1px solid #E5E7EB', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
         chatArea: { flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' },
         bubble: (role) => ({
@@ -115,6 +116,7 @@ const AIChatPage = () => {
 
     return (
         <div style={styles.container}>
+            <div style={styles.innerContainer}>
             <div style={styles.header}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--color-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -153,9 +155,10 @@ const AIChatPage = () => {
                     onKeyPress={e => e.key === 'Enter' && handleSend()}
                     placeholder="Chiedimi qualcosa..."
                 />
-                <button style={styles.sendBtn} onClick={handleSend}>
-                    <AppIcon name="paper-plane" size={18} color="white" />
+                <button style={styles.sendBtn} onClick={handleSend} disabled={isTyping || !inputText.trim()}>
+                    <AppIcon name="paper-plane" size={16} color="inherit" />
                 </button>
+            </div>
             </div>
         </div>
     );

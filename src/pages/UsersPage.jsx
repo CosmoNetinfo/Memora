@@ -81,6 +81,7 @@ const UsersPage = () => {
 
     const styles = {
         container: { padding: '20px', backgroundColor: 'var(--color-bg-primary)', minHeight: '100vh', paddingBottom: '100px' },
+        innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%' },
         title: { fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '20px', color: 'var(--color-primary-dark)' },
         userCard: { backgroundColor: 'white', borderRadius: '16px', padding: '16px', marginBottom: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '12px' },
         avatar: { width: '50px', height: '50px', flexShrink: 0, borderRadius: '50%', backgroundColor: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
@@ -103,6 +104,7 @@ const UsersPage = () => {
 
     return (
         <div style={styles.container}>
+            <div style={styles.innerContainer}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
                     <AppIcon name="arrow-left" size={24} color="primary" />
@@ -144,6 +146,7 @@ const UsersPage = () => {
                     </div>
                 </div>
             ))}
+            </div>
         </div>
     );
 };

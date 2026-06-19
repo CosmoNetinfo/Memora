@@ -40,6 +40,7 @@ const FindPeoplePage = () => {
 
     const styles = {
         container: { padding: '20px', backgroundColor: 'var(--color-bg-primary)', minHeight: '100vh', paddingBottom: '100px' },
+        innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%' },
         header: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' },
         title: { fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--color-primary-dark)', margin: 0 },
         searchContainer: {
@@ -89,7 +90,8 @@ const FindPeoplePage = () => {
     };
 
     return (
-        <div style={styles.container}>
+        <div style={styles.container} className="last-scroll-block">
+            <div style={styles.innerContainer}>
             <div style={styles.header}>
                 <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                     <AppIcon name="arrow-left" size={24} color="primary" />
@@ -142,6 +144,7 @@ const FindPeoplePage = () => {
                     )}
                 </div>
             )}
+            </div>
         </div>
     );
 };

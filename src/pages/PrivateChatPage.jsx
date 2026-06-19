@@ -475,6 +475,7 @@ const PrivateChatPage = () => {
             backgroundColor: 'var(--color-bg-primary)',
             overflow: 'hidden',
         },
+        innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' },
         header: {
             padding: '12px 16px',
             backgroundColor: 'white',
@@ -585,6 +586,7 @@ const PrivateChatPage = () => {
 
     return (
         <div style={styles.container}>
+            <div style={styles.innerContainer}>
             <div style={styles.header} onClick={() => navigate(`/profilo/${receiverId}`)}>
                 <button onClick={(e) => { e.stopPropagation(); navigate(-1); }} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
                     <AppIcon name="arrow-left" size={24} color="primary" />
@@ -658,6 +660,7 @@ const PrivateChatPage = () => {
                         </button>
                     </div>
                 )}
+            </div>
             </div>
         </div>
     );

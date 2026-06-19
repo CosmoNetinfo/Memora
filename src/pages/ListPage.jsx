@@ -206,6 +206,7 @@ const ListPage = () => {
 
     const styles = {
         container: { padding: 'var(--content-padding-y) var(--content-padding-x) 100px', width: '100%', maxWidth: '100%', minWidth: 0, boxSizing: 'border-box', overflowX: 'hidden' },
+        innerContainer: { maxWidth: '800px', margin: '0 auto', width: '100%' },
         header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--section-gap)' },
         greeting: { fontSize: '1.75rem', fontWeight: 'bold', color: '#1A1A1A' },
         agendaCard: { background: 'var(--color-primary)', borderRadius: 'var(--card-radius-lg)', padding: 'var(--content-padding-y) 20px', color: 'white', marginBottom: 'var(--section-gap)', boxShadow: 'var(--card-shadow-outer)' },
@@ -236,6 +237,7 @@ const ListPage = () => {
 
     return (
         <div style={styles.container}>
+            <div style={styles.innerContainer}>
             <div style={styles.header}>
                 <div style={styles.greeting}>Ciao, {user.name || 'lol'}!</div>
             </div>
@@ -336,6 +338,7 @@ const ListPage = () => {
             )}
 
             {isHealthcare && <ClinicalDashboard />}
+            </div>
         </div>
     );
 };
