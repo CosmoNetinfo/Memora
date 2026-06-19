@@ -34,14 +34,21 @@ const SettingsPage = () => {
 
   useEffect(() => {
     const checkStatus = async () => {
+      let isSubscribed = false;
       let status = "default";
       if (window.OneSignal) {
-        status = window.OneSignal.Notifications.permission;
+        // v16 SDK
+        if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
+          isSubscribed = window.OneSignal.User.PushSubscription.optedIn;
+        } else {
+          isSubscribed = window.OneSignal.Notifications?.permission;
+        }
       } else if ("Notification" in window) {
         status = Notification.permission;
+        isSubscribed = status === "granted";
       }
       
-      setNotifications(status === "granted" || status === true);
+      setNotifications(!!isSubscribed);
       setIsDenied(status === "denied");
     };
     
@@ -61,15 +68,38 @@ const SettingsPage = () => {
       return;
     }
 
+    if (notifications) {
+      // Disattiva
+      if (window.OneSignal && window.OneSignal.User && window.OneSignal.User.PushSubscription) {
+        window.OneSignal.User.PushSubscription.optOut();
+      }
+      setNotifications(false);
+      return;
+    }
+
+    // Attiva
+    if (window.OneSignal && window.OneSignal.User && window.OneSignal.User.PushSubscription) {
+      window.OneSignal.User.PushSubscription.optIn();
+    }
+
     // 1. Prova via OneSignal
     if (window.OneSignal && window.OneSignal.Notifications) {
       try {
         console.log("Richiesta via OneSignal...");
-        await window.OneSignal.Notifications.requestPermission();
+        if (window.OneSignal.Slidedown) {
+            await window.OneSignal.Slidedown.promptPush();
+        } else {
+            await window.OneSignal.Notifications.requestPermission();
+        }
+        
         const hasPerm = window.OneSignal.Notifications.permission;
-        setNotifications(hasPerm);
+        setNotifications(hasPerm || (window.OneSignal.User && window.OneSignal.User.PushSubscription.optedIn));
         if (hasPerm) {
-          window.OneSignal.login(user.name + "_" + (user.surname || ""));
+          if (user?.id) {
+             window.OneSignal.login(user.id);
+          } else {
+             window.OneSignal.login(user.name + "_" + (user.surname || ""));
+          }
           return;
         }
       } catch (e) {
