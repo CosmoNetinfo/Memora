@@ -11,12 +11,31 @@
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
+      window.OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "99f7b2f1-0f40-4bae-a90b-6ca8777042f9",
           notifyButton: {
             enable: false,
           },
+          promptOptions: {
+            slidedown: {
+              prompts: [
+                {
+                  type: "push",
+                  autoPrompt: true,
+                  text: {
+                    actionMessage: "Attiva le notifiche per ricevere promemoria e aggiornamenti importanti. Puoi disabilitarle in qualsiasi momento.",
+                    acceptButton: "Attiva",
+                    cancelButton: "Più tardi"
+                  },
+                  delay: {
+                    pageViews: 1,
+                    timeDelay: 2
+                  }
+                }
+              ]
+            }
+          }
         });
       });
     </script>
