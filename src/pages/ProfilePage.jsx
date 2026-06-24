@@ -1010,7 +1010,7 @@ const ProfilePage = () => {
             )}
 
             <div style={{ textAlign: 'center', marginTop: '30px', color: '#9CA3AF', fontSize: '0.75rem' }}>
-                Memora v1.0
+                Memora v1.1
             </div>
             </div>
         </div>

@@ -355,8 +355,8 @@ const SettingsPage = () => {
       )}
 
       <div style={{ textAlign: "center", marginTop: "30px", color: "#9CA3AF", fontSize: '0.75rem' }}>
-        Memora v1.0<br />
-        Memora x Airalzh &copy; 2026<br />
+        Memora v1.1<br />
+        con il contributo di Airalzh ETS &copy; 2026<br />
         Michele Mosca Web Designer e Daniele Spalletti Developer
       </div>
       </div>

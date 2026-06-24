@@ -223,7 +223,7 @@ const SignupPage = () => {
             </div>
 
             <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.6875rem', color: '#999', lineHeight: '1.4' }}>
-                Memora x Airalzh © 2026<br />
+                con il contributo di Airalzh ETS © 2026<br />
                 Michele Mosca Web Designer e Daniele Spalletti Developer
             </div>
         </div>
