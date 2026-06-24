@@ -28,8 +28,9 @@ const AnalyticsPage = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                // Se è caregiver/medico, cerca i pazienti associati (chi seguo)
-                if (user.role !== 'patient') {
+                // Solo caregiver e medici vedono i dati dei pazienti che seguono
+                const isCarerRole = user.role === 'caregiver' || user.role === 'healthcare';
+                if (isCarerRole) {
                     const { data: followed } = await supabase
                         .from('follows')
                         .select('followed_id, profiles!followed_id(id, name, surname)')
@@ -40,10 +41,10 @@ const AnalyticsPage = () => {
                     if (patientList.length > 0) {
                         setSelectedPatient(patientList[0]);
                     } else {
-                        // Fallback: se non ne segue nessuno, mostra i propri dati se ha umore
                         setSelectedPatient(user);
                     }
                 } else {
+                    // patient, admin, super_admin, moderatore → mostrano i propri dati
                     setSelectedPatient(user);
                 }
             } catch (e) {
