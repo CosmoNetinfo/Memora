@@ -6,6 +6,7 @@ import {
 } from 'recharts';
 import { supabase } from '../supabaseClient';
 import AppIcon from '../components/AppIcon';
+import { formatFullName } from '../utils/avatarUtils';
 
 const AnalyticsPage = () => {
     const user = JSON.parse(localStorage.getItem('alzheimer_user') || '{}');
@@ -220,7 +221,7 @@ const AnalyticsPage = () => {
             <div style={styles.innerContainer}>
             <div style={styles.header}>
                 <h1 style={styles.title}>Analisi e Benessere</h1>
-                <p style={styles.subtitle}>Monitoraggio andamento per {selectedPatient?.name || 'Utente'}</p>
+                <p style={styles.subtitle}>Monitoraggio andamento per {selectedPatient ? formatFullName(selectedPatient) : 'Utente'}</p>
             </div>
 
             {patients.length > 1 && (
